@@ -6,12 +6,17 @@ on:
       - main
   workflow_dispatch:
 
+permissions:
+  contents: read
+  issues: write
+  pull-requests: write
+
 env:
   ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
   ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
   ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
   ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
-  WORKING_DIR_: '.'
+  WORKING_DIR: '.'
 
 jobs:
   validate:
@@ -48,6 +53,7 @@ jobs:
     name: Deploy Prod Environment
     runs-on: ubuntu-latest
     environment: Production
+    needs: validate
     steps:
       - name: Checkout
         id: checkout
