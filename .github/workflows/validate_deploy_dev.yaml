@@ -1,4 +1,4 @@
-name: Terraform Validate & Deploy Dev Environment
+name: Validate & Deploy Dev Environment
 
 on:
   pull_request:
