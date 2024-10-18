@@ -1,0 +1,74 @@
+name: Validate & Deploy Prod Environment
+
+on:
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+env:
+  ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
+  ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
+  ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
+  ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
+  WORKING_DIR_: '.'
+
+jobs:
+  validate:
+    name: Validate, Tfsec & Checkov
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        id: checkout
+        uses: actions/checkout@master
+
+      - name: Terraform Init
+        id: init
+        run: terraform init
+        working-directory: ${{ env.WORKING_DIR }}
+
+      - name: Terraform Validate
+        id: validate
+        run: terraform validate
+        working-directory: ${{ env.WORKING_DIR }}
+
+      - name: Tfsec
+        id: tfsec
+        uses: aquasecurity/tfsec-action@v1.0.3
+        with:
+          working_directory: ${{ env.WORKING_DIR }}
+
+      - name: Checkov
+        id: checkov
+        uses: bridgecrewio/checkov-action@master
+        with:
+          directory: ${{ env.WORKING_DIR }}
+
+  prod:
+    name: Deploy Prod Environment
+    runs-on: ubuntu-latest
+    environment: Production
+    steps:
+      - name: Checkout
+        id: checkout
+        uses: actions/checkout@master
+
+      - name: Terraform Init
+        id: init
+        run: terraform init
+        working-directory: ${{ env.WORKING_DIR }}
+
+      - name: Terraform Workspace Prod
+        id: workspace
+        run: terraform workspace select prod || terraform workspace new prod
+        working-directory: ${{ env.WORKING_DIR }}
+
+      - name: Terraform Plan
+        id: plan
+        run: terraform plan -out=main.tfplan
+        working-directory: ${{ env.WORKING_DIR }}
+
+      - name: Terraform Apply
+        id: apply
+        run: terraform apply "main.tfplan"
+        working-directory: ${{ env.WORKING_DIR }}
