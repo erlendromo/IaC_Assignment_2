@@ -64,4 +64,4 @@ jobs:
         uses: bridgecrewio/checkov-action@master
         with:
           directory: ${{ env.WORKING_DIR }}
-          hard-fail-on: HIGH
+          hard_fail_on: HIGH
