@@ -7,7 +7,16 @@ on:
       - stage
       - main
 
+permissions:
+  contents: write
+  issues: write
+  pull-requests: write
+
 env:
+  ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
+  ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
+  ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
+  ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
   WORKING_DIR: '.'
 
 jobs:
@@ -18,6 +27,8 @@ jobs:
       - name: Checkout
         id: checkout
         uses: actions/checkout@master
+        with:
+          ref: ${{ github.ref }}
 
       - name: terraform fmt
         id: fmt
@@ -25,19 +36,22 @@ jobs:
         with:
           path: ${{ env.WORKING_DIR }}
 
-      - name: Create Pull Request
-        id: pull-request
-        uses: peter-evans/create-pull-request@v7
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          commit-message: terraform fmt
-          title: Reformat terraform files
-          body: Update Terraform files to canonical format using `terraform fmt`
-          branch: automated-terraform-fmt
+      - name: Commit changes
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add .
+          git diff-index --quiet HEAD || git commit -m "terraform fmt applied"
+
+      - name: Push Changes
+        id: push
+        run: |
+          git push origin ${{ github.ref }}
 
   soft-validate:
     name: Soft Validate Terraform Files
     runs-on: ubuntu-latest
+    needs: format
     steps:
       - name: Checkout
         id: checkout
@@ -64,4 +78,4 @@ jobs:
         uses: bridgecrewio/checkov-action@master
         with:
           directory: ${{ env.WORKING_DIR }}
-          hard-fail-on: HIGH
+          hard_fail_on: HIGH
