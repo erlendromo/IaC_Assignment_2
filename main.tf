@@ -14,9 +14,6 @@ module "network" {
   subnets = {
     "subnet1" = {
       address_prefixes = ["10.0.0.0/28"] # 16 ip addresses
-    },
-    "subnet2" = {
-      address_prefixes = ["10.0.0.16/28"] # 16 ip addresses
     }
   }
 }
@@ -40,13 +37,6 @@ module "nsg" {
   }
 }
 
-resource "azurerm_public_ip" "main" {
-  name                = "publicip"
-  resource_group_name = azurerm_resource_group.main.name
-  location            = azurerm_resource_group.main.location
-  allocation_method   = "Static"
-}
-
 resource "azurerm_network_interface" "main" {
   name                = "nic"
   resource_group_name = azurerm_resource_group.main.name
@@ -56,11 +46,42 @@ resource "azurerm_network_interface" "main" {
     name                          = "ipconfig"
     subnet_id                     = module.network.subnet_id_map["subnet1"]
     private_ip_address_allocation = "Dynamic"
-    public_ip_address_id          = azurerm_public_ip.main.id
   }
+
+  depends_on = [ module.network ]
+}
+
+resource "azurerm_public_ip" "main" {
+  name                = "publicip"
+  resource_group_name = azurerm_resource_group.main.name
+  location            = azurerm_resource_group.main.location
+  allocation_method   = "Static"
+  sku = "Standard"
+}
+
+resource "azurerm_lb" "main" {
+  name = "loadbalancer"
+  resource_group_name = azurerm_resource_group.main.name
+  location            = azurerm_resource_group.main.location
+
+  frontend_ip_configuration {
+    name                 = "PublicIPAddress"
+    public_ip_address_id = azurerm_public_ip.main.id
+  }
+
+  depends_on = [ azurerm_public_ip.main ]
 }
 
 resource "azurerm_network_interface_security_group_association" "main" {
   network_interface_id      = azurerm_network_interface.main.id
   network_security_group_id = module.nsg.network_security_group_id
+
+  depends_on = [
+    azurerm_network_interface.main,
+    module.nsg
+  ]
+}
+
+output "publicip" {
+  value = azurerm_public_ip.main.ip_address
 }
