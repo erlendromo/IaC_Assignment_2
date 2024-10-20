@@ -24,9 +24,9 @@ resource "azurerm_subnet" "main" {
 }
 
 resource "azurerm_network_security_group" "main" {
-  name = "default"
+  name                = "default"
   resource_group_name = azurerm_virtual_network.main.resource_group_name
-  location = azurerm_virtual_network.main.location
+  location            = azurerm_virtual_network.main.location
 }
 
 resource "azurerm_subnet_network_security_group_association" "main" {
