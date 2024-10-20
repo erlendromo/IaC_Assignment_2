@@ -11,7 +11,7 @@ variable "resource_group_location" {
 variable "network_security_group_name" {
   type        = string
   description = "The name of the network security group."
-  
+
 }
 
 variable "network_security_rules" {

@@ -22,9 +22,9 @@ module "network" {
 }
 
 module "nsg" {
-  source                  = "./modules/nsg"
-  resource_group_name     = azurerm_resource_group.main.name
-  resource_group_location = azurerm_resource_group.main.location
+  source                      = "./modules/nsg"
+  resource_group_name         = azurerm_resource_group.main.name
+  resource_group_location     = azurerm_resource_group.main.location
   network_security_group_name = "nsg"
   network_security_rules = {
     "https" = {
