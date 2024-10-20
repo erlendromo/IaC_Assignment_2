@@ -1,4 +1,4 @@
 output "subnet_id_map" {
-  value       = tomap(azurerm_subnet.main.*.name, azurerm_subnet.main.*.id)
+  value       = tomap({ for subnet in azurerm_subnet.main : subnet.name => subnet.id })
   description = "Map of subnet names to subnet IDs"
 }
