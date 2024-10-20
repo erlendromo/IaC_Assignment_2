@@ -4,19 +4,19 @@ resource "azurerm_resource_group" "main" {
 }
 
 module "network" {
-  source = "./modules/network"
-  resource_group_name = azurerm_resource_group.main.name
+  source                  = "./modules/network"
+  resource_group_name     = azurerm_resource_group.main.name
   resource_group_location = azurerm_resource_group.main.location
 
-  virtual_network_name = "vnet"
+  virtual_network_name          = "vnet"
   virtual_network_address_space = [""]
   subnets = [
     {
-      name = "subnet1"
+      name             = "subnet1"
       address_prefixes = [""]
     },
     {
-      name = "subnet2"
+      name             = "subnet2"
       address_prefixes = [""]
     },
   ]
