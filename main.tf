@@ -48,7 +48,7 @@ resource "azurerm_network_interface" "main" {
     private_ip_address_allocation = "Dynamic"
   }
 
-  depends_on = [ module.network ]
+  depends_on = [module.network]
 }
 
 resource "azurerm_public_ip" "main" {
@@ -56,11 +56,11 @@ resource "azurerm_public_ip" "main" {
   resource_group_name = azurerm_resource_group.main.name
   location            = azurerm_resource_group.main.location
   allocation_method   = "Static"
-  sku = "Standard"
+  sku                 = "Standard"
 }
 
 resource "azurerm_lb" "main" {
-  name = "loadbalancer"
+  name                = "loadbalancer"
   resource_group_name = azurerm_resource_group.main.name
   location            = azurerm_resource_group.main.location
 
@@ -69,7 +69,7 @@ resource "azurerm_lb" "main" {
     public_ip_address_id = azurerm_public_ip.main.id
   }
 
-  depends_on = [ azurerm_public_ip.main ]
+  depends_on = [azurerm_public_ip.main]
 }
 
 resource "azurerm_network_interface_security_group_association" "main" {
