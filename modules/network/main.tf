@@ -13,10 +13,10 @@ resource "azurerm_virtual_network_dns_servers" "main" {
 }
 
 resource "azurerm_subnet" "main" {
-  count = length(var.subnets)
+  for_each = var.subnets
 
-  name                 = var.subnets[count.index].name
-  address_prefixes     = var.subnets[count.index].address_prefixes
+  name                 = each.key
+  address_prefixes     = each.value.address_prefixes
   resource_group_name  = azurerm_virtual_network.main.resource_group_name
   virtual_network_name = azurerm_virtual_network.main.name
 

@@ -11,18 +11,55 @@ module "network" {
   virtual_network_name          = "vnet"
   virtual_network_address_space = ["10.0.0.0/24"]                    # 256 ip addresses
   dns_servers                   = ["168.63.129.16", "168.63.129.17"] # Azure-provided DNS servers
-  subnets = [
-    {
-      name             = "subnet1"
+  subnets = {
+    "subnet1" = {
       address_prefixes = ["10.0.0.0/28"] # 16 ip addresses
     },
-    {
-      name             = "subnet2"
+    "subnet2" = {
       address_prefixes = ["10.0.0.16/28"] # 16 ip addresses
-    },
-  ]
+    }
+  }
 }
 
-output "subnet_id_map" {
-  value = module.network.subnet_id_map
+module "nsg" {
+  source = "./modules/nsg"
+  resource_group_name = azurerm_resource_group.main.name
+  resource_group_location = azurerm_resource_group.main.location
+  network_security_rules = {
+    "https" = {
+      priority = 100
+      direction = "Inbound"
+      access = "Allow"
+      protocol = "Tcp"
+      source_port_range = "*"
+      destination_port_range = "443"
+      source_address_prefix = "*"
+      destination_address_prefix = "*"
+    },
+  }
+}
+
+resource "azurerm_public_ip" "main" {
+  name = "publicip"
+  resource_group_name = azurerm_resource_group.main.name
+  location = azurerm_resource_group.main.location
+  allocation_method = "Static"
+}
+
+resource "azurerm_network_interface" "main" {
+  name = "nic"
+  resource_group_name = azurerm_resource_group.main.name
+  location = azurerm_resource_group.main.location
+
+  ip_configuration {
+    name = "ipconfig"
+    subnet_id = module.network.subnet_id_map["subnet1"]
+    private_ip_address_allocation = "Dynamic"
+    public_ip_address_id = azurerm_public_ip.main.id
+  }
+}
+
+resource "azurerm_network_interface_security_group_association" "main" {
+  network_interface_id = azurerm_network_interface.main.id
+  network_security_group_id = azurerm_network_security_group.main.id
 }
