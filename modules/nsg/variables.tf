@@ -8,6 +8,12 @@ variable "resource_group_location" {
   description = "The location of the resource group."
 }
 
+variable "network_security_group_name" {
+  type        = string
+  description = "The name of the network security group."
+  
+}
+
 variable "network_security_rules" {
   type = map(object({
     priority                   = number
