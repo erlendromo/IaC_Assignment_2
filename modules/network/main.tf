@@ -8,8 +8,8 @@ resource "azurerm_virtual_network" "main" {
 resource "azurerm_subnet" "main" {
   count = length(var.subnets)
 
-  name                 = subnets[count.index].name
-  address_prefixes     = subnets[count.index].address_prefixes
+  name                 = var.subnets[count.index].name
+  address_prefixes     = var.subnets[count.index].address_prefixes
   resource_group_name  = azurerm_virtual_network.main.resource_group_name
   virtual_network_name = azurerm_virtual_network.main.name
 
