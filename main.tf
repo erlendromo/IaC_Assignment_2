@@ -46,3 +46,7 @@ resource "azurerm_subnet_network_security_group_association" "subnet1" {
     module.nsg
   ]
 }
+
+output "subnet1_nsr" {
+  value = module.network.subnet_id_map["subnet1"].network_security_group_associations
+}

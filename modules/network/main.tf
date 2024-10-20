@@ -22,3 +22,16 @@ resource "azurerm_subnet" "main" {
 
   depends_on = [azurerm_virtual_network.main]
 }
+
+resource "azurerm_network_security_group" "main" {
+  name = "default"
+  resource_group_name = azurerm_virtual_network.main.resource_group_name
+  location = azurerm_virtual_network.main.location
+}
+
+resource "azurerm_subnet_network_security_group_association" "main" {
+  for_each = azurerm_subnet.main
+
+  subnet_id                 = each.value.id
+  network_security_group_id = azurerm_network_security_group.main.id
+}
