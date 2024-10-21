@@ -13,7 +13,7 @@ resource "azurerm_storage_account" "main" {
   local_user_enabled              = false
 
   blob_properties {
-    delete_retention_policy {
+    delete_retention_policy {      
       days = 7
     }
   }
@@ -41,6 +41,24 @@ resource "azurerm_storage_account" "main" {
       retention_policy_days = 10
     }
   }
+}
+
+resource "azurerm_log_analytics_workspace" "main" {
+  name                = "logging-workspace"
+  location            = azurerm_storage_account.main.location
+  resource_group_name = azurerm_storage_account.main.resource_group_name
+  sku                 = "PerGB2018"
+  retention_in_days   = 30
+}
+
+resource "azurerm_log_analytics_storage_insights" "main" {
+  name                = "logging-storageinsightconfig"
+  resource_group_name = azurerm_storage_account.main.resource_group_name
+  workspace_id        = azurerm_log_analytics_workspace.main.id
+
+  storage_account_id  = azurerm_storage_account.main.id
+  storage_account_key = azurerm_storage_account.main.primary_access_key
+  blob_container_names= ["blobExample_ok"]
 }
 
 resource "azurerm_storage_account_network_rules" "main" {
