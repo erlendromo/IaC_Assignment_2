@@ -38,7 +38,7 @@ variable "key_vault_key_name" {
   description = "(Required) The name of the key."
 }
 
-variable "storage_blob_name" {
-  type        = string
-  description = "(Required) The name of the storage blob."
-}
+# variable "storage_blob_name" {
+#   type        = string
+#   description = "(Required) The name of the storage blob."
+# }

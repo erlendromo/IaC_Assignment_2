@@ -43,34 +43,6 @@ resource "azurerm_storage_account" "main" {
   }
 }
 
-resource "azurerm_private_endpoint" "main" {
-  name                = "${var.storage_account_name}-private-endpoint"
-  resource_group_name = azurerm_storage_account.main.resource_group_name
-  location            = azurerm_storage_account.main.location
-  subnet_id           = var.virtual_network_subnet_ids[0]
-
-  private_service_connection {
-    name                           = "${var.storage_account_name}-private-service-connection"
-    is_manual_connection           = false
-    private_connection_resource_id = var.key_vault_id
-    subresource_names              = ["vault", "blob"]
-  }
-
-  depends_on = [
-    azurerm_storage_account.main
-  ]
-}
-
-resource "azurerm_storage_container" "main" {
-  storage_account_name = azurerm_storage_account.main.name
-
-  name = var.storage_container_name
-
-  depends_on = [
-    azurerm_storage_account.main
-  ]
-}
-
 resource "azurerm_storage_account_network_rules" "main" {
   storage_account_id = azurerm_storage_account.main.id
 
@@ -95,15 +67,43 @@ resource "azurerm_storage_account_customer_managed_key" "main" {
   ]
 }
 
-resource "azurerm_storage_blob" "main" {
-  storage_account_name   = azurerm_storage_account.main.name
-  storage_container_name = azurerm_storage_container.main.name
+resource "azurerm_private_endpoint" "main" {
+  name                = "${var.storage_account_name}-private-endpoint"
+  resource_group_name = azurerm_storage_account.main.resource_group_name
+  location            = azurerm_storage_account.main.location
+  subnet_id           = var.virtual_network_subnet_ids[0]
 
-  name = var.storage_blob_name
-  type = "Block"
+  private_service_connection {
+    name                           = "${var.storage_account_name}-private-service-connection"
+    is_manual_connection           = false
+    private_connection_resource_id = var.key_vault_id
+    subresource_names              = ["vault"]
+  }
 
   depends_on = [
-    azurerm_storage_account.main,
-    azurerm_storage_container.main
+    azurerm_storage_account.main
   ]
 }
+
+resource "azurerm_storage_container" "main" {
+  storage_account_name = azurerm_storage_account.main.name
+
+  name = var.storage_container_name
+
+  depends_on = [
+    azurerm_storage_account.main
+  ]
+}
+
+# resource "azurerm_storage_blob" "main" {
+#   storage_account_name   = azurerm_storage_account.main.name
+#   storage_container_name = azurerm_storage_container.main.name
+
+#   name = var.storage_blob_name
+#   type = "Block"
+
+#   depends_on = [
+#     azurerm_storage_account.main,
+#     azurerm_storage_container.main
+#   ]
+# }
