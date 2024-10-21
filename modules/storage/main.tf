@@ -20,24 +20,24 @@ resource "azurerm_storage_account" "main" {
 
   queue_properties {
     logging {
-      read   = true
-      write  = true
-      delete = true
-      version = "1.0"
+      read                  = true
+      write                 = true
+      delete                = true
+      version               = "1.0"
       retention_policy_days = 10
     }
 
     hour_metrics {
-      enabled = true
-      include_apis = true
-      version = "1.0"
+      enabled               = true
+      include_apis          = true
+      version               = "1.0"
       retention_policy_days = 10
     }
 
     minute_metrics {
-      enabled = true
-      include_apis = true
-      version = "1.0"
+      enabled               = true
+      include_apis          = true
+      version               = "1.0"
       retention_policy_days = 10
     }
   }
@@ -51,7 +51,7 @@ resource "azurerm_private_endpoint" "main" {
 
   private_service_connection {
     name                           = "${var.storage_account_name}-private-service-connection"
-    is_manual_connection = false
+    is_manual_connection           = false
     private_connection_resource_id = var.key_vault_id
     subresource_names              = ["vault"]
   }
