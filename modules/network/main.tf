@@ -15,10 +15,10 @@ resource "azurerm_virtual_network_dns_servers" "main" {
 resource "azurerm_subnet" "main" {
   count = length(var.subnets)
 
-  name                 = var.subnets[count.index].name
-  address_prefixes     = var.subnets[count.index].address_prefixes
-  resource_group_name  = azurerm_virtual_network.main.resource_group_name
-  virtual_network_name = azurerm_virtual_network.main.name
+  name                              = var.subnets[count.index].name
+  address_prefixes                  = var.subnets[count.index].address_prefixes
+  resource_group_name               = azurerm_virtual_network.main.resource_group_name
+  virtual_network_name              = azurerm_virtual_network.main.name
   private_endpoint_network_policies = "NetworkSecurityGroupEnabled"
 
   depends_on = [azurerm_virtual_network.main]
