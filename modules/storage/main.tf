@@ -1,8 +1,7 @@
 resource "azurerm_storage_account" "main" {
-  name                = var.storage_account_name
-  resource_group_name = var.resource_group_name
-  location            = var.resource_group_location
-
+  name                            = var.storage_account_name
+  resource_group_name             = var.resource_group_name
+  location                        = var.resource_group_location
   account_tier                    = "Standard"
   account_replication_type        = "GRS"
   min_tls_version                 = "TLS1_2"
@@ -52,18 +51,16 @@ resource "azurerm_log_analytics_workspace" "main" {
 }
 
 resource "azurerm_log_analytics_storage_insights" "main" {
-  name                = "logging-storageinsightconfig"
-  resource_group_name = azurerm_storage_account.main.resource_group_name
-  workspace_id        = azurerm_log_analytics_workspace.main.id
-
+  name                 = "logging-storageinsightconfig"
+  resource_group_name  = azurerm_storage_account.main.resource_group_name
+  workspace_id         = azurerm_log_analytics_workspace.main.id
   storage_account_id   = azurerm_storage_account.main.id
   storage_account_key  = azurerm_storage_account.main.primary_access_key
   blob_container_names = ["blobExample_ok"]
 }
 
 resource "azurerm_storage_account_network_rules" "main" {
-  storage_account_id = azurerm_storage_account.main.id
-
+  storage_account_id         = azurerm_storage_account.main.id
   default_action             = "Deny"
   ip_rules                   = var.public_ip_rules
   virtual_network_subnet_ids = var.virtual_network_subnet_ids
@@ -90,18 +87,12 @@ resource "azurerm_private_endpoint" "main" {
 
 resource "azurerm_storage_account_customer_managed_key" "main" {
   storage_account_id = azurerm_storage_account.main.id
-
-  key_vault_id = var.key_vault_id
-  key_name     = var.key_vault_key_name
-
-  depends_on = [
-    azurerm_storage_account.main
-  ]
+  key_vault_id       = var.key_vault_id
+  key_name           = var.key_vault_key_name
 }
 
 resource "azurerm_storage_container" "main" {
-  storage_account_name = azurerm_storage_account.main.name
-
+  storage_account_name  = azurerm_storage_account.main.name
   name                  = var.storage_container_name
   container_access_type = "private"
 

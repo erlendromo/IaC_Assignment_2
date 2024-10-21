@@ -6,9 +6,8 @@ resource "azurerm_key_vault" "main" {
   location                      = var.resource_group_location
   tenant_id                     = data.azurerm_client_config.current.tenant_id
   sku_name                      = "standard"
-  public_network_access_enabled = true
+  public_network_access_enabled = false
   purge_protection_enabled      = true
-  enable_rbac_authorization     = true
   soft_delete_retention_days    = 7
 
   network_acls {
@@ -24,7 +23,21 @@ resource "azurerm_key_vault_access_policy" "main" {
   object_id    = data.azurerm_client_config.current.object_id
 
   key_permissions    = ["Get", "Create", "Delete", "List", "Restore", "Recover", "UnwrapKey", "WrapKey", "Purge", "Encrypt", "Decrypt", "Sign", "Verify"]
-  secret_permissions = ["Get", "Set", "Delete", "List", "Restore", "Recover", "Purge"]
+  secret_permissions = ["Get"]
+}
+
+resource "azurerm_key_vault_key" "main" {
+  name            = var.key_vault_key_name
+  key_vault_id    = azurerm_key_vault.main.id
+  key_type        = "RSA-HSM"
+  key_size        = 2048
+  key_opts        = ["decrypt", "encrypt", "sign", "unwrapKey", "verify", "wrapKey"]
+  expiration_date = "2024-12-31T00:00:00Z"
+
+  depends_on = [
+    azurerm_key_vault.main,
+    azurerm_key_vault_access_policy.main
+  ]
 }
 
 resource "azurerm_private_endpoint" "main" {

@@ -73,12 +73,16 @@ module "keyvault" {
   resource_group_name             = azurerm_resource_group.main.name
   resource_group_location         = azurerm_resource_group.main.location
   key_vault_name                  = "${local.base_prefix}-kv-${random_string.main.result}-${local.workspace_suffix}"
+  key_vault_key_name              = "${local.base_prefix}-cmk-${random_string.main.result}-${local.workspace_suffix}"
   public_ip_rules                 = [azurerm_public_ip.kv.ip_address]
   private_endpoint_name           = "${local.base_prefix}-pe-${local.workspace_suffix}"
   subnet_id                       = module.network.subnet_id_list[0]
   private_service_connection_name = "${local.base_prefix}-psc-${local.workspace_suffix}"
 
-  depends_on = [module.network]
+  depends_on = [
+    azurerm_public_ip.kv,
+    module.network
+  ]
 }
 
 module "storage" {
@@ -93,9 +97,10 @@ module "storage" {
   private_endpoint_name           = "${local.base_prefix}-pe-${local.workspace_suffix}"
   private_service_connection_name = "${local.base_prefix}-psc-${local.workspace_suffix}"
   key_vault_id                    = module.keyvault.key_vault_id
-  key_vault_key_name              = "${local.base_prefix}-cmk-${random_string.main.result}-${local.workspace_suffix}"
+  key_vault_key_name              = module.keyvault.key_vault_key_name
 
   depends_on = [
+    azurerm_public_ip.sa,
     module.keyvault,
     module.network
   ]
