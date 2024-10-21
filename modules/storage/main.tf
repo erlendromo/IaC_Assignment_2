@@ -85,6 +85,7 @@ resource "azurerm_storage_container" "main" {
   storage_account_name = azurerm_storage_account.main.name
 
   name = var.storage_container_name
+  container_access_type = "private"
 
   depends_on = [
     azurerm_storage_account.main
