@@ -24,8 +24,6 @@ resource "azurerm_key_vault_access_policy" "main" {
 
   key_permissions         = ["Get", "Create", "Delete", "List", "Restore", "Recover", "UnwrapKey", "WrapKey", "Purge", "Encrypt", "Decrypt", "Sign", "Verify"]
   secret_permissions      = ["Get", "Set", "Delete", "List", "Restore", "Recover", "Purge"]
-  certificate_permissions = ["Get", "Create", "Delete", "List", "Restore", "Recover", "UnwrapKey", "WrapKey", "Purge", "Encrypt", "Decrypt", "Sign", "Verify"]
-  storage_permissions     = ["Get", "List", "Delete", "Set", "Update", "RegenerateKey", "Recover", "Backup", "Restore", "Purge"]
 }
 
 resource "azurerm_key_vault_key" "main" {
