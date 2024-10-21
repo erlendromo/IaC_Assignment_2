@@ -18,6 +18,11 @@ variable "key_vault_key_name" {
   description = "(Required) Name of the key vault key."
 }
 
+variable "public_ip_rules" {
+  type = list(string)
+  description = "Public ip rules for the key vault."
+}
+
 variable "private_endpoint_name" {
   type        = string
   description = "(Required) Name of the private endpoint."

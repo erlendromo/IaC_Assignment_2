@@ -18,7 +18,7 @@ variable "storage_container_name" {
   description = "(Required) The name of the storage container."
 }
 
-variable "ip_rules" {
+variable "public_ip_rules" {
   type        = list(string)
   description = "(Required) The list of IP addresses that are allowed to access the storage account."
 }
