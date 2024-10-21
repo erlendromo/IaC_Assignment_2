@@ -28,6 +28,16 @@ variable "virtual_network_subnet_ids" {
   description = "(Required) The list of virtual network subnet IDs that are allowed to access the storage account."
 }
 
+variable "private_endpoint_name" {
+  type        = string
+  description = "(Required) The name of the private endpoint."
+}
+
+variable "private_service_connection_name" {
+  type        = string
+  description = "(Required) The name of the private service connection."
+}
+
 variable "key_vault_id" {
   type        = string
   description = "(Required) The ID of the Key Vault."
@@ -38,7 +48,7 @@ variable "key_vault_key_name" {
   description = "(Required) The name of the key."
 }
 
-# variable "storage_blob_name" {
-#   type        = string
-#   description = "(Required) The name of the storage blob."
-# }
+variable "storage_blob_name" {
+  type        = string
+  description = "(Required) The name of the storage blob."
+}

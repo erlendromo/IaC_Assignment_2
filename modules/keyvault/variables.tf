@@ -17,3 +17,18 @@ variable "key_vault_key_name" {
   type        = string
   description = "(Required) Name of the key vault key."
 }
+
+variable "private_endpoint_name" {
+  type        = string
+  description = "(Required) Name of the private endpoint."
+}
+
+variable "subnet_id" {
+  type        = string
+  description = "(Required) ID of the subnet."
+}
+
+variable "private_service_connection_name" {
+  type        = string
+  description = "(Required) Name of the private service connection."
+}

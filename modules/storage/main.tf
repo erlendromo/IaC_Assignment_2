@@ -47,7 +47,7 @@ resource "azurerm_storage_account_network_rules" "main" {
   storage_account_id = azurerm_storage_account.main.id
 
   default_action             = "Deny"
-  ip_rules                   = var.ip_rules
+  ip_rules                   = ["10.0.0.0/24"]
   virtual_network_subnet_ids = var.virtual_network_subnet_ids
   bypass                     = ["Metrics", "AzureServices"]
 
@@ -56,29 +56,25 @@ resource "azurerm_storage_account_network_rules" "main" {
   ]
 }
 
-resource "azurerm_storage_account_customer_managed_key" "main" {
-  storage_account_id = azurerm_storage_account.main.id
-
-  key_vault_id = var.key_vault_id
-  key_name     = var.key_vault_key_name
-
-  depends_on = [
-    azurerm_storage_account.main
-  ]
-}
-
 resource "azurerm_private_endpoint" "main" {
-  name                = "${var.storage_account_name}-private-endpoint"
+  name                = var.private_endpoint_name
   resource_group_name = azurerm_storage_account.main.resource_group_name
   location            = azurerm_storage_account.main.location
   subnet_id           = var.virtual_network_subnet_ids[0]
 
   private_service_connection {
-    name                           = "${var.storage_account_name}-private-service-connection"
+    name                           = var.private_service_connection_name
     is_manual_connection           = false
-    private_connection_resource_id = var.key_vault_id
-    subresource_names              = ["vault"]
+    private_connection_resource_id = azurerm_storage_account.main.id
+    subresource_names              = ["blob"]
   }
+}
+
+resource "azurerm_storage_account_customer_managed_key" "main" {
+  storage_account_id = azurerm_storage_account.main.id
+
+  key_vault_id = var.key_vault_id
+  key_name     = var.key_vault_key_name
 
   depends_on = [
     azurerm_storage_account.main
@@ -95,15 +91,15 @@ resource "azurerm_storage_container" "main" {
   ]
 }
 
-# resource "azurerm_storage_blob" "main" {
-#   storage_account_name   = azurerm_storage_account.main.name
-#   storage_container_name = azurerm_storage_container.main.name
+resource "azurerm_storage_blob" "main" {
+  storage_account_name   = azurerm_storage_account.main.name
+  storage_container_name = azurerm_storage_container.main.name
 
-#   name = var.storage_blob_name
-#   type = "Block"
+  name = var.storage_blob_name
+  type = "Block"
 
-#   depends_on = [
-#     azurerm_storage_account.main,
-#     azurerm_storage_container.main
-#   ]
-# }
+  depends_on = [
+    azurerm_storage_account.main,
+    azurerm_storage_container.main
+  ]
+}

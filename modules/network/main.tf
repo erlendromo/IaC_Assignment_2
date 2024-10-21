@@ -19,7 +19,6 @@ resource "azurerm_subnet" "main" {
   address_prefixes                  = var.subnets[count.index].address_prefixes
   resource_group_name               = azurerm_virtual_network.main.resource_group_name
   virtual_network_name              = azurerm_virtual_network.main.name
-  private_endpoint_network_policies = "NetworkSecurityGroupEnabled"
 
   depends_on = [azurerm_virtual_network.main]
 }
