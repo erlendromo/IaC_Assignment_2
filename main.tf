@@ -9,6 +9,13 @@ resource "azurerm_resource_group" "main" {
   location = var.resource_group_location
 }
 
+resource "azurerm_public_ip" "sa" {
+  name                = "${local.base_prefix}-sa-pip-${local.workspace_suffix}"
+  resource_group_name = azurerm_resource_group.main.name
+  location            = azurerm_resource_group.main.location
+  allocation_method   = "Static"
+}
+
 module "network" {
   source                  = "./modules/network"
   resource_group_name     = azurerm_resource_group.main.name
@@ -51,5 +58,39 @@ resource "azurerm_subnet_network_security_group_association" "main" {
   depends_on = [
     module.network,
     module.nsg
+  ]
+}
+
+module "keyvault" {
+  source                          = "./modules/keyvault"
+  resource_group_name             = azurerm_resource_group.main.name
+  resource_group_location         = azurerm_resource_group.main.location
+  key_vault_name                  = "${local.base_prefix}-kv-${random_string.main.result}-${local.workspace_suffix}"
+  key_vault_key_name              = "${local.base_prefix}-key-${local.workspace_suffix}"
+  public_ip_rules                 = ["203.0.113.0/24"]
+  private_endpoint_name           = "${local.base_prefix}-pe-${local.workspace_suffix}"
+  subnet_id                       = module.network.subnet_id_list[0]
+  private_service_connection_name = "${local.base_prefix}-psc-${local.workspace_suffix}"
+
+  depends_on = [module.network]
+}
+
+module "storage" {
+  source                          = "./modules/storage"
+  resource_group_name             = azurerm_resource_group.main.name
+  resource_group_location         = azurerm_resource_group.main.location
+  storage_account_name            = "${local.base_prefix}sa${random_string.main.result}${local.workspace_suffix}"
+  storage_container_name          = "${local.base_prefix}sc${random_string.main.result}${local.workspace_suffix}"
+  storage_blob_name               = "${local.base_prefix}sb${random_string.main.result}${local.workspace_suffix}"
+  public_ip_rules                 = [azurerm_public_ip.sa.ip_address]
+  virtual_network_subnet_ids      = module.network.subnet_id_list
+  private_endpoint_name           = "${local.base_prefix}-pe-${local.workspace_suffix}"
+  private_service_connection_name = "${local.base_prefix}-psc-${local.workspace_suffix}"
+  key_vault_id                    = module.keyvault.key_vault_id
+  key_vault_key_name              = module.keyvault.key_vault_key_name
+
+  depends_on = [
+    module.keyvault,
+    module.network
   ]
 }
