@@ -35,6 +35,7 @@ resource "azurerm_storage_account_network_rules" "main" {
   default_action             = "Deny"
   ip_rules                   = var.ip_rules
   virtual_network_subnet_ids = var.virtual_network_subnet_ids
+  bypass = ["Metrics", "AzureServices"]
 
   depends_on = [
     azurerm_storage_account.main
