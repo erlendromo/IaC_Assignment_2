@@ -17,6 +17,48 @@ resource "azurerm_storage_account" "main" {
       days = 7
     }
   }
+
+  queue_properties {
+    logging {
+      read   = true
+      write  = true
+      delete = true
+      version = "1.0"
+      retention_policy_days = 10
+    }
+
+    hour_metrics {
+      enabled = true
+      include_apis = true
+      version = "1.0"
+      retention_policy_days = 10
+    }
+
+    minute_metrics {
+      enabled = true
+      include_apis = true
+      version = "1.0"
+      retention_policy_days = 10
+    }
+  }
+}
+
+resource "azurerm_private_endpoint" "main" {
+  name                = "${var.storage_account_name}-private-endpoint"
+  resource_group_name = azurerm_storage_account.main.resource_group_name
+  location            = azurerm_storage_account.main.location
+  subnet_id           = var.virtual_network_subnet_ids[0]
+
+  private_service_connection {
+    name                           = "${var.storage_account_name}-private-service-connection"
+    is_manual_connection = false
+    private_connection_resource_id = var.key_vault_id
+    subresource_names              = ["vault"]
+  }
+
+  depends_on = [
+    azurerm_storage_account.main
+  ]
 }
 
 resource "azurerm_storage_container" "main" {

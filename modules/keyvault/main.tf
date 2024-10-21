@@ -8,6 +8,7 @@ resource "azurerm_key_vault" "main" {
   sku_name                    = "standard"
   purge_protection_enabled    = true
   enabled_for_disk_encryption = true
+  public_network_access_enabled = false
   soft_delete_retention_days  = 7
 
   network_acls {
