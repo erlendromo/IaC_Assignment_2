@@ -63,11 +63,11 @@ module "keyvault" {
 }
 
 module "storage" {
-  source                     = "./modules/storage"
-  resource_group_name        = azurerm_resource_group.main.name
-  resource_group_location    = azurerm_resource_group.main.location
-  storage_account_name       = "${local.base_prefix}sa${random_string.main.result}${local.workspace_suffix}"
-  storage_container_name     = "${local.base_prefix}sc${random_string.main.result}${local.workspace_suffix}"
+  source                  = "./modules/storage"
+  resource_group_name     = azurerm_resource_group.main.name
+  resource_group_location = azurerm_resource_group.main.location
+  storage_account_name    = "${local.base_prefix}sa${random_string.main.result}${local.workspace_suffix}"
+  storage_container_name  = "${local.base_prefix}sc${random_string.main.result}${local.workspace_suffix}"
   #storage_blob_name          = "${local.base_prefix}sb${random_string.main.result}${local.workspace_suffix}"
   ip_rules                   = ["10.0.0.0/24"]
   virtual_network_subnet_ids = module.network.subnet_id_list
