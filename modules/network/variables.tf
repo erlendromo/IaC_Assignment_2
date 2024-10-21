@@ -19,7 +19,8 @@ variable "virtual_network_address_space" {
 }
 
 variable "subnets" {
-  type = map(object({
+  type = list(object({
+    name             = string
     address_prefixes = list(string)
   }))
   description = "The subnets that are used by the virtual network."
