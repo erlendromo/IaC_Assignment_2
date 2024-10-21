@@ -19,7 +19,7 @@ variable "key_vault_key_name" {
 }
 
 variable "public_ip_rules" {
-  type = list(string)
+  type        = list(string)
   description = "Public ip rules for the key vault."
 }
 

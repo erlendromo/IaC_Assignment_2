@@ -10,17 +10,17 @@ resource "azurerm_resource_group" "main" {
 }
 
 resource "azurerm_public_ip" "sa" {
-  name = "${local.base_prefix}-sa-pip-${local.workspace_suffix}"
+  name                = "${local.base_prefix}-sa-pip-${local.workspace_suffix}"
   resource_group_name = azurerm_resource_group.main.name
-  location = azurerm_resource_group.main.location
-  allocation_method = "Static"
+  location            = azurerm_resource_group.main.location
+  allocation_method   = "Static"
 }
 
 resource "azurerm_public_ip" "kv" {
-  name = "${local.base_prefix}-kv-pip-${local.workspace_suffix}"
+  name                = "${local.base_prefix}-kv-pip-${local.workspace_suffix}"
   resource_group_name = azurerm_resource_group.main.name
-  location = azurerm_resource_group.main.location
-  allocation_method = "Static"
+  location            = azurerm_resource_group.main.location
+  allocation_method   = "Static"
 }
 
 module "network" {
