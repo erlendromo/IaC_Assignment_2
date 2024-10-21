@@ -44,7 +44,7 @@ module "nsg" {
   }
 }
 
-resource "azurerm_subnet_network_security_group_association" "subnet1" {
+resource "azurerm_subnet_network_security_group_association" "main" {
   subnet_id                 = module.network.subnet_id_list[0]
   network_security_group_id = module.nsg.network_security_group_id
 

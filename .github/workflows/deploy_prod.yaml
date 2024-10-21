@@ -38,13 +38,8 @@ jobs:
         run: terraform workspace select prod || terraform workspace new prod
         working-directory: ${{ env.WORKING_DIR }}
 
-      - name: Terraform Plan
-        id: plan
-        run: terraform plan -out=main.tfplan
-        working-directory: ${{ env.WORKING_DIR }}
-
       - name: Terraform Apply
         id: apply
-        run: terraform apply "main.tfplan"
+        run: terraform apply -auto-approve
         working-directory: ${{ env.WORKING_DIR }}
     
