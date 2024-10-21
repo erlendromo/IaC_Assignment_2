@@ -27,20 +27,6 @@ resource "azurerm_key_vault_access_policy" "main" {
   secret_permissions = ["Get", "Set", "Delete", "List", "Restore", "Recover", "Purge"]
 }
 
-resource "azurerm_key_vault_key" "main" {
-  key_vault_id = azurerm_key_vault.main.id
-
-  name            = var.key_vault_key_name
-  key_type        = "RSA-HSM"
-  key_opts        = ["decrypt", "encrypt", "sign", "wrapKey", "unwrapKey", "verify"]
-  key_size        = 2048
-  expiration_date = "2024-12-31T23:59:59+00:00"
-
-  depends_on = [
-    azurerm_key_vault.main
-  ]
-}
-
 resource "azurerm_private_endpoint" "main" {
   name                = var.private_endpoint_name
   resource_group_name = azurerm_key_vault.main.resource_group_name

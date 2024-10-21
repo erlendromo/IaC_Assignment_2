@@ -13,11 +13,6 @@ variable "key_vault_name" {
   description = "(Required) Name of the key vault."
 }
 
-variable "key_vault_key_name" {
-  type        = string
-  description = "(Required) Name of the key vault key."
-}
-
 variable "public_ip_rules" {
   type        = list(string)
   description = "Public ip rules for the key vault."
