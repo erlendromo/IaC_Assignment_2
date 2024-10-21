@@ -53,7 +53,7 @@ resource "azurerm_private_endpoint" "main" {
     name                           = "${var.storage_account_name}-private-service-connection"
     is_manual_connection           = false
     private_connection_resource_id = var.key_vault_id
-    subresource_names              = ["vault"]
+    subresource_names              = ["vault", "blob"]
   }
 
   depends_on = [
