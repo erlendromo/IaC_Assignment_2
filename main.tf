@@ -67,7 +67,6 @@ module "keyvault" {
   private_service_connection_name = "${local.base_prefix}-psc-${local.workspace_suffix}"
 
   depends_on = [
-    azurerm_public_ip.kv,
     module.network
   ]
 }
@@ -87,7 +86,6 @@ module "storage" {
   key_vault_key_name              = module.keyvault.key_vault_key_name
 
   depends_on = [
-    azurerm_public_ip.sa,
     module.keyvault,
     module.network
   ]
