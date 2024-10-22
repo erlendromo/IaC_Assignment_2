@@ -13,8 +13,8 @@ resource "azurerm_linux_web_app" "main" {
   service_plan_id     = azurerm_service_plan.main.id
 
   site_config {
-    http2_enabled = true
-    health_check_path = "/health"
+    http2_enabled       = true
+    health_check_path   = "/health"
     minimum_tls_version = "1.2"
   }
 }

@@ -66,21 +66,21 @@ module "app_service" {
 }
 
 resource "azurerm_public_ip" "main" {
-  name = "${local.base_prefix}-pip-${local.workspace_suffix}"
+  name                = "${local.base_prefix}-pip-${local.workspace_suffix}"
   resource_group_name = azurerm_resource_group.main.name
-  location = azurerm_resource_group.main.location
-  allocation_method = "Static"
+  location            = azurerm_resource_group.main.location
+  allocation_method   = "Static"
 }
 
 resource "azurerm_lb" "main" {
-  name = "${local.base_prefix}-lb-${local.workspace_suffix}"
+  name                = "${local.base_prefix}-lb-${local.workspace_suffix}"
   resource_group_name = azurerm_resource_group.main.name
-  location = azurerm_resource_group.main.location
-  sku = "Basic"
+  location            = azurerm_resource_group.main.location
+  sku                 = "Basic"
 
   frontend_ip_configuration {
-    name = "PublicIPAddress"
+    name                 = "PublicIPAddress"
     public_ip_address_id = azurerm_public_ip.main.id
-    subnet_id = module.network.subnet_id_list[0]
+    subnet_id            = module.network.subnet_id_list[0]
   }
 }

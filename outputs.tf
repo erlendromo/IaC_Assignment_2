@@ -1,4 +1,4 @@
 output "web_app_public_ip" {
-  value = azurerm_public_ip.main.ip_address
+  value       = azurerm_public_ip.main.ip_address
   description = "The public IP address of the web app"
 }
