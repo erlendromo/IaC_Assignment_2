@@ -33,8 +33,8 @@ module "network" {
   dns_servers                   = ["168.63.129.16", "168.63.129.17"] # Azure-provided DNS servers
   subnets = [
     {
-      name             = "subnet-${random_string.main.result}"
-      address_prefixes = ["10.0.0.0/28"] # 16 ip addresses
+      name              = "subnet-${random_string.main.result}"
+      address_prefixes  = ["10.0.0.0/28"] # 16 ip addresses
       service_endpoints = ["Microsoft.KeyVault"]
     }
   ]

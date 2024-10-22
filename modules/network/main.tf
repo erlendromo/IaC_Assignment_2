@@ -17,7 +17,7 @@ resource "azurerm_subnet" "main" {
 
   name                 = var.subnets[count.index].name
   address_prefixes     = var.subnets[count.index].address_prefixes
-  service_endpoints = var.subnets[count.index].service_endpoints
+  service_endpoints    = var.subnets[count.index].service_endpoints
   resource_group_name  = azurerm_virtual_network.main.resource_group_name
   virtual_network_name = azurerm_virtual_network.main.name
 
