@@ -93,7 +93,7 @@ module "storage" {
   storage_account_name            = "${local.base_prefix}sa${random_string.main.result}${local.workspace_suffix}"
   storage_container_name          = "${local.base_prefix}sc${random_string.main.result}${local.workspace_suffix}"
   storage_blob_name               = "${local.base_prefix}sb${random_string.main.result}${local.workspace_suffix}"
-  public_ip_rules                 = ["10.0.0.0/24"]
+  public_ip_rules                 = ["203.0.113.0/32"]
   virtual_network_subnet_ids      = module.network.subnet_id_list
   private_endpoint_name           = "${local.base_prefix}-pe-${local.workspace_suffix}"
   private_service_connection_name = "${local.base_prefix}-psc-${local.workspace_suffix}"
