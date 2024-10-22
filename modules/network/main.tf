@@ -9,7 +9,9 @@ resource "azurerm_virtual_network_dns_servers" "main" {
   virtual_network_id = azurerm_virtual_network.main.id
   dns_servers        = var.dns_servers
 
-  depends_on = [azurerm_virtual_network.main]
+  depends_on = [
+    azurerm_virtual_network.main
+  ]
 }
 
 resource "azurerm_subnet" "main" {
@@ -21,5 +23,7 @@ resource "azurerm_subnet" "main" {
   resource_group_name  = azurerm_virtual_network.main.resource_group_name
   virtual_network_name = azurerm_virtual_network.main.name
 
-  depends_on = [azurerm_virtual_network.main]
+  depends_on = [
+    azurerm_virtual_network.main
+  ]
 }
