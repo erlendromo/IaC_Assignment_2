@@ -1,4 +1,4 @@
-output "web_app_public_ip" {
-  value       = azurerm_public_ip.main.ip_address
-  description = "The public IP address of the web app"
+output "web_app_hostname" {
+  value       = module.app_service.linux_web_app_hostname
+  description = "The hostname of the deployed web app"
 }
