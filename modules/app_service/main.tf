@@ -15,6 +15,7 @@ resource "azurerm_linux_web_app" "main" {
   site_config {
     http2_enabled       = true
     health_check_path   = "/health"
+    health_check_eviction_time_in_min = 20
     minimum_tls_version = "1.2"
   }
 }
