@@ -61,7 +61,7 @@ module "keyvault" {
   resource_group_location         = azurerm_resource_group.main.location
   key_vault_name                  = "${local.base_prefix}-kv-${random_string.main.result}-${local.workspace_suffix}"
   key_vault_key_name              = "${local.base_prefix}-cmk-${random_string.main.result}-${local.workspace_suffix}"
-  public_ip_rules                 = ["203.0.113.16/30"]
+  public_ip_rules                 = ["52.225.77.209"]
   private_endpoint_name           = "${local.base_prefix}-pe-${local.workspace_suffix}"
   subnet_id                       = module.network.subnet_id_list[0]
   private_service_connection_name = "${local.base_prefix}-psc-${local.workspace_suffix}"
@@ -78,7 +78,7 @@ module "storage" {
   storage_account_name            = "${local.base_prefix}sa${random_string.main.result}${local.workspace_suffix}"
   storage_container_name          = "${local.base_prefix}sc${random_string.main.result}${local.workspace_suffix}"
   storage_blob_name               = "${local.base_prefix}sb${random_string.main.result}${local.workspace_suffix}"
-  public_ip_rules                 = ["203.0.113.0/30"]
+  public_ip_rules                 = ["52.225.77.209"]
   virtual_network_subnet_ids      = module.network.subnet_id_list
   private_endpoint_name           = "${local.base_prefix}-pe-${local.workspace_suffix}"
   private_service_connection_name = "${local.base_prefix}-psc-${local.workspace_suffix}"
