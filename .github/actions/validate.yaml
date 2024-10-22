@@ -1,0 +1,42 @@
+name: Validate
+
+on:
+  workflow_call:
+    inputs:
+      WORKING_DIR:
+        description: 'The working directory for the Terraform code'
+        required: true
+        type: string
+        default: '.'
+
+jobs:
+  validate:
+    name: Validate, Tfsec & Checkov
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        id: checkout
+        uses: actions/checkout@master
+
+      - name: Terraform Init
+        id: init
+        run: terraform init
+        working-directory: ${{ inputs.WORKING_DIR }}
+
+      - name: Terraform Validate
+        id: validate
+        run: terraform validate
+        working-directory: ${{ inputs.WORKING_DIR }}
+
+      - name: Tfsec
+        id: tfsec
+        uses: aquasecurity/tfsec-action@v1.0.3
+        with:
+          working_directory: ${{ inputs.WORKING_DIR }}
+
+      - name: Checkov
+        id: checkov
+        uses: bridgecrewio/checkov-action@master
+        with:
+          directory: ${{ inputs.WORKING_DIR }}
+        continue-on-error: true
