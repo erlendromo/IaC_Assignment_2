@@ -25,7 +25,7 @@ jobs:
     steps:
       - name: Validation
         id: validation
-        uses: ./.github/actions/validate
+        uses: ./.github/actions/validate.yaml
         with:
           WORKING_DIR: ${{ env.WORKING_DIR }}
 
