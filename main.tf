@@ -35,6 +35,7 @@ module "network" {
     {
       name             = "subnet-${random_string.main.result}"
       address_prefixes = ["10.0.0.0/28"] # 16 ip addresses
+      service_endpoints = ["Microsoft.KeyVault"]
     }
   ]
 }

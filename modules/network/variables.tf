@@ -22,6 +22,7 @@ variable "subnets" {
   type = list(object({
     name             = string
     address_prefixes = list(string)
+    service_endpoints = list(string)
   }))
   description = "The subnets that are used by the virtual network."
 }
