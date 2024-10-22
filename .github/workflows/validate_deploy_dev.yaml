@@ -16,43 +16,27 @@ env:
   ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
   ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
   ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
+  GH_TOKEN: ${{ secrets.IAC_ASSIGNMENT_2_TOKEN }}
   WORKING_DIR: '.'
 
 jobs:
-  validate:
-    name: Validate, Tfsec & Checkov
+  validation:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         id: checkout
         uses: actions/checkout@master
-
-      - name: Terraform Init
-        id: init
-        run: terraform init
-        working-directory: ${{ env.WORKING_DIR }}
-
-      - name: Terraform Validate
-        id: validate
-        run: terraform validate
-        working-directory: ${{ env.WORKING_DIR }}
-
-      - name: Tfsec
-        id: tfsec
-        uses: aquasecurity/tfsec-action@v1.0.3
+      
+      - name: Validation
+        id: validation
+        uses: ./.github/actions/validate
         with:
-          working_directory: ${{ env.WORKING_DIR }}
-
-      - name: Checkov
-        id: checkov
-        uses: bridgecrewio/checkov-action@master
-        with:
-          directory: ${{ env.WORKING_DIR }}
+          WORKING_DIR: ${{ env.WORKING_DIR }}
 
   dev:
     name: Deploy Dev Environment
     runs-on: ubuntu-latest
-    needs: validate
+    needs: validation
     steps:
       - name: Checkout
         id: checkout
@@ -68,12 +52,7 @@ jobs:
         run: terraform workspace select dev || terraform workspace new dev
         working-directory: ${{ env.WORKING_DIR }}
 
-      - name: Terraform Plan
-        id: plan
-        run: terraform plan -out=main.tfplan
-        working-directory: ${{ env.WORKING_DIR }}
-
       - name: Terraform Apply
         id: apply
-        run: terraform apply "main.tfplan"
+        run: terraform apply -auto-approve
         working-directory: ${{ env.WORKING_DIR }}
