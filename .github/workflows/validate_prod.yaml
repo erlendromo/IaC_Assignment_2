@@ -20,33 +20,15 @@ env:
   WORKING_DIR: '.'
 
 jobs:
-  validate:
-    name: Validate, Tfsec & Checkov
+  validation:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         id: checkout
         uses: actions/checkout@master
-
-      - name: Terraform Init
-        id: init
-        run: terraform init
-        working-directory: ${{ env.WORKING_DIR }}
-
-      - name: Terraform Validate
-        id: validate
-        run: terraform validate
-        working-directory: ${{ env.WORKING_DIR }}
-
-      - name: Tfsec
-        id: tfsec
-        uses: aquasecurity/tfsec-action@v1.0.3
+      
+      - name: Validation
+        id: validation
+        uses: ./.github/actions/validate
         with:
-          working_directory: ${{ env.WORKING_DIR }}
-
-      - name: Checkov
-        id: checkov
-        uses: bridgecrewio/checkov-action@master
-        with:
-          directory: ${{ env.WORKING_DIR }}
-        continue-on-error: true
+          WORKING_DIR: ${{ env.WORKING_DIR }}
