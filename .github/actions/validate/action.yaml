@@ -12,6 +12,10 @@ on:
 runs:
   using: 'composite'
   steps:
+    - name: Checkout
+      id: checkout
+      uses: actions/checkout@master
+    
     - name: Terraform Init
       id: init
       run: terraform init

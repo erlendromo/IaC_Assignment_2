@@ -23,10 +23,6 @@ jobs:
   validation:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        id: checkout
-        uses: actions/checkout@master
-      
       - name: Validation
         id: validation
         uses: ./.github/actions/validate
