@@ -79,7 +79,7 @@ resource "azurerm_lb" "main" {
   sku                 = "Basic"
 
   frontend_ip_configuration {
-    name                 = "EntryPoint"
+    name      = "EntryPoint"
     subnet_id = module.network.subnet_id_list[0]
   }
 }
