@@ -20,11 +20,13 @@ runs:
       id: init
       run: terraform init
       working-directory: ${{ inputs.WORKING_DIR }}
+      shell: bash
 
     - name: Terraform Validate
       id: validate
       run: terraform validate
       working-directory: ${{ inputs.WORKING_DIR }}
+      shell: bash
 
     - name: Tfsec
       id: tfsec
