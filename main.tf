@@ -103,6 +103,7 @@ module "key_vault" {
       key_type = "RSA-HSM"
       key_size = 2048
       key_opts = ["unwrapKey", "wrapKey"]
+      expiration_date = "2024-12-31T23:59:00Z"
     }
   ]
 }
@@ -112,8 +113,7 @@ module "sql_database" {
   resource_group_name          = azurerm_resource_group.main.name
   resource_group_location      = azurerm_resource_group.main.location
   server_name                  = "${local.base_prefix}-sql-server-${local.workspace_suffix}"
-  server_version               = "12.0"
-  administrator_login          = "4dm1nu5er"
+  administrator_login          = random_string.main.result
   administrator_login_password = random_password.main.result
   database_name                = "${local.base_prefix}-db-${local.workspace_suffix}"
   user_assigned_identity_id    = azurerm_user_assigned_identity.main.id
