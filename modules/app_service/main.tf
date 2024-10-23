@@ -4,6 +4,8 @@ resource "azurerm_service_plan" "main" {
   location            = var.resource_group_location
   os_type             = var.os_type
   sku_name            = var.sku_name
+  zone_balancing_enabled = var.zone_balancing_enabled
+  maximum_elastic_worker_count = var.maximum_elastic_worker_count
 }
 
 resource "azurerm_linux_web_app" "main" {
@@ -11,6 +13,13 @@ resource "azurerm_linux_web_app" "main" {
   resource_group_name = azurerm_service_plan.main.resource_group_name
   location            = azurerm_service_plan.main.location
   service_plan_id     = azurerm_service_plan.main.id
+  https_only = var.https_only
+  client_certificate_enabled = var.client_certificate_enabled
+  ftp_publish_basic_authentication_enabled = var.ftp_publish_basic_authentication_enabled
+
+  logs {
+    failed_request_tracing = true
+  }
 
   site_config {
     http2_enabled                     = true

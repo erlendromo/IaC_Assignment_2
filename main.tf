@@ -60,8 +60,6 @@ module "app_service" {
   resource_group_name     = azurerm_resource_group.main.name
   resource_group_location = azurerm_resource_group.main.location
   service_plan_name       = "${local.base_prefix}-sp-${local.workspace_suffix}"
-  os_type                 = "Linux"
-  sku_name                = "P1v2"
   linux_web_app_name      = "${local.base_prefix}-webapp-${local.workspace_suffix}"
 }
 
