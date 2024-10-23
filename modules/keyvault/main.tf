@@ -10,6 +10,11 @@ resource "azurerm_key_vault" "main" {
   sku_name                      = var.sku_name
   soft_delete_retention_days    = var.soft_delete_retention_days
   purge_protection_enabled      = var.purge_protection_enabled
+
+  network_acls {
+    default_action = "Deny"
+    bypass = "AzureServices"
+  }
 }
 
 resource "azurerm_key_vault_access_policy" "client" {
@@ -36,4 +41,5 @@ resource "azurerm_key_vault_key" "main" {
   key_type     = var.key_vault_keys[count.index].key_type
   key_size     = var.key_vault_keys[count.index].key_size
   key_opts     = var.key_vault_keys[count.index].key_opts
+  expiration_date = var.key_vault_keys[count.index].expiration_date
 }

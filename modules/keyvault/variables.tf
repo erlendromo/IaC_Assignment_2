@@ -65,6 +65,7 @@ variable "key_vault_keys" {
     key_type = string
     key_size = number
     key_opts = list(string)
+    expiration_date = string
   }))
   description = "A list of key vault keys to create."
 }
