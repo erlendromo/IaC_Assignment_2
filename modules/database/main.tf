@@ -5,6 +5,10 @@ resource "azurerm_mssql_server" "main" {
   version                      = var.server_version
   administrator_login          = var.administrator_login
   administrator_login_password = var.administrator_login_password
+  public_network_access_enabled = var.public_network_access_enabled
+  minimum_tls_version = var.minimum_tls_version
+
+  
 }
 
 resource "azurerm_mssql_database" "main" {

@@ -18,6 +18,7 @@ variable "server_name" {
 variable "server_version" {
   type        = string
   description = "The version of the SQL server."
+  default = "12.0"
 }
 
 variable "administrator_login" {
@@ -28,6 +29,18 @@ variable "administrator_login" {
 variable "administrator_login_password" {
   type        = string
   description = "The administrator login password for the SQL server."
+}
+
+variable "public_network_access_enabled" {
+  type        = bool
+  description = "Whether or not public network access is enabled for the SQL server."
+  default     = false
+}
+
+variable "minimum_tls_version" {
+  type        = string
+  description = "The minimum TLS version for the SQL server."
+  default     = "1.2"
 }
 
 # SQL database variables
