@@ -5,7 +5,7 @@ resource "random_string" "main" {
 }
 
 resource "random_password" "main" {
-  length = 16
+  length           = 16
   override_special = "!@#$%^&*()_+"
 }
 
@@ -85,21 +85,21 @@ resource "azurerm_lb" "main" {
 }
 
 resource "azurerm_user_assigned_identity" "main" {
-  name = "${local.base_prefix}-identity-${local.workspace_suffix}"
+  name                = "${local.base_prefix}-identity-${local.workspace_suffix}"
   resource_group_name = azurerm_resource_group.main.name
-  location = azurerm_resource_group.main.location
+  location            = azurerm_resource_group.main.location
 }
 
 module "key_vault" {
-  source = "./modules/keyvault"
-  key_vault_name = "${local.base_prefix}-kv-${local.workspace_suffix}"
-  resource_group_name = azurerm_resource_group.main.name
-  resource_group_location = azurerm_resource_group.main.location
-  user_assigned_identity_tenant_id = azurerm_user_assigned_identity.main.tenant_id
+  source                              = "./modules/keyvault"
+  key_vault_name                      = "${local.base_prefix}-kv-${local.workspace_suffix}"
+  resource_group_name                 = azurerm_resource_group.main.name
+  resource_group_location             = azurerm_resource_group.main.location
+  user_assigned_identity_tenant_id    = azurerm_user_assigned_identity.main.tenant_id
   user_assigned_identity_principal_id = azurerm_user_assigned_identity.main.principal_id
   key_vault_keys = [
     {
-      name = "database-key"
+      name     = "database-key"
       key_type = "RSA-HSM"
       key_size = 2048
       key_opts = ["unwrapKey", "wrapKey"]
@@ -108,14 +108,14 @@ module "key_vault" {
 }
 
 module "sql_database" {
-  source = "./modules/database"
-  resource_group_name     = azurerm_resource_group.main.name
-  resource_group_location = azurerm_resource_group.main.location
-  server_name             = "${local.base_prefix}-sql-server-${local.workspace_suffix}"
-  server_version          = "12.0"
-  administrator_login     = "4dm1nu5er"
+  source                       = "./modules/database"
+  resource_group_name          = azurerm_resource_group.main.name
+  resource_group_location      = azurerm_resource_group.main.location
+  server_name                  = "${local.base_prefix}-sql-server-${local.workspace_suffix}"
+  server_version               = "12.0"
+  administrator_login          = "4dm1nu5er"
   administrator_login_password = random_password.main.result
-  database_name           = "${local.base_prefix}-db-${local.workspace_suffix}"
-  user_assigned_identity_id = azurerm_user_assigned_identity.main.id
-  key_vault_key_id        = module.key_vault.key_vault_key_ids[0]
+  database_name                = "${local.base_prefix}-db-${local.workspace_suffix}"
+  user_assigned_identity_id    = azurerm_user_assigned_identity.main.id
+  key_vault_key_id             = module.key_vault.key_vault_key_ids[0]
 }

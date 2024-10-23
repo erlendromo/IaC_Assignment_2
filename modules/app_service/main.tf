@@ -32,7 +32,7 @@ resource "azurerm_linux_web_app" "main" {
     http_logs {
       file_system {
         retention_in_days = 25
-        retention_in_mb = 50
+        retention_in_mb   = 50
       }
     }
   }
