@@ -59,12 +59,6 @@ variable "client_certificate_enabled" {
   default     = true
 }
 
-variable "ftp_publish_basic_authentication_enabled" {
-  type        = bool
-  description = "Whether to enable FTP publish basic authentication."
-  default     = false
-}
-
 variable "public_network_access_enabled" {
   type        = bool
   description = "Whether to enable public network access."
