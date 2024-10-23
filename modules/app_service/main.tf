@@ -9,20 +9,20 @@ resource "azurerm_service_plan" "main" {
 }
 
 resource "azurerm_linux_web_app" "main" {
-  name                                     = var.linux_web_app_name
-  resource_group_name                      = azurerm_service_plan.main.resource_group_name
-  location                                 = azurerm_service_plan.main.location
-  service_plan_id                          = azurerm_service_plan.main.id
-  https_only                               = var.https_only
-  client_certificate_enabled               = var.client_certificate_enabled
-  public_network_access_enabled            = var.public_network_access_enabled
+  name                          = var.linux_web_app_name
+  resource_group_name           = azurerm_service_plan.main.resource_group_name
+  location                      = azurerm_service_plan.main.location
+  service_plan_id               = azurerm_service_plan.main.id
+  https_only                    = var.https_only
+  client_certificate_enabled    = var.client_certificate_enabled
+  public_network_access_enabled = var.public_network_access_enabled
 
   site_config {
     http2_enabled                     = true
     health_check_path                 = "/health"
     health_check_eviction_time_in_min = 5
     minimum_tls_version               = "1.2"
-    ftps_state = "FtpsOnly"
+    ftps_state                        = "FtpsOnly"
   }
 
   logs {
