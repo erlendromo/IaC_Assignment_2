@@ -28,6 +28,13 @@ resource "azurerm_linux_web_app" "main" {
   logs {
     failed_request_tracing  = true
     detailed_error_messages = true
+
+    http_logs {
+      file_system {
+        retention_in_days = 25
+        retention_in_mb = 50
+      }
+    }
   }
 
   identity {
