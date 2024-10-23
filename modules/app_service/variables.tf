@@ -33,9 +33,9 @@ variable "zone_balancing_enabled" {
   default     = true
 }
 
-variable "maximum_elastic_worker_count" {
+variable "worker_count" {
   type        = number
-  description = "The maximum number of workers that can be allocated."
+  description = "The number of workers."
   default     = 3
 }
 
@@ -62,6 +62,11 @@ variable "client_certificate_enabled" {
 variable "ftp_publish_basic_authentication_enabled" {
   type        = bool
   description = "Whether to enable FTP publish basic authentication."
-  default     = true
+  default     = false
+}
 
+variable "public_network_access_enabled" {
+  type        = bool
+  description = "Whether to enable public network access."
+  default     = false
 }
