@@ -99,10 +99,10 @@ module "key_vault" {
   user_assigned_identity_principal_id = azurerm_user_assigned_identity.main.principal_id
   key_vault_keys = [
     {
-      name     = "database-key"
-      key_type = "RSA-HSM"
-      key_size = 2048
-      key_opts = ["unwrapKey", "wrapKey"]
+      name            = "database-key"
+      key_type        = "RSA-HSM"
+      key_size        = 2048
+      key_opts        = ["unwrapKey", "wrapKey"]
       expiration_date = "2024-12-31T23:59:00Z"
     }
   ]

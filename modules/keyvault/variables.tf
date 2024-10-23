@@ -61,10 +61,10 @@ variable "user_assigned_identity_principal_id" {
 
 variable "key_vault_keys" {
   type = list(object({
-    name     = string
-    key_type = string
-    key_size = number
-    key_opts = list(string)
+    name            = string
+    key_type        = string
+    key_size        = number
+    key_opts        = list(string)
     expiration_date = string
   }))
   description = "A list of key vault keys to create."

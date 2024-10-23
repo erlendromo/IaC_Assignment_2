@@ -18,7 +18,7 @@ variable "server_name" {
 variable "server_version" {
   type        = string
   description = "The version of the SQL server."
-  default = "12.0"
+  default     = "12.0"
 }
 
 variable "administrator_login" {

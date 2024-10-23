@@ -4,13 +4,13 @@ output "web_app_hostname" {
 }
 
 output "sql_database_username" {
-  value = module.sql_database.sql_database_username
+  value       = module.sql_database.sql_database_username
   description = "The username for the SQL database"
-  sensitive = true
+  sensitive   = true
 }
 
 output "sql_database_password" {
-  value = module.sql_database.sql_database_password
+  value       = module.sql_database.sql_database_password
   description = "The password for the SQL database"
-  sensitive = true
+  sensitive   = true
 }
