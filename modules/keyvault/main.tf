@@ -40,7 +40,7 @@ resource "azurerm_key_vault_access_policy" "cmk_access" {
   tenant_id    = data.azurerm_client_config.current.tenant_id
   object_id    = var.storage_account_pricipal_id
 
-  key_permissions = ["get", "wrapKey", "unwrapKey"]
+  key_permissions = ["Get", "List"]
 }
 
 resource "azurerm_key_vault_key" "main" {
