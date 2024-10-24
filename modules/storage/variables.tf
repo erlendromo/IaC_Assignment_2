@@ -1,45 +1,45 @@
 # Storage Account Variables
 
 variable "resource_group_name" {
-  type = string
+  type        = string
   description = "The name of the resource group."
 }
 
 variable "resource_group_location" {
-  type = string
+  type        = string
   description = "The location of the resource group."
 }
 
 variable "storage_account_name" {
-  type = string
+  type        = string
   description = "The name of the storage account."
 }
 
 variable "account_tier" {
-  type = string
+  type        = string
   description = "Defines the Tier to use for this storage account. Valid options are Standard and Premium."
-  default = "Standard"
+  default     = "Standard"
 }
 
 variable "account_kind" {
-  type = string
+  type        = string
   description = "Defines the Kind to use for this storage account. Valid options are Storage, StorageV2, BlobStorage."
-  default = "StorageV2"
+  default     = "StorageV2"
 }
 
 variable "account_replication_type" {
-  type = string
+  type        = string
   description = "Defines the type of replication to use for this storage account. Valid options are LRS, GRS, RAGRS, ZRS, GZRS, RA_GZRS."
-  default = "GRS"
+  default     = "GRS"
 }
 
 variable "https_traffic_only_enabled" {
-  type = bool
+  type        = bool
   description = "Boolean flag which forces HTTPS if enabled, and allows HTTP traffic if disabled."
-  default = false
+  default     = false
 }
 
 variable "virtual_network_subnet_ids" {
-  type = list(string)
+  type        = list(string)
   description = "A list of virtual network subnet ids to associate with the storage account."
 }

@@ -109,10 +109,10 @@ module "key_vault" {
 }
 
 module "storage" {
-  source = "./modules/storage"
-  resource_group_name = azurerm_resource_group.main.name
-  resource_group_location = azurerm_resource_group.main.location
-  storage_account_name = "${local.base_prefix}sa${random_string.main.result}${local.workspace_suffix}"
+  source                     = "./modules/storage"
+  resource_group_name        = azurerm_resource_group.main.name
+  resource_group_location    = azurerm_resource_group.main.location
+  storage_account_name       = "${local.base_prefix}sa${random_string.main.result}${local.workspace_suffix}"
   virtual_network_subnet_ids = module.network.subnet_id_list
 }
 
@@ -123,8 +123,8 @@ module "sql_database" {
   server_name                  = "${local.base_prefix}-sql-server-${local.workspace_suffix}"
   administrator_login          = random_string.main.result
   administrator_login_password = random_password.main.result
-  storage_endpoint = module.storage.storage_account_blob_endpoint
-  storage_account_access_key = module.storage.storage_account_access_key
+  storage_endpoint             = module.storage.storage_account_blob_endpoint
+  storage_account_access_key   = module.storage.storage_account_access_key
   database_name                = "${local.base_prefix}-db-${local.workspace_suffix}"
   user_assigned_identity_id    = azurerm_user_assigned_identity.main.id
   key_vault_key_id             = module.key_vault.key_vault_key_ids[0]

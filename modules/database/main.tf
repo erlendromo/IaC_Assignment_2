@@ -10,8 +10,8 @@ resource "azurerm_mssql_server" "main" {
 }
 
 resource "azurerm_mssql_server_extended_auditing_policy" "main" {
-  server_id = azurerm_mssql_server.main.id
-  storage_endpoint = var.storage_endpoint
+  server_id                  = azurerm_mssql_server.main.id
+  storage_endpoint           = var.storage_endpoint
   storage_account_access_key = var.storage_account_access_key
 }
 
