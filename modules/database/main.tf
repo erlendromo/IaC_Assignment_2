@@ -15,6 +15,10 @@ resource "azurerm_mssql_server" "main" {
     object_id      = data.azurerm_client_config.current.object_id
     tenant_id      = data.azurerm_client_config.current.tenant_id
   }
+
+  identity {
+    type = "SystemAssigned"
+  }
 }
 
 resource "azurerm_mssql_server_extended_auditing_policy" "main" {

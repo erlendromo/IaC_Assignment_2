@@ -1,8 +1,3 @@
-output "web_app_hostname" {
-  value       = module.app_service.default_hostname
-  description = "The hostname of the deployed web app"
-}
-
 output "sql_database_username" {
   value       = module.sql_database.sql_database_username
   description = "The username for the SQL database"
