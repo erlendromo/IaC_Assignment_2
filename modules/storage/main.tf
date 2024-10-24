@@ -8,7 +8,8 @@ resource "azurerm_storage_account" "main" {
   https_traffic_only_enabled      = var.https_traffic_only_enabled
   allow_nested_items_to_be_public = var.allow_nested_items_to_be_public
   public_network_access_enabled   = var.public_network_access_enabled
-  shared_access_key_enabled       = var.shared_access_key_enabled # TODO be wary of this
+  shared_access_key_enabled       = var.shared_access_key_enabled
+  local_user_enabled              = var.local_user_enabled
   min_tls_version                 = var.min_tls_version
 
   queue_properties {

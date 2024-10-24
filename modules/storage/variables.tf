@@ -57,6 +57,12 @@ variable "shared_access_key_enabled" {
   default     = false
 }
 
+variable "local_user_enabled" {
+  type        = bool
+  description = "Boolean flag which enables the local user accounts."
+  default     = false
+}
+
 variable "min_tls_version" {
   type        = string
   description = "The minimum supported TLS version for the storage account. Valid values are TLS1_0, TLS1_1, and TLS1_2."
