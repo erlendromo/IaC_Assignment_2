@@ -43,6 +43,14 @@ resource "azurerm_key_vault_access_policy" "cmk_access" {
   key_permissions = ["Get", "List"]
 }
 
+# resource "azurerm_key_vault_access_policy" "sql_access" {
+#   key_vault_id = azurerm_key_vault.main.id
+#   tenant_id = data.azurerm_client_config.current.tenant_id
+#   object_id = var.sql_server_principal_id
+
+#   key_permissions = ["Get", "List"]
+# }
+
 resource "azurerm_key_vault_key" "main" {
   count = length(var.key_vault_keys)
 

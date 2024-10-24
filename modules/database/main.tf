@@ -47,7 +47,7 @@ resource "azurerm_mssql_database" "main" {
     identity_ids = [var.user_assigned_identity_id]
   }
 
-  transparent_data_encryption_key_vault_key_id = var.key_vault_key_id
+  #transparent_data_encryption_key_vault_key_id = var.key_vault_key_id
 
   lifecycle {
     prevent_destroy = true

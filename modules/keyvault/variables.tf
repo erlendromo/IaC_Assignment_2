@@ -62,6 +62,11 @@ variable "storage_account_pricipal_id" {
   description = "The principal ID of the storage account."
 }
 
+# variable "sql_server_principal_id" {
+#   type        = string
+#   description = "The principal ID of the SQL server."
+# }
+
 # Key vault key variables
 
 variable "key_vault_keys" {
