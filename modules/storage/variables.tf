@@ -73,15 +73,3 @@ variable "virtual_network_subnet_ids" {
   type        = list(string)
   description = "A list of virtual network subnet ids to associate with the storage account."
 }
-
-# Customer managed key variables
-
-variable "key_vault_id" {
-  type        = string
-  description = "The ID of the Key Vault."
-}
-
-variable "key_name" {
-  type        = string
-  description = "The name of the Key Vault key."
-}

@@ -45,7 +45,7 @@ variable "purge_protection_enabled" {
   default     = true
 }
 
-# User-assigned identity variables
+# Access policy variables
 
 variable "user_assigned_identity_tenant_id" {
   type        = string
@@ -55,6 +55,18 @@ variable "user_assigned_identity_tenant_id" {
 variable "user_assigned_identity_principal_id" {
   type        = string
   description = "The principal ID of the user assigned identity."
+}
+
+variable "storage_account_pricipal_id" {
+  type        = string
+  description = "The principal ID of the storage account."
+}
+
+# Storage account customer managed key variables
+
+variable "storage_account_id" {
+  type        = string
+  description = "The ID of the storage account."
 }
 
 # Key vault key variables

@@ -35,6 +35,14 @@ resource "azurerm_key_vault_access_policy" "user_assigned" {
   secret_permissions = ["Get", "List"]
 }
 
+resource "azurerm_key_vault_access_policy" "cmk_access" {
+  key_vault_id = azurerm_key_vault.main.id
+  tenant_id    = data.azurerm_client_config.current.tenant_id
+  object_id    = var.storage_account_pricipal_id
+
+  key_permissions = ["get", "wrapKey", "unwrapKey"]
+}
+
 resource "azurerm_key_vault_key" "main" {
   count = length(var.key_vault_keys)
 
@@ -44,6 +52,12 @@ resource "azurerm_key_vault_key" "main" {
   key_size        = var.key_vault_keys[count.index].key_size
   key_opts        = var.key_vault_keys[count.index].key_opts
   expiration_date = var.key_vault_keys[count.index].expiration_date
+}
+
+resource "azurerm_storage_account_customer_managed_key" "main" {
+  storage_account_id = var.storage_account_id
+  key_vault_id       = azurerm_key_vault.main.id
+  key_name           = var.key_vault_keys[0].name
 }
 
 resource "azurerm_private_endpoint" "main" {

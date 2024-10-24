@@ -41,28 +41,18 @@ resource "azurerm_storage_account" "main" {
       days = 7
     }
   }
+
+  identity {
+    type = "SystemAssigned"
+  }
 }
 
-resource "azurerm_storage_account_network_rules" "default" {
-  storage_account_id         = azurerm_storage_account.main.id
-  default_action             = "Deny"
-  ip_rules                   = ["100.0.0.1"]
-  virtual_network_subnet_ids = var.virtual_network_subnet_ids
-  bypass                     = ["Metrics", "AzureServices"]
-}
-
-resource "azurerm_storage_account_network_rules" "localhost" {
+resource "azurerm_storage_account_network_rules" "main" {
   storage_account_id         = azurerm_storage_account.main.id
   default_action             = "Deny"
   ip_rules                   = ["127.0.0.1"]
   virtual_network_subnet_ids = var.virtual_network_subnet_ids
   bypass                     = ["Metrics", "AzureServices"]
-}
-
-resource "azurerm_storage_account_customer_managed_key" "cmk" {
-  storage_account_id = azurerm_storage_account.main.id
-  key_vault_id       = var.key_vault_id
-  key_name           = var.key_name
 }
 
 resource "azurerm_private_endpoint" "main" {
