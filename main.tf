@@ -148,7 +148,7 @@ resource "azurerm_key_vault_access_policy" "user_assigned" {
 
 resource "azurerm_key_vault_access_policy" "cmk_access" {
   key_vault_id = module.key_vault.key_vault_id
-  tenant_id    = data.azurerm_client_config.current.tenant_id
+  tenant_id    = azurerm_user_assigned_identity.main.tenant_id
   object_id    = module.storage.storage_account_pricipal_id
 
   key_permissions    = ["Get", "List", "WrapKey", "UnwrapKey"]
@@ -157,7 +157,7 @@ resource "azurerm_key_vault_access_policy" "cmk_access" {
 
 resource "azurerm_key_vault_access_policy" "sql_access" {
   key_vault_id = module.key_vault.key_vault_id
-  tenant_id    = data.azurerm_client_config.current.tenant_id
+  tenant_id    = azurerm_user_assigned_identity.main.tenant_id
   object_id    = module.sql_database.sql_database_principal_id
 
   key_permissions    = ["Get", "List", "WrapKey", "UnwrapKey"]
