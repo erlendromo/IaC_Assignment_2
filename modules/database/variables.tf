@@ -43,6 +43,18 @@ variable "minimum_tls_version" {
   default     = "1.2"
 }
 
+# SQL extended auditing policy variables
+
+variable "storage_endpoint" {
+  type        = string
+  description = "The storage endpoint for the SQL extended auditing policy."
+}
+
+variable "storage_account_access_key" {
+  type        = string
+  description = "The storage account access key for the SQL extended auditing policy."
+}
+
 # SQL database variables
 
 variable "database_name" {

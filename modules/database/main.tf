@@ -7,8 +7,12 @@ resource "azurerm_mssql_server" "main" {
   administrator_login_password  = var.administrator_login_password
   public_network_access_enabled = var.public_network_access_enabled
   minimum_tls_version           = var.minimum_tls_version
+}
 
-
+resource "azurerm_mssql_server_extended_auditing_policy" "main" {
+  server_id = azurerm_mssql_server.main.id
+  storage_endpoint = var.storage_endpoint
+  storage_account_access_key = var.storage_account_access_key
 }
 
 resource "azurerm_mssql_database" "main" {
