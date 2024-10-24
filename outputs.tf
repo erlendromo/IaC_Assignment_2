@@ -1,11 +1,11 @@
-output "sql_database_username" {
-  value       = module.sql_database.sql_database_username
+output "database_username" {
+  value       = module.backend_infrastructure.database_username
   description = "The username for the SQL database"
   sensitive   = true
 }
 
-output "sql_database_password" {
-  value       = module.sql_database.sql_database_password
+output "database_password" {
+  value       = module.backend_infrastructure.database_password
   description = "The password for the SQL database"
   sensitive   = true
 }
