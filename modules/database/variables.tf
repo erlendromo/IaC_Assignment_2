@@ -56,9 +56,9 @@ variable "storage_account_access_key" {
 }
 
 variable "retention_in_days" {
-  type = number
+  type        = number
   description = "The retention in days for the SQL extended auditing policy."
-  default = 90
+  default     = 90
 }
 
 # SQL database variables
@@ -111,9 +111,9 @@ variable "enclave_type" {
 }
 
 variable "ledger_enabled" {
-  type = bool
+  type        = bool
   description = "Whether or not ledger is enabled for the SQL database."
-  default = true
+  default     = true
 }
 
 variable "user_assigned_identity_id" {

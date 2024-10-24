@@ -66,11 +66,11 @@ variable "public_network_access_enabled" {
 }
 
 variable "storage_account_name" {
-  type = string
+  type        = string
   description = "The name of the storage account."
 }
 
 variable "storage_account_access_key" {
-  type = string
+  type        = string
   description = "The access key of the storage account."
 }

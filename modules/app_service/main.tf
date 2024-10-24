@@ -26,11 +26,11 @@ resource "azurerm_linux_web_app" "main" {
   }
 
   storage_account {
-    name = "webappstorage"
-    type = "AzureFiles"
-    share_name = "webappstorage"
+    name         = "webappstorage"
+    type         = "AzureFiles"
+    share_name   = "webappstorage"
     account_name = var.storage_account_name
-    access_key = var.storage_account_access_key
+    access_key   = var.storage_account_access_key
   }
 
   logs {
