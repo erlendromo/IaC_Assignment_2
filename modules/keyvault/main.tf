@@ -17,8 +17,8 @@ resource "azurerm_key_vault" "main" {
   }
 
   access_policy {
-    tenant_id    = data.azurerm_client_config.current.tenant_id
-    object_id    = data.azurerm_client_config.current.principal_id
+    tenant_id = data.azurerm_client_config.current.tenant_id
+    object_id = data.azurerm_client_config.current.principal_id
 
     key_permissions    = ["Get", "List", "Create", "Delete", "Update", "Recover", "Purge", "GetRotationPolicy"]
     secret_permissions = ["Get", "List"]
