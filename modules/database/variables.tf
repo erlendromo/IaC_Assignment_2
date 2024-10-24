@@ -125,3 +125,10 @@ variable "key_vault_key_id" {
   type        = string
   description = "The ID of the key vault key."
 }
+
+# Private endpoint variables
+
+variable "subnet_id" {
+  type        = string
+  description = "The ID of the subnet."
+}

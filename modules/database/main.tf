@@ -44,7 +44,7 @@ resource "azurerm_private_endpoint" "main" {
   name                = "sql-private-endpoint"
   resource_group_name = azurerm_mssql_server.main.resource_group_name
   location            = azurerm_mssql_server.main.location
-  subnet_id           = var.virtual_network_subnet_ids[0]
+  subnet_id           = var.subnet_id
 
   private_service_connection {
     name                           = "sql-private-endpoint-connection"
