@@ -22,7 +22,7 @@ resource "azurerm_key_vault_access_policy" "client" {
   tenant_id    = data.azurerm_client_config.current.tenant_id
   object_id    = data.azurerm_client_config.current.object_id
 
-  key_permissions = ["Get", "List", "Create", "Delete", "Update", "Recover", "Purge", "GetRotationPolicy"]
+  key_permissions    = ["Get", "List", "Create", "Delete", "Update", "Recover", "Purge", "GetRotationPolicy"]
   secret_permissions = ["Get", "List"]
 }
 
@@ -31,7 +31,7 @@ resource "azurerm_key_vault_access_policy" "user_assigned" {
   tenant_id    = var.user_assigned_identity_tenant_id
   object_id    = var.user_assigned_identity_principal_id
 
-  key_permissions = ["Get", "List", "WrapKey", "UnwrapKey"]
+  key_permissions    = ["Get", "List", "WrapKey", "UnwrapKey"]
   secret_permissions = ["Get", "List"]
 }
 
