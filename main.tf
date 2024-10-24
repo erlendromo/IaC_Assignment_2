@@ -60,12 +60,22 @@ resource "azurerm_subnet_network_security_group_association" "main" {
   ]
 }
 
+module "storage" {
+  source                     = "./modules/storage"
+  resource_group_name        = azurerm_resource_group.main.name
+  resource_group_location    = azurerm_resource_group.main.location
+  storage_account_name       = "${local.base_prefix}sa${random_string.main.result}${local.workspace_suffix}"
+  virtual_network_subnet_ids = module.network.subnet_id_list
+}
+
 module "app_service" {
   source                  = "./modules/app_service"
   resource_group_name     = azurerm_resource_group.main.name
   resource_group_location = azurerm_resource_group.main.location
   service_plan_name       = "${local.base_prefix}-sp-${local.workspace_suffix}"
   linux_web_app_name      = "${local.base_prefix}-webapp-${local.workspace_suffix}"
+  storage_account_name = module.storage.storage_account_name
+  storage_account_access_key = module.storage.storage_account_access_key
 }
 
 resource "azurerm_lb" "main" {
@@ -106,14 +116,6 @@ module "key_vault" {
       expiration_date = "2024-12-31T23:59:00Z"
     }
   ]
-}
-
-module "storage" {
-  source                     = "./modules/storage"
-  resource_group_name        = azurerm_resource_group.main.name
-  resource_group_location    = azurerm_resource_group.main.location
-  storage_account_name       = "${local.base_prefix}sa${random_string.main.result}${local.workspace_suffix}"
-  virtual_network_subnet_ids = module.network.subnet_id_list
 }
 
 module "sql_database" {

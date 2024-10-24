@@ -25,6 +25,14 @@ resource "azurerm_linux_web_app" "main" {
     ftps_state                        = "FtpsOnly"
   }
 
+  storage_account {
+    name = "webappstorage"
+    type = "AzureFiles"
+    share_name = "webappstorage"
+    account_name = var.storage_account_name
+    access_key = var.storage_account_access_key
+  }
+
   logs {
     failed_request_tracing  = true
     detailed_error_messages = true

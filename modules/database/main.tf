@@ -13,6 +13,7 @@ resource "azurerm_mssql_server_extended_auditing_policy" "main" {
   server_id                  = azurerm_mssql_server.main.id
   storage_endpoint           = var.storage_endpoint
   storage_account_access_key = var.storage_account_access_key
+  retention_in_days = var.retention_in_days
 }
 
 resource "azurerm_mssql_database" "main" {
@@ -25,6 +26,7 @@ resource "azurerm_mssql_database" "main" {
   sku_name       = var.sku_name
   zone_redundant = var.zone_redundant
   enclave_type   = var.enclave_type
+  ledger_enabled = var.ledger_enabled
 
   identity {
     type         = "UserAssigned"

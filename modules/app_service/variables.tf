@@ -64,3 +64,13 @@ variable "public_network_access_enabled" {
   description = "Whether to enable public network access."
   default     = false
 }
+
+variable "storage_account_name" {
+  type = string
+  description = "The name of the storage account."
+}
+
+variable "storage_account_access_key" {
+  type = string
+  description = "The access key of the storage account."
+}

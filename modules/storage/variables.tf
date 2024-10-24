@@ -39,6 +39,24 @@ variable "https_traffic_only_enabled" {
   default     = false
 }
 
+variable "allow_nested_items_to_be_public" {
+  type        = bool
+  description = "Boolean flag which allows public access to the content of any subdirectory, file or link in the storage account."
+  default     = false
+}
+
+variable "public_network_access_enabled" {
+  type        = bool
+  description = "Boolean flag which allows public access to the storage account."
+  default     = false
+}
+
+variable "shared_access_key_enabled" {
+  type = bool
+  description = "Boolean flag which enables shared access signature (SAS) tokens for all services in the storage account."
+  default = false
+}
+
 variable "min_tls_version" {
   type        = string
   description = "The minimum supported TLS version for the storage account. Valid values are TLS1_0, TLS1_1, and TLS1_2."
