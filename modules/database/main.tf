@@ -41,15 +41,15 @@ resource "azurerm_mssql_database" "main" {
 }
 
 resource "azurerm_private_endpoint" "main" {
-  name = "sql-private-endpoint"
+  name                = "sql-private-endpoint"
   resource_group_name = azurerm_mssql_server.main.resource_group_name
-  location = azurerm_mssql_server.main.location
-  subnet_id = var.virtual_network_subnet_ids[0]
+  location            = azurerm_mssql_server.main.location
+  subnet_id           = var.virtual_network_subnet_ids[0]
 
   private_service_connection {
-    name = "sql-private-endpoint-connection"
+    name                           = "sql-private-endpoint-connection"
     private_connection_resource_id = azurerm_mssql_server.main.id
-    is_manual_connection = false
-    subresource_names = ["sqlServer"]
+    is_manual_connection           = false
+    subresource_names              = ["sqlServer"]
   }
 }

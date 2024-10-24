@@ -90,8 +90,8 @@ module "storage" {
   resource_group_location    = azurerm_resource_group.main.location
   storage_account_name       = "${local.base_prefix}sa${random_string.main.result}${local.workspace_suffix}"
   virtual_network_subnet_ids = module.network.subnet_id_list
-  key_vault_id = module.key_vault.key_vault_id
-  key_name = module.key_vault.key_vault_name
+  key_vault_id               = module.key_vault.key_vault_id
+  key_name                   = module.key_vault.key_vault_name
 }
 
 module "app_service" {
