@@ -57,3 +57,23 @@ resource "azurerm_storage_account_network_rules" "localhost" {
   virtual_network_subnet_ids = var.virtual_network_subnet_ids
   bypass                     = ["Metrics", "AzureServices"]
 }
+
+resource "azurerm_storage_account_customer_managed_key" "cmk" {
+  storage_account_id = azurerm_storage_account.main.id
+  key_vault_id = var.key_vault_id
+  key_name = var.key_name
+}
+
+resource "azurerm_private_endpoint" "main" {
+  name = "sa-private-endpoint"
+  resource_group_name = azurerm_storage_account.main.resource_group_name
+  location = azurerm_storage_account.main.location
+  subnet_id = var.virtual_network_subnet_ids[0]
+
+  private_service_connection {
+    name                           = "sa-private-endpoint-connection"
+    private_connection_resource_id = azurerm_storage_account.main.id
+    is_manual_connection           = false
+    subresource_names = ["blobStorage"]
+  }
+}

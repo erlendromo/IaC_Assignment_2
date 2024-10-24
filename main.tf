@@ -60,12 +60,38 @@ resource "azurerm_subnet_network_security_group_association" "main" {
   ]
 }
 
+resource "azurerm_user_assigned_identity" "main" {
+  name                = "${local.base_prefix}-identity-${local.workspace_suffix}"
+  resource_group_name = azurerm_resource_group.main.name
+  location            = azurerm_resource_group.main.location
+}
+
+module "key_vault" {
+  source                              = "./modules/keyvault"
+  key_vault_name                      = "${local.base_prefix}-kv-${local.workspace_suffix}"
+  resource_group_name                 = azurerm_resource_group.main.name
+  resource_group_location             = azurerm_resource_group.main.location
+  user_assigned_identity_tenant_id    = azurerm_user_assigned_identity.main.tenant_id
+  user_assigned_identity_principal_id = azurerm_user_assigned_identity.main.principal_id
+  key_vault_keys = [
+    {
+      name            = "database-key"
+      key_type        = "RSA-HSM"
+      key_size        = 2048
+      key_opts        = ["unwrapKey", "wrapKey"]
+      expiration_date = "2024-12-31T23:59:00Z"
+    }
+  ]
+}
+
 module "storage" {
   source                     = "./modules/storage"
   resource_group_name        = azurerm_resource_group.main.name
   resource_group_location    = azurerm_resource_group.main.location
   storage_account_name       = "${local.base_prefix}sa${random_string.main.result}${local.workspace_suffix}"
   virtual_network_subnet_ids = module.network.subnet_id_list
+  key_vault_id = module.key_vault.key_vault_id
+  key_name = module.key_vault.key_vault_name
 }
 
 module "app_service" {
@@ -91,30 +117,6 @@ resource "azurerm_lb" "main" {
 
   depends_on = [
     module.network
-  ]
-}
-
-resource "azurerm_user_assigned_identity" "main" {
-  name                = "${local.base_prefix}-identity-${local.workspace_suffix}"
-  resource_group_name = azurerm_resource_group.main.name
-  location            = azurerm_resource_group.main.location
-}
-
-module "key_vault" {
-  source                              = "./modules/keyvault"
-  key_vault_name                      = "${local.base_prefix}-kv-${local.workspace_suffix}"
-  resource_group_name                 = azurerm_resource_group.main.name
-  resource_group_location             = azurerm_resource_group.main.location
-  user_assigned_identity_tenant_id    = azurerm_user_assigned_identity.main.tenant_id
-  user_assigned_identity_principal_id = azurerm_user_assigned_identity.main.principal_id
-  key_vault_keys = [
-    {
-      name            = "database-key"
-      key_type        = "RSA-HSM"
-      key_size        = 2048
-      key_opts        = ["unwrapKey", "wrapKey"]
-      expiration_date = "2024-12-31T23:59:00Z"
-    }
   ]
 }
 
