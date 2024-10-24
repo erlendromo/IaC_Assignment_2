@@ -105,7 +105,7 @@ module "key_vault" {
 resource "azurerm_storage_account_customer_managed_key" "main" {
   storage_account_id = module.storage.storage_account_id
   key_vault_id       = module.key_vault.key_vault_id
-  key_name           = module.key_vault.key_name
+  key_name           = module.key_vault.key_names[0]
 
   depends_on = [
     module.storage,
