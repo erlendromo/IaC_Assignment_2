@@ -116,9 +116,9 @@ variable "ledger_enabled" {
   default     = true
 }
 
-variable "user_assigned_identity_id" {
+variable "user_assigned_identity_principal_id" {
   type        = string
-  description = "The ID of the user-assigned identity."
+  description = "The principal ID of the user assigned identity."
 }
 
 variable "key_vault_key_id" {

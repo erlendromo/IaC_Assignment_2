@@ -50,6 +50,11 @@ variable "user_assigned_identity_tenant_id" {
   description = "The tenant ID of the user assigned identity."
 }
 
+variable "user_assigned_identity_principal_id" {
+  type        = string
+  description = "The principal ID of the user assigned identity."
+}
+
 # Key vault key variables
 
 variable "key_vault_keys" {

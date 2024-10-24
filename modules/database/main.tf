@@ -17,7 +17,7 @@ resource "azurerm_mssql_server" "main" {
   }
 
   identity {
-    type = "SystemAssigned"
+    type = "UserAssigned"
   }
 }
 
@@ -48,10 +48,10 @@ resource "azurerm_mssql_database" "main" {
 
   identity {
     type         = "UserAssigned"
-    identity_ids = [var.user_assigned_identity_id]
+    identity_ids = [var.user_assigned_identity_principal_id]
   }
 
-  #transparent_data_encryption_key_vault_key_id = var.key_vault_key_id
+  transparent_data_encryption_key_vault_key_id = var.key_vault_key_id
 
   lifecycle {
     prevent_destroy = true

@@ -23,6 +23,14 @@ resource "azurerm_key_vault" "main" {
     key_permissions    = ["Get", "List", "Create", "Delete", "Update", "Recover", "Purge", "GetRotationPolicy"]
     secret_permissions = ["Get", "List"]
   }
+
+  access_policy {
+    tenant_id    = var.user_assigned_identity_tenant_id
+    object_id    = var.user_assigned_identity_principal_id
+
+    key_permissions    = ["Get", "List", "WrapKey", "UnwrapKey"]
+    secret_permissions = ["Get", "List"]
+  }
 }
 
 resource "azurerm_key_vault_key" "main" {
