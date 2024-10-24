@@ -54,6 +54,6 @@ resource "azurerm_private_endpoint" "main" {
     name                           = "keyvault-private-endpoint-connection"
     private_connection_resource_id = azurerm_key_vault.main.id
     is_manual_connection           = false
-    subresource_names              = ["keyvault"]
+    subresource_names              = ["vault"]
   }
 }

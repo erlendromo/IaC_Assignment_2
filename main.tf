@@ -78,7 +78,7 @@ module "key_vault" {
       name            = "database-key"
       key_type        = "RSA-HSM"
       key_size        = 2048
-      key_opts        = ["unwrapKey", "wrapKey"]
+      key_opts        = ["get", "unwrapKey", "wrapKey"]
       expiration_date = "2024-12-31T23:59:00Z"
     }
   ]

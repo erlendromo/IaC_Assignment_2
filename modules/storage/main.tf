@@ -75,6 +75,6 @@ resource "azurerm_private_endpoint" "main" {
     name                           = "sa-private-endpoint-connection"
     private_connection_resource_id = azurerm_storage_account.main.id
     is_manual_connection           = false
-    subresource_names              = ["blobStorage"]
+    subresource_names              = ["blob"]
   }
 }

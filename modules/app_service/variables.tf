@@ -24,7 +24,7 @@ variable "os_type" {
 variable "sku_name" {
   type        = string
   description = "The SKU name of the service plan."
-  default     = "P1v2"
+  default     = "S1"
 }
 
 variable "zone_balancing_enabled" {
