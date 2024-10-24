@@ -14,7 +14,7 @@ output "storage_account_name" {
 }
 
 output "storage_account_pricipal_id" {
-  value = azurerm_storage_account.main.identity[0].principal_id
+  value       = azurerm_storage_account.main.identity[0].principal_id
   description = "The principal ID of the storage account."
 }
 

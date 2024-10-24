@@ -73,7 +73,7 @@ module "storage" {
   storage_account_name       = "${local.base_prefix}sa${random_string.main.result}${local.workspace_suffix}"
   virtual_network_subnet_ids = module.network.subnet_id_list
 
-  depends_on = [ module.network ]
+  depends_on = [module.network]
 }
 
 module "key_vault" {
@@ -92,9 +92,9 @@ module "key_vault" {
       expiration_date = "2024-12-31T23:59:00Z"
     }
   ]
-  storage_account_id = module.storage.storage_account_id
+  storage_account_id          = module.storage.storage_account_id
   storage_account_pricipal_id = module.storage.storage_account_principal_id
-  subnet_id = module.network.subnet_id_list[0]
+  subnet_id                   = module.network.subnet_id_list[0]
 
   depends_on = [
     module.network,
@@ -112,7 +112,7 @@ module "app_service" {
   storage_account_name       = module.storage.storage_account_name
   storage_account_access_key = module.storage.storage_account_access_key
 
-  depends_on = [ module.storage ]
+  depends_on = [module.storage]
 }
 
 resource "azurerm_lb" "main" {
