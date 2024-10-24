@@ -146,10 +146,10 @@ resource "azurerm_key_vault_access_policy" "user_assigned" {
   secret_permissions = ["Get", "List"]
 }
 
-resource "azurerm_key_vault_access_policy" "kv_access" {
+resource "azurerm_key_vault_access_policy" "kvk_access" {
   key_vault_id = module.key_vault.key_vault_id
   tenant_id    = data.azurerm_client_config.current.tenant_id
-  object_id    = module.key_vault.key_vault_principal_id
+  object_id    = module.key_vault.key_vault_key_principal_ids[0]
 
   key_permissions    = ["Get", "List", "Create", "Delete", "Update", "Recover", "Purge", "GetRotationPolicy"]
   secret_permissions = ["Get", "List"]
