@@ -37,6 +37,7 @@ module "backend_infrastructure" {
   resource_group_name        = azurerm_resource_group.main.name
   resource_group_location    = azurerm_resource_group.main.location
   random_string              = random_string.main.result
+  random_password            = random_password.main.result
   base_prefix                = local.base_prefix
   workspace_suffix           = local.workspace_suffix
   user_assigned_tenant_id    = azurerm_user_assigned_identity.main.tenant_id
