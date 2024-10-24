@@ -132,5 +132,5 @@ module "sql_database" {
   database_name                = "${local.base_prefix}-db-${local.workspace_suffix}"
   user_assigned_identity_id    = azurerm_user_assigned_identity.main.id
   key_vault_key_id             = module.key_vault.key_vault_key_ids[0]
-  subnet_id = module.network.subnet_id_list[0]
+  subnet_id                    = module.network.subnet_id_list[0]
 }
