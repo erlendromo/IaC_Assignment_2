@@ -62,13 +62,6 @@ variable "storage_account_pricipal_id" {
   description = "The principal ID of the storage account."
 }
 
-# Storage account customer managed key variables
-
-variable "storage_account_id" {
-  type        = string
-  description = "The ID of the storage account."
-}
-
 # Key vault key variables
 
 variable "key_vault_keys" {

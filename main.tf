@@ -92,7 +92,6 @@ module "key_vault" {
       expiration_date = "2024-12-31T23:59:00Z"
     }
   ]
-  storage_account_id          = module.storage.storage_account_id
   storage_account_pricipal_id = module.storage.storage_account_pricipal_id
   subnet_id                   = module.network.subnet_id_list[0]
 
@@ -100,6 +99,17 @@ module "key_vault" {
     module.network,
     module.storage,
     azurerm_user_assigned_identity.main
+  ]
+}
+
+resource "azurerm_storage_account_customer_managed_key" "main" {
+  storage_account_id = module.storage.storage_account_id
+  key_vault_id       = module.key_vault.key_vault_id
+  key_name           = module.key_vault.key_name
+
+  depends_on = [
+    module.storage,
+    module.key_vault
   ]
 }
 

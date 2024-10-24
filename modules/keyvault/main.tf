@@ -54,12 +54,6 @@ resource "azurerm_key_vault_key" "main" {
   expiration_date = var.key_vault_keys[count.index].expiration_date
 }
 
-resource "azurerm_storage_account_customer_managed_key" "main" {
-  storage_account_id = var.storage_account_id
-  key_vault_id       = azurerm_key_vault.main.id
-  key_name           = var.key_vault_keys[0].name
-}
-
 resource "azurerm_private_endpoint" "main" {
   name                = "keyvault-private-endpoint"
   resource_group_name = azurerm_key_vault.main.resource_group_name
