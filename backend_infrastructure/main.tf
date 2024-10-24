@@ -4,7 +4,7 @@ module "storage" {
   resource_group_location    = var.resource_group_location
   virtual_network_subnet_ids = var.subnet_ids
 
-  storage_account_name       = "${var.base_prefix}sa${var.random_string}${var.workspace_suffix}"
+  storage_account_name = "${var.base_prefix}sa${var.random_string}${var.workspace_suffix}"
 }
 
 module "key_vault" {
@@ -13,9 +13,9 @@ module "key_vault" {
   resource_group_location             = var.resource_group_location
   user_assigned_identity_tenant_id    = var.user_assigned_tenant_id
   user_assigned_identity_principal_id = var.user_assigned_principal_id
-  subnet_id = var.subnet_ids[0]
+  subnet_id                           = var.subnet_ids[0]
 
-  key_vault_name                      = "${var.base_prefix}-kv-${var.workspace_suffix}"
+  key_vault_name = "${var.base_prefix}-kv-${var.workspace_suffix}"
   key_vault_keys = [
     {
       name            = "sql-key"
@@ -35,7 +35,7 @@ module "key_vault" {
 }
 
 resource "azurerm_key_vault_access_policy" "cmk_access" {
-  tenant_id    = var.user_assigned_tenant_id
+  tenant_id = var.user_assigned_tenant_id
 
   key_permissions    = ["Get", "List", "WrapKey", "UnwrapKey"]
   secret_permissions = ["Get", "List"]
@@ -69,12 +69,12 @@ module "sql_database" {
   user_assigned_identity_principal_id = var.user_assigned_principal_id
   subnet_id                           = var.subnet_ids[0]
 
-  server_name                         = "${var.base_prefix}-sqlserver-${var.workspace_suffix}"
-  database_name                       = "${var.base_prefix}-db-${var.workspace_suffix}"
+  server_name   = "${var.base_prefix}-sqlserver-${var.workspace_suffix}"
+  database_name = "${var.base_prefix}-db-${var.workspace_suffix}"
 
-  storage_endpoint                    = module.storage.storage_account_blob_endpoint
-  storage_account_access_key          = module.storage.storage_account_access_key
-  key_vault_key_id                    = module.key_vault.key_vault_key_ids[0]
+  storage_endpoint           = module.storage.storage_account_blob_endpoint
+  storage_account_access_key = module.storage.storage_account_access_key
+  key_vault_key_id           = module.key_vault.key_vault_key_ids[0]
 
   depends_on = [
     module.storage,
@@ -83,7 +83,7 @@ module "sql_database" {
 }
 
 resource "azurerm_key_vault_access_policy" "sql_access" {
-  tenant_id    = var.user_assigned_tenant_id
+  tenant_id = var.user_assigned_tenant_id
 
   key_permissions    = ["Get", "List", "WrapKey", "UnwrapKey"]
   secret_permissions = ["Get", "List"]
