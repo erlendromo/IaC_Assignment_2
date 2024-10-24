@@ -137,21 +137,21 @@ module "sql_database" {
 
 
 
-resource "azurerm_key_vault_access_policy" "client" {
-  key_vault_id = module.key_vault.key_vault_id
-  tenant_id    = data.azurerm_client_config.current.tenant_id
-  object_id    = data.azurerm_client_config.current.object_id
-
-  key_permissions    = ["Get", "List", "Create", "Delete", "Update", "Recover", "Purge", "GetRotationPolicy"]
-  secret_permissions = ["Get", "List"]
-}
-
 resource "azurerm_key_vault_access_policy" "user_assigned" {
   key_vault_id = module.key_vault.key_vault_id
   tenant_id    = azurerm_user_assigned_identity.main.tenant_id
   object_id    = azurerm_user_assigned_identity.main.principal_id
 
   key_permissions    = ["Get", "List", "WrapKey", "UnwrapKey"]
+  secret_permissions = ["Get", "List"]
+}
+
+resource "azurerm_key_vault_access_policy" "kv_access" {
+  key_vault_id = module.key_vault.key_vault_id
+  tenant_id    = data.azurerm_client_config.current.tenant_id
+  object_id    = module.key_vault.key_vault_principal_id
+
+  key_permissions    = ["Get", "List", "Create", "Delete", "Update", "Recover", "Purge", "GetRotationPolicy"]
   secret_permissions = ["Get", "List"]
 }
 
