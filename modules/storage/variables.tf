@@ -40,9 +40,9 @@ variable "https_traffic_only_enabled" {
 }
 
 variable "min_tls_version" {
-  type = string
+  type        = string
   description = "The minimum supported TLS version for the storage account. Valid values are TLS1_0, TLS1_1, and TLS1_2."
-  default = "TLS1_2"
+  default     = "TLS1_2"
 }
 
 variable "virtual_network_subnet_ids" {
