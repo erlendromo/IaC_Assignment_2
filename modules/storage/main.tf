@@ -19,7 +19,7 @@ resource "azurerm_storage_account_network_rules" "default" {
 
 resource "azurerm_storage_account_network_rules" "localhost" {
   storage_account_id         = azurerm_storage_account.main.id
-  default_action             = "Allow"
+  default_action             = "Deny"
   ip_rules                   = ["127.0.0.1"]
   virtual_network_subnet_ids = var.virtual_network_subnet_ids
   bypass                     = ["Metrics", "AzureServices"]
