@@ -17,40 +17,6 @@ resource "azurerm_key_vault" "main" {
   }
 }
 
-resource "azurerm_key_vault_access_policy" "client" {
-  key_vault_id = azurerm_key_vault.main.id
-  tenant_id    = data.azurerm_client_config.current.tenant_id
-  object_id    = data.azurerm_client_config.current.object_id
-
-  key_permissions    = ["Get", "List", "Create", "Delete", "Update", "Recover", "Purge", "GetRotationPolicy"]
-  secret_permissions = ["Get", "List"]
-}
-
-resource "azurerm_key_vault_access_policy" "user_assigned" {
-  key_vault_id = azurerm_key_vault.main.id
-  tenant_id    = var.user_assigned_identity_tenant_id
-  object_id    = var.user_assigned_identity_principal_id
-
-  key_permissions    = ["Get", "List", "WrapKey", "UnwrapKey"]
-  secret_permissions = ["Get", "List"]
-}
-
-resource "azurerm_key_vault_access_policy" "cmk_access" {
-  key_vault_id = azurerm_key_vault.main.id
-  tenant_id    = data.azurerm_client_config.current.tenant_id
-  object_id    = var.storage_account_pricipal_id
-
-  key_permissions = ["Get", "List"]
-}
-
-# resource "azurerm_key_vault_access_policy" "sql_access" {
-#   key_vault_id = azurerm_key_vault.main.id
-#   tenant_id = data.azurerm_client_config.current.tenant_id
-#   object_id = var.sql_server_principal_id
-
-#   key_permissions = ["Get", "List"]
-# }
-
 resource "azurerm_key_vault_key" "main" {
   count = length(var.key_vault_keys)
 

@@ -82,7 +82,6 @@ module "key_vault" {
   resource_group_name                 = azurerm_resource_group.main.name
   resource_group_location             = azurerm_resource_group.main.location
   user_assigned_identity_tenant_id    = azurerm_user_assigned_identity.main.tenant_id
-  user_assigned_identity_principal_id = azurerm_user_assigned_identity.main.principal_id
   key_vault_keys = [
     {
       name            = "database-key"
@@ -92,7 +91,6 @@ module "key_vault" {
       expiration_date = "2024-12-31T23:59:00Z"
     }
   ]
-  storage_account_pricipal_id = module.storage.storage_account_pricipal_id
   subnet_id                   = module.network.subnet_id_list[0]
 
   depends_on = [
@@ -110,34 +108,6 @@ resource "azurerm_storage_account_customer_managed_key" "main" {
   depends_on = [
     module.storage,
     module.key_vault
-  ]
-}
-
-module "app_service" {
-  source                     = "./modules/app_service"
-  resource_group_name        = azurerm_resource_group.main.name
-  resource_group_location    = azurerm_resource_group.main.location
-  service_plan_name          = "${local.base_prefix}-sp-${local.workspace_suffix}"
-  linux_web_app_name         = "${local.base_prefix}-webapp-${local.workspace_suffix}"
-  storage_account_name       = module.storage.storage_account_name
-  storage_account_access_key = module.storage.storage_account_access_key
-
-  depends_on = [module.storage]
-}
-
-resource "azurerm_lb" "main" {
-  name                = "${local.base_prefix}-lb-${local.workspace_suffix}"
-  resource_group_name = azurerm_resource_group.main.name
-  location            = azurerm_resource_group.main.location
-  sku                 = "Basic"
-
-  frontend_ip_configuration {
-    name      = "EntryPoint"
-    subnet_id = module.network.subnet_id_list[0]
-  }
-
-  depends_on = [
-    module.network
   ]
 }
 
@@ -162,3 +132,71 @@ module "sql_database" {
     azurerm_user_assigned_identity.main
   ]
 }
+
+
+
+resource "azurerm_key_vault_access_policy" "client" {
+  key_vault_id = module.key_vault.key_vault_id
+  tenant_id    = data.azurerm_client_config.current.tenant_id
+  object_id    = data.azurerm_client_config.current.object_id
+
+  key_permissions    = ["Get", "List", "Create", "Delete", "Update", "Recover", "Purge", "GetRotationPolicy"]
+  secret_permissions = ["Get", "List"]
+}
+
+resource "azurerm_key_vault_access_policy" "user_assigned" {
+  key_vault_id = module.key_vault.key_vault_id
+  tenant_id    = azurerm_user_assigned_identity.main.tenant_id
+  object_id    = azurerm_user_assigned_identity.main.principal_id
+
+  key_permissions    = ["Get", "List", "WrapKey", "UnwrapKey"]
+  secret_permissions = ["Get", "List"]
+}
+
+resource "azurerm_key_vault_access_policy" "cmk_access" {
+  key_vault_id = module.key_vault.key_vault_id
+  tenant_id    = data.azurerm_client_config.current.tenant_id
+  object_id    = module.storage.storage_account_pricipal_id
+
+  key_permissions = ["Get", "List"]
+  secret_permissions = ["Get", "List"]
+}
+
+resource "azurerm_key_vault_access_policy" "sql_access" {
+  key_vault_id = module.key_vault.key_vault_id
+  tenant_id = data.azurerm_client_config.current.tenant_id
+  object_id = module.sql_database.sql_database_principal_id
+
+  key_permissions = ["Get", "List"]
+  secret_permissions = ["Get", "List"]
+}
+
+
+
+# module "app_service" {
+#   source                     = "./modules/app_service"
+#   resource_group_name        = azurerm_resource_group.main.name
+#   resource_group_location    = azurerm_resource_group.main.location
+#   service_plan_name          = "${local.base_prefix}-sp-${local.workspace_suffix}"
+#   linux_web_app_name         = "${local.base_prefix}-webapp-${local.workspace_suffix}"
+#   storage_account_name       = module.storage.storage_account_name
+#   storage_account_access_key = module.storage.storage_account_access_key
+
+#   depends_on = [module.storage]
+# }
+
+# resource "azurerm_lb" "main" {
+#   name                = "${local.base_prefix}-lb-${local.workspace_suffix}"
+#   resource_group_name = azurerm_resource_group.main.name
+#   location            = azurerm_resource_group.main.location
+#   sku                 = "Basic"
+
+#   frontend_ip_configuration {
+#     name      = "EntryPoint"
+#     subnet_id = module.network.subnet_id_list[0]
+#   }
+
+#   depends_on = [
+#     module.network
+#   ]
+# }

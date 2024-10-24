@@ -45,27 +45,10 @@ variable "purge_protection_enabled" {
   default     = true
 }
 
-# Access policy variables
-
 variable "user_assigned_identity_tenant_id" {
   type        = string
   description = "The tenant ID of the user assigned identity."
 }
-
-variable "user_assigned_identity_principal_id" {
-  type        = string
-  description = "The principal ID of the user assigned identity."
-}
-
-variable "storage_account_pricipal_id" {
-  type        = string
-  description = "The principal ID of the storage account."
-}
-
-# variable "sql_server_principal_id" {
-#   type        = string
-#   description = "The principal ID of the SQL server."
-# }
 
 # Key vault key variables
 
