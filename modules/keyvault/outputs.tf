@@ -17,8 +17,3 @@ output "key_names" {
   value       = tolist([for key in azurerm_key_vault_key.main : key.name])
   description = "The names of the key vault keys."
 }
-
-output "key_vault_key_principal_ids" {
-  value       = tolist([for key in azurerm_azurerm_key_vault_key.main : key.principal_id])
-  description = "The principal IDs of the key vault keys."
-}

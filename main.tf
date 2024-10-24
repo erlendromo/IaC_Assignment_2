@@ -146,21 +146,12 @@ resource "azurerm_key_vault_access_policy" "user_assigned" {
   secret_permissions = ["Get", "List"]
 }
 
-resource "azurerm_key_vault_access_policy" "kvk_access" {
-  key_vault_id = module.key_vault.key_vault_id
-  tenant_id    = data.azurerm_client_config.current.tenant_id
-  object_id    = module.key_vault.key_vault_key_principal_ids[0]
-
-  key_permissions    = ["Get", "List", "Create", "Delete", "Update", "Recover", "Purge", "GetRotationPolicy"]
-  secret_permissions = ["Get", "List"]
-}
-
 resource "azurerm_key_vault_access_policy" "cmk_access" {
   key_vault_id = module.key_vault.key_vault_id
   tenant_id    = data.azurerm_client_config.current.tenant_id
   object_id    = module.storage.storage_account_pricipal_id
 
-  key_permissions    = ["Get", "List"]
+  key_permissions    = ["Get", "List", "WrapKey", "UnwrapKey"]
   secret_permissions = ["Get", "List"]
 }
 
@@ -169,7 +160,7 @@ resource "azurerm_key_vault_access_policy" "sql_access" {
   tenant_id    = data.azurerm_client_config.current.tenant_id
   object_id    = module.sql_database.sql_database_principal_id
 
-  key_permissions    = ["Get", "List"]
+  key_permissions    = ["Get", "List", "WrapKey", "UnwrapKey"]
   secret_permissions = ["Get", "List"]
 }
 
