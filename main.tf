@@ -77,11 +77,11 @@ module "storage" {
 }
 
 module "key_vault" {
-  source                              = "./modules/keyvault"
-  key_vault_name                      = "${local.base_prefix}-kv-${local.workspace_suffix}"
-  resource_group_name                 = azurerm_resource_group.main.name
-  resource_group_location             = azurerm_resource_group.main.location
-  user_assigned_identity_tenant_id    = azurerm_user_assigned_identity.main.tenant_id
+  source                           = "./modules/keyvault"
+  key_vault_name                   = "${local.base_prefix}-kv-${local.workspace_suffix}"
+  resource_group_name              = azurerm_resource_group.main.name
+  resource_group_location          = azurerm_resource_group.main.location
+  user_assigned_identity_tenant_id = azurerm_user_assigned_identity.main.tenant_id
   key_vault_keys = [
     {
       name            = "database-key"
@@ -91,7 +91,7 @@ module "key_vault" {
       expiration_date = "2024-12-31T23:59:00Z"
     }
   ]
-  subnet_id                   = module.network.subnet_id_list[0]
+  subnet_id = module.network.subnet_id_list[0]
 
   depends_on = [
     module.network,
@@ -158,16 +158,16 @@ resource "azurerm_key_vault_access_policy" "cmk_access" {
   tenant_id    = data.azurerm_client_config.current.tenant_id
   object_id    = module.storage.storage_account_pricipal_id
 
-  key_permissions = ["Get", "List"]
+  key_permissions    = ["Get", "List"]
   secret_permissions = ["Get", "List"]
 }
 
 resource "azurerm_key_vault_access_policy" "sql_access" {
   key_vault_id = module.key_vault.key_vault_id
-  tenant_id = data.azurerm_client_config.current.tenant_id
-  object_id = module.sql_database.sql_database_principal_id
+  tenant_id    = data.azurerm_client_config.current.tenant_id
+  object_id    = module.sql_database.sql_database_principal_id
 
-  key_permissions = ["Get", "List"]
+  key_permissions    = ["Get", "List"]
   secret_permissions = ["Get", "List"]
 }
 
