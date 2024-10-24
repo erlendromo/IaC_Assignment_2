@@ -25,8 +25,8 @@ resource "azurerm_key_vault" "main" {
   }
 
   access_policy {
-    tenant_id    = var.user_assigned_identity_tenant_id
-    object_id    = var.user_assigned_identity_principal_id
+    tenant_id = var.user_assigned_identity_tenant_id
+    object_id = var.user_assigned_identity_principal_id
 
     key_permissions    = ["Get", "List", "WrapKey", "UnwrapKey"]
     secret_permissions = ["Get", "List"]

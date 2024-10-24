@@ -7,11 +7,11 @@ module "storage" {
 }
 
 module "key_vault" {
-  source                           = "../modules/keyvault"
-  key_vault_name                   = "${var.base_prefix}-kv-${var.workspace_suffix}"
-  resource_group_name              = var.resource_group_name
-  resource_group_location          = var.resource_group_location
-  user_assigned_identity_tenant_id = var.user_assigned_tenant_id
+  source                              = "../modules/keyvault"
+  key_vault_name                      = "${var.base_prefix}-kv-${var.workspace_suffix}"
+  resource_group_name                 = var.resource_group_name
+  resource_group_location             = var.resource_group_location
+  user_assigned_identity_tenant_id    = var.user_assigned_tenant_id
   user_assigned_identity_principal_id = var.user_assigned_principal_id
   key_vault_keys = [
     {
@@ -58,18 +58,18 @@ resource "azurerm_storage_account_customer_managed_key" "main" {
 }
 
 module "sql_database" {
-  source                       = "../modules/database"
-  resource_group_name          = var.resource_group_name
-  resource_group_location      = var.resource_group_location
-  server_name                  = "${var.base_prefix}-sqlserver-${var.workspace_suffix}"
-  administrator_login          = var.random_string
-  administrator_login_password = var.random_password
-  storage_endpoint             = module.storage.storage_account_blob_endpoint
-  storage_account_access_key   = module.storage.storage_account_access_key
-  database_name                = "${var.base_prefix}-db-${var.workspace_suffix}"
+  source                              = "../modules/database"
+  resource_group_name                 = var.resource_group_name
+  resource_group_location             = var.resource_group_location
+  server_name                         = "${var.base_prefix}-sqlserver-${var.workspace_suffix}"
+  administrator_login                 = var.random_string
+  administrator_login_password        = var.random_password
+  storage_endpoint                    = module.storage.storage_account_blob_endpoint
+  storage_account_access_key          = module.storage.storage_account_access_key
+  database_name                       = "${var.base_prefix}-db-${var.workspace_suffix}"
   user_assigned_identity_principal_id = var.user_assigned_principal_id
-  key_vault_key_id             = module.key_vault.key_vault_key_ids[0]
-  subnet_id                    = module.network.subnet_id_list[0]
+  key_vault_key_id                    = module.key_vault.key_vault_key_ids[0]
+  subnet_id                           = module.network.subnet_id_list[0]
 
   depends_on = [
     module.storage,
