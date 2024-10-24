@@ -82,6 +82,7 @@ module "key_vault" {
       expiration_date = "2024-12-31T23:59:00Z"
     }
   ]
+  subnet_id = module.network.subnet_id_list[0]
 }
 
 module "storage" {

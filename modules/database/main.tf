@@ -1,3 +1,5 @@
+data "azurerm_client_config" "current" {}
+
 resource "azurerm_mssql_server" "main" {
   name                          = var.server_name
   resource_group_name           = var.resource_group_name
@@ -7,6 +9,12 @@ resource "azurerm_mssql_server" "main" {
   administrator_login_password  = var.administrator_login_password
   public_network_access_enabled = var.public_network_access_enabled
   minimum_tls_version           = var.minimum_tls_version
+
+  azuread_administrator {
+    login_username = "sqlserveradmin"
+    object_id      = data.azurerm_client_config.current.object_id
+    tenant_id      = data.azurerm_client_config.current.tenant_id
+  }
 }
 
 resource "azurerm_mssql_server_extended_auditing_policy" "main" {

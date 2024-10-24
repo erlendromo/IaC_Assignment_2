@@ -69,3 +69,10 @@ variable "key_vault_keys" {
   }))
   description = "A list of key vault keys to create."
 }
+
+# Private endpoint variables
+
+variable "subnet_id" {
+  type        = string
+  description = "The ID of the subnet."
+}
