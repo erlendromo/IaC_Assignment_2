@@ -36,7 +36,7 @@ variable "account_replication_type" {
 variable "https_traffic_only_enabled" {
   type        = bool
   description = "Boolean flag which forces HTTPS if enabled, and allows HTTP traffic if disabled."
-  default     = false
+  default     = true
 }
 
 variable "allow_nested_items_to_be_public" {
