@@ -92,9 +92,9 @@ module "key_vault" {
       expiration_date = "2024-12-31T23:59:00Z"
     }
   ]
-  storage_account_id = module.storage.storage_account_id
+  storage_account_id          = module.storage.storage_account_id
   storage_account_pricipal_id = module.storage.storage_account_pricipal_id
-  subnet_id = module.network.subnet_id_list[0]
+  subnet_id                   = module.network.subnet_id_list[0]
 
   depends_on = [
     module.network,
