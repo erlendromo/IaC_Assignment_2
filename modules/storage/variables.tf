@@ -48,7 +48,7 @@ variable "allow_nested_items_to_be_public" {
 variable "public_network_access_enabled" {
   type        = bool
   description = "Boolean flag which allows public access to the storage account."
-  default     = false
+  default     = true
 }
 
 variable "shared_access_key_enabled" {

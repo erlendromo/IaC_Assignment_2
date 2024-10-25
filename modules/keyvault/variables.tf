@@ -24,7 +24,7 @@ variable "enabled_for_disk_encryption" {
 variable "public_network_access_enabled" {
   type        = bool
   description = "Specifies whether the key vault is accessible over the public network."
-  default     = false
+  default     = true
 }
 
 variable "sku_name" {
