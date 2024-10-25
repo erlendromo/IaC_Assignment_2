@@ -34,7 +34,7 @@ variable "administrator_login_password" {
 variable "public_network_access_enabled" {
   type        = bool
   description = "Whether or not public network access is enabled for the SQL server."
-  default     = true
+  default     = false
 }
 
 variable "minimum_tls_version" {
