@@ -9,8 +9,3 @@ output "sql_database_password" {
   description = "The password for the SQL database"
   sensitive   = true
 }
-
-output "sql_database_principal_id" {
-  value       = azurerm_mssql_server.main.identity.0.principal_id
-  description = "The principal ID for the SQL server"
-}

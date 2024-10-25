@@ -34,18 +34,17 @@ module "key_vault" {
   ]
 }
 
-resource "azurerm_key_vault_access_policy" "cmk_access" {
+resource "azurerm_key_vault_access_policy" "resource_access" {
   tenant_id = var.user_assigned_tenant_id
+  object_id = var.user_assigned_principal_id
 
   key_permissions    = ["Get", "List", "WrapKey", "UnwrapKey"]
   secret_permissions = ["Get", "List"]
 
   key_vault_id = module.key_vault.key_vault_id
-  object_id    = module.storage.storage_account_pricipal_id
 
   depends_on = [
-    module.key_vault,
-    module.storage
+    module.key_vault
   ]
 }
 
@@ -55,8 +54,7 @@ resource "azurerm_storage_account_customer_managed_key" "main" {
   key_name           = module.key_vault.key_names[1]
 
   depends_on = [
-    module.key_vault,
-    azurerm_key_vault_access_policy.cmk_access
+    module.key_vault
   ]
 }
 
@@ -79,20 +77,5 @@ module "sql_database" {
   depends_on = [
     module.storage,
     module.key_vault
-  ]
-}
-
-resource "azurerm_key_vault_access_policy" "sql_access" {
-  tenant_id = var.user_assigned_tenant_id
-
-  key_permissions    = ["Get", "List", "WrapKey", "UnwrapKey"]
-  secret_permissions = ["Get", "List"]
-
-  key_vault_id = module.key_vault.key_vault_id
-  object_id    = module.sql_database.sql_database_principal_id
-
-  depends_on = [
-    module.key_vault,
-    module.sql_database
   ]
 }

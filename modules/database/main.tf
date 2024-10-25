@@ -15,10 +15,6 @@ resource "azurerm_mssql_server" "main" {
     object_id      = data.azurerm_client_config.current.object_id
     tenant_id      = data.azurerm_client_config.current.tenant_id
   }
-
-  identity {
-    type = "UserAssigned"
-  }
 }
 
 resource "azurerm_mssql_server_extended_auditing_policy" "main" {
@@ -35,8 +31,8 @@ resource "azurerm_mssql_server_extended_auditing_policy" "main" {
 }
 
 resource "azurerm_mssql_database" "main" {
-  name           = var.database_name
   server_id      = azurerm_mssql_server.main.id
+  name           = var.database_name
   collation      = var.collation
   license_type   = var.license_type
   max_size_gb    = var.max_size_gb
