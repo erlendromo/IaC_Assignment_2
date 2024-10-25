@@ -193,14 +193,3 @@ resource "azurerm_private_endpoint" "main" {
     azurerm_key_vault.main
   ]
 }
-
-resource "azurerm_storage_account_customer_managed_key" "main" {
-  storage_account_id = var.storage_account_id
-  key_vault_id       = azurerm_key_vault.main.id
-  key_name           = var.key_vault_keys[0].name
-
-  depends_on = [
-    azurerm_key_vault.main,
-    azurerm_key_vault_key.main
-  ]
-}

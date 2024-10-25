@@ -41,10 +41,6 @@ resource "azurerm_storage_account" "main" {
       days = 7
     }
   }
-
-  identity {
-    type = "SystemAssigned, UserAssigned"
-  }
 }
 
 resource "azurerm_storage_account_network_rules" "main" {

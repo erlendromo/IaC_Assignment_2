@@ -14,7 +14,6 @@ module "key_vault" {
   user_assigned_identity_tenant_id    = var.user_assigned_tenant_id
   user_assigned_identity_principal_id = var.user_assigned_principal_id
   subnet_id                           = var.subnet_ids[0]
-  storage_account_id                  = module.storage.storage_account_id
 
   key_vault_name = "${var.base_prefix}-kv-${var.workspace_suffix}"
   key_vault_keys = [
@@ -33,10 +32,6 @@ module "key_vault" {
       expiration_date = "2024-12-31T23:59:00Z"
     }
   ]
-
-  depends_on = [
-    module.storage
-  ]
 }
 
 module "sql_database" {
@@ -54,6 +49,17 @@ module "sql_database" {
   storage_endpoint           = module.storage.storage_account_blob_endpoint
   storage_account_access_key = module.storage.storage_account_access_key
   key_vault_key_id           = module.key_vault.key_vault_key_ids[1]
+
+  depends_on = [
+    module.storage,
+    module.key_vault
+  ]
+}
+
+resource "azurerm_storage_account_customer_managed_key" "main" {
+  storage_account_id = module.storage.storage_account_id
+  key_vault_id       = module.key_vault.key_vault_id
+  key_name           = module.key_vault.key_names[0].name
 
   depends_on = [
     module.storage,

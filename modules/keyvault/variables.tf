@@ -74,10 +74,3 @@ variable "subnet_id" {
   type        = string
   description = "The ID of the subnet."
 }
-
-# CMK variables
-
-variable "storage_account_id" {
-  type        = string
-  description = "The ID of the storage account."
-}
