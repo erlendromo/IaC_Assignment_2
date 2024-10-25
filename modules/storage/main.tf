@@ -43,7 +43,7 @@ resource "azurerm_storage_account" "main" {
   }
 
   identity {
-    type = "UserAssigned"
+    type = "SystemAssigned, UserAssigned"
   }
 }
 
