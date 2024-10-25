@@ -76,7 +76,7 @@ resource "azurerm_mssql_database" "main" {
   }
 
   depends_on = [
-    azurerm_private_endpoint.main,
-    aazurerm_mssql_server.main
+    azurerm_mssql_server.main,
+    azurerm_private_endpoint.main
   ]
 }
