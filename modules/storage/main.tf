@@ -49,6 +49,10 @@ resource "azurerm_storage_account_network_rules" "main" {
   ip_rules                   = ["127.0.0.1"]
   virtual_network_subnet_ids = var.virtual_network_subnet_ids
   bypass                     = ["Metrics", "AzureServices"]
+
+  depends_on = [
+    azurerm_storage_account.main
+  ]
 }
 
 resource "azurerm_private_endpoint" "main" {
@@ -63,4 +67,8 @@ resource "azurerm_private_endpoint" "main" {
     is_manual_connection           = false
     subresource_names              = ["blob"]
   }
+
+  depends_on = [
+    azurerm_storage_account.main
+  ]
 }

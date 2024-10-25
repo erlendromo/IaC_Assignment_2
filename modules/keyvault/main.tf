@@ -161,21 +161,6 @@ resource "azurerm_key_vault" "main" {
   }
 }
 
-resource "azurerm_key_vault_key" "main" {
-  count = length(var.key_vault_keys)
-
-  key_vault_id    = azurerm_key_vault.main.id
-  name            = var.key_vault_keys[count.index].name
-  key_type        = var.key_vault_keys[count.index].key_type
-  key_size        = var.key_vault_keys[count.index].key_size
-  key_opts        = var.key_vault_keys[count.index].key_opts
-  expiration_date = var.key_vault_keys[count.index].expiration_date
-
-  depends_on = [
-    azurerm_key_vault.main
-  ]
-}
-
 resource "azurerm_private_endpoint" "main" {
   name                = "keyvault-private-endpoint"
   resource_group_name = azurerm_key_vault.main.resource_group_name
@@ -191,5 +176,21 @@ resource "azurerm_private_endpoint" "main" {
 
   depends_on = [
     azurerm_key_vault.main
+  ]
+}
+
+resource "azurerm_key_vault_key" "main" {
+  count = length(var.key_vault_keys)
+
+  key_vault_id    = azurerm_key_vault.main.id
+  name            = var.key_vault_keys[count.index].name
+  key_type        = var.key_vault_keys[count.index].key_type
+  key_size        = var.key_vault_keys[count.index].key_size
+  key_opts        = var.key_vault_keys[count.index].key_opts
+  expiration_date = var.key_vault_keys[count.index].expiration_date
+
+  depends_on = [
+    azurerm_key_vault.main,
+    azurerm_private_endpoint.main
   ]
 }

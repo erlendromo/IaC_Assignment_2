@@ -28,6 +28,28 @@ resource "azurerm_mssql_server_extended_auditing_policy" "main" {
     update = "1h"
     delete = "1h"
   }
+
+  depends_on = [
+    azurerm_mssql_server.main
+  ]
+}
+
+resource "azurerm_private_endpoint" "main" {
+  name                = "sql-private-endpoint"
+  resource_group_name = azurerm_mssql_server.main.resource_group_name
+  location            = azurerm_mssql_server.main.location
+  subnet_id           = var.subnet_id
+
+  private_service_connection {
+    name                           = "sql-private-endpoint-connection"
+    private_connection_resource_id = azurerm_mssql_server.main.id
+    is_manual_connection           = false
+    subresource_names              = ["sqlServer"]
+  }
+
+  depends_on = [
+    azurerm_mssql_server.main
+  ]
 }
 
 resource "azurerm_mssql_database" "main" {
@@ -52,18 +74,9 @@ resource "azurerm_mssql_database" "main" {
   lifecycle {
     prevent_destroy = true
   }
-}
 
-resource "azurerm_private_endpoint" "main" {
-  name                = "sql-private-endpoint"
-  resource_group_name = azurerm_mssql_server.main.resource_group_name
-  location            = azurerm_mssql_server.main.location
-  subnet_id           = var.subnet_id
-
-  private_service_connection {
-    name                           = "sql-private-endpoint-connection"
-    private_connection_resource_id = azurerm_mssql_server.main.id
-    is_manual_connection           = false
-    subresource_names              = ["sqlServer"]
-  }
+  depends_on = [
+    azurerm_private_endpoint.main,
+    aazurerm_mssql_server.main
+  ]
 }
