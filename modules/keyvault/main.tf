@@ -10,7 +10,6 @@ resource "azurerm_key_vault" "main" {
   sku_name                      = var.sku_name
   soft_delete_retention_days    = var.soft_delete_retention_days
   purge_protection_enabled      = var.purge_protection_enabled
-  vault_uri                     = "https://${var.key_vault_name}.privatelink.vault.azure.net"
 
   network_acls {
     default_action             = "Deny"
