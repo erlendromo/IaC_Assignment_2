@@ -63,12 +63,6 @@ resource "azurerm_mssql_database" "main" {
   zone_redundant = var.zone_redundant
   enclave_type   = var.enclave_type
   ledger_enabled = var.ledger_enabled
-
-  identity {
-    type         = "UserAssigned"
-    identity_ids = [var.user_assigned_identity_principal_id]
-  }
-
   transparent_data_encryption_key_vault_key_id = var.key_vault_key_id
 
   lifecycle {
