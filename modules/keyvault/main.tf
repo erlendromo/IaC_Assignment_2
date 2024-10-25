@@ -182,7 +182,7 @@ resource "azurerm_private_endpoint" "main" {
 resource "azurerm_key_vault_key" "main" {
   count = length(var.key_vault_keys)
 
-  key_vault_id    = azurerm_private_endpoint.main.id
+  key_vault_id    = replace(azurerm_key_vault.main.vault_uri, "vault.azure.net", "privatelink.vault.azure.net")
   name            = var.key_vault_keys[count.index].name
   key_type        = var.key_vault_keys[count.index].key_type
   key_size        = var.key_vault_keys[count.index].key_size
@@ -190,6 +190,7 @@ resource "azurerm_key_vault_key" "main" {
   expiration_date = var.key_vault_keys[count.index].expiration_date
 
   depends_on = [
+    azurerm_key_vault.main,
     azurerm_private_endpoint.main
   ]
 }
