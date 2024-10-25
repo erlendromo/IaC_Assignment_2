@@ -14,6 +14,7 @@ resource "azurerm_key_vault" "main" {
   network_acls {
     default_action = "Deny"
     bypass         = "AzureServices"
+    virtual_network_subnet_ids = [var.subnet_id]
   }
 
   access_policy {
@@ -182,7 +183,7 @@ resource "azurerm_private_endpoint" "main" {
 resource "azurerm_key_vault_key" "main" {
   count = length(var.key_vault_keys)
 
-  key_vault_id    = replace(azurerm_key_vault.main.vault_uri, "vault.azure.net", "privatelink.vault.azure.net")
+  key_vault_id    = azurerm_key_vault.main.id
   name            = var.key_vault_keys[count.index].name
   key_type        = var.key_vault_keys[count.index].key_type
   key_size        = var.key_vault_keys[count.index].key_size
