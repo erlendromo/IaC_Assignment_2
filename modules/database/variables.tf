@@ -43,24 +43,6 @@ variable "minimum_tls_version" {
   default     = "1.2"
 }
 
-# SQL extended auditing policy variables
-
-variable "storage_endpoint" {
-  type        = string
-  description = "The storage endpoint for the SQL extended auditing policy."
-}
-
-variable "storage_account_access_key" {
-  type        = string
-  description = "The storage account access key for the SQL extended auditing policy."
-}
-
-variable "retention_in_days" {
-  type        = number
-  description = "The retention in days for the SQL extended auditing policy."
-  default     = 90
-}
-
 # SQL database variables
 
 variable "database_name" {
@@ -114,21 +96,4 @@ variable "ledger_enabled" {
   type        = bool
   description = "Whether or not ledger is enabled for the SQL database."
   default     = true
-}
-
-variable "user_assigned_identity_principal_id" {
-  type        = string
-  description = "The principal ID of the user assigned identity."
-}
-
-variable "key_vault_key_id" {
-  type        = string
-  description = "The ID of the key vault key."
-}
-
-# Private endpoint variables
-
-variable "subnet_id" {
-  type        = string
-  description = "The ID of the subnet."
 }
