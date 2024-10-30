@@ -39,7 +39,6 @@ module "backend_infrastructure" {
   subnet_ids = module.core_infrastructure.subnet_ids
 
   depends_on = [
-    module.core_infrastructure,
-    azurerm_user_assigned_identity.main
+    module.core_infrastructure
   ]
 }
