@@ -93,7 +93,7 @@ variable "license_type" {
 variable "max_size_gb" {
   type        = number
   description = "The maximum size of the SQL database in gigabytes."
-  default     = 4
+  default     = 1
 }
 
 variable "read_scale_enabled" {
