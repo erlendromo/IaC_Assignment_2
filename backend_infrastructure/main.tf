@@ -17,7 +17,7 @@ module "sql_database" {
   database_name = "${var.base_prefix}-db-${var.workspace_suffix}"
 
   storage_account_access_key = module.storage.storage_account_access_key
-  storage_endpoint = module.storage.storage_blob_endpoint
+  storage_endpoint           = module.storage.storage_blob_endpoint
 
   depends_on = [
     module.storage

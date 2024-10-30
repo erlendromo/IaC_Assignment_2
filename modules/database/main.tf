@@ -12,11 +12,11 @@ resource "azurerm_mssql_server" "main" {
 }
 
 resource "azurerm_mssql_database_extended_auditing_policy" "main" {
-  database_id = azurerm_mssql_database.main.id
-  retention_in_days = var.retention_in_days
-  storage_account_access_key = var.storage_account_access_key
+  database_id                             = azurerm_mssql_database.main.id
+  retention_in_days                       = var.retention_in_days
+  storage_account_access_key              = var.storage_account_access_key
   storage_account_access_key_is_secondary = var.storage_account_access_key_is_secondary
-  storage_endpoint = var.storage_endpoint
+  storage_endpoint                        = var.storage_endpoint
 }
 
 resource "azurerm_mssql_database" "main" {

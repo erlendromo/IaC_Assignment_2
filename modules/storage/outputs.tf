@@ -10,6 +10,6 @@ output "storage_account_access_key" {
 }
 
 output "storage_blob_endpoint" {
-  value = azurerm_storage_account.main.primary_blob_endpoint
+  value       = azurerm_storage_account.main.primary_blob_endpoint
   description = "The blob endpoint for the storage account."
 }
