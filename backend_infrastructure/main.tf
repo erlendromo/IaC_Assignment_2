@@ -15,11 +15,6 @@ module "sql_database" {
 
   server_name   = "${var.base_prefix}-sqlserver-${var.workspace_suffix}"
   database_name = "${var.base_prefix}-db-${var.workspace_suffix}"
-
-  depends_on = [
-    module.storage,
-    module.key_vault
-  ]
 }
 
 module "app_service" {
