@@ -8,3 +8,8 @@ output "storage_account_access_key" {
   description = "The primary access key for the storage account."
   sensitive   = true
 }
+
+output "storage_blob_endpoint" {
+  value = azurerm_storage_account.main.primary_blob_endpoint
+  description = "The blob endpoint for the storage account."
+}

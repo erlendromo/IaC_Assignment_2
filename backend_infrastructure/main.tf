@@ -15,6 +15,13 @@ module "sql_database" {
 
   server_name   = "${var.base_prefix}-sqlserver-${var.workspace_suffix}"
   database_name = "${var.base_prefix}-db-${var.workspace_suffix}"
+
+  storage_account_access_key = module.storage.storage_account_access_key
+  storage_endpoint = module.storage.storage_blob_endpoint
+
+  depends_on = [
+    module.storage
+  ]
 }
 
 module "app_service" {
