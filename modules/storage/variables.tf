@@ -54,7 +54,7 @@ variable "public_network_access_enabled" {
 variable "shared_access_key_enabled" {
   type        = bool
   description = "Boolean flag which enables shared access signature (SAS) tokens for all services in the storage account."
-  default     = false
+  default     = true
 }
 
 variable "local_user_enabled" {
