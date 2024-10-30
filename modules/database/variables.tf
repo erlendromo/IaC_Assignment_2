@@ -50,7 +50,7 @@ variable "minimum_tls_version" {
 variable "retention_in_days" {
   type        = number
   description = "The retention in days for the server audit policy."
-  default     = 7
+  default     = 90
 }
 
 variable "storage_account_access_key" {
@@ -61,7 +61,7 @@ variable "storage_account_access_key" {
 variable "storage_account_access_key_is_secondary" {
   type        = bool
   description = "Whether or not the storage account access key is secondary for the server audit policy."
-  default     = true
+  default     = false
 }
 
 variable "storage_endpoint" {
