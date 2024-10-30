@@ -68,8 +68,3 @@ variable "min_tls_version" {
   description = "The minimum supported TLS version for the storage account. Valid values are TLS1_0, TLS1_1, and TLS1_2."
   default     = "TLS1_2"
 }
-
-variable "virtual_network_subnet_ids" {
-  type        = list(string)
-  description = "A list of virtual network subnet ids to associate with the storage account."
-}
