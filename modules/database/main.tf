@@ -12,16 +12,16 @@ resource "azurerm_mssql_server" "main" {
 }
 
 resource "azurerm_mssql_database" "main" {
-  server_id                                    = azurerm_mssql_server.main.id
-  name                                         = var.database_name
-  collation                                    = var.collation
-  license_type                                 = var.license_type
-  max_size_gb                                  = var.max_size_gb
-  read_scale                                   = var.read_scale_enabled
-  sku_name                                     = var.sku_name
-  zone_redundant                               = var.zone_redundant
-  enclave_type                                 = var.enclave_type
-  ledger_enabled                               = var.ledger_enabled
+  server_id      = azurerm_mssql_server.main.id
+  name           = var.database_name
+  collation      = var.collation
+  license_type   = var.license_type
+  max_size_gb    = var.max_size_gb
+  read_scale     = var.read_scale_enabled
+  sku_name       = var.sku_name
+  zone_redundant = var.zone_redundant
+  enclave_type   = var.enclave_type
+  ledger_enabled = var.ledger_enabled
 
   lifecycle {
     prevent_destroy = true
