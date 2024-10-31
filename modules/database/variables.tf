@@ -99,7 +99,7 @@ variable "max_size_gb" {
 variable "read_scale_enabled" {
   type        = bool
   description = "Whether or not read scale is enabled for the SQL database."
-  default     = true
+  default     = false
 }
 
 variable "sku_name" {
@@ -111,7 +111,7 @@ variable "sku_name" {
 variable "zone_redundant" {
   type        = bool
   description = "Whether or not the SQL database is zone redundant."
-  default     = true
+  default     = false
 }
 
 variable "enclave_type" {
