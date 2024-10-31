@@ -50,7 +50,6 @@ variable "https_only" {
   type        = bool
   description = "Whether to only allow HTTPS traffic."
   default     = true
-
 }
 
 variable "client_certificate_enabled" {
