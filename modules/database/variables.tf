@@ -43,23 +43,33 @@ variable "minimum_tls_version" {
   default     = "1.2"
 }
 
-# SQL extended auditing policy variables
 
-variable "storage_endpoint" {
-  type        = string
-  description = "The storage endpoint for the SQL extended auditing policy."
+
+# Server Audit Policy variables
+
+variable "retention_in_days" {
+  type        = number
+  description = "The retention in days for the server audit policy."
+  default     = 90
 }
 
 variable "storage_account_access_key" {
   type        = string
-  description = "The storage account access key for the SQL extended auditing policy."
+  description = "The storage account access key for the server audit policy."
 }
 
-variable "retention_in_days" {
-  type        = number
-  description = "The retention in days for the SQL extended auditing policy."
-  default     = 90
+variable "storage_account_access_key_is_secondary" {
+  type        = bool
+  description = "Whether or not the storage account access key is secondary for the server audit policy."
+  default     = false
 }
+
+variable "storage_endpoint" {
+  type        = string
+  description = "The storage endpoint for the server audit policy."
+}
+
+
 
 # SQL database variables
 
@@ -83,13 +93,13 @@ variable "license_type" {
 variable "max_size_gb" {
   type        = number
   description = "The maximum size of the SQL database in gigabytes."
-  default     = 4
+  default     = 1
 }
 
 variable "read_scale_enabled" {
   type        = bool
   description = "Whether or not read scale is enabled for the SQL database."
-  default     = true
+  default     = false
 }
 
 variable "sku_name" {
@@ -101,7 +111,7 @@ variable "sku_name" {
 variable "zone_redundant" {
   type        = bool
   description = "Whether or not the SQL database is zone redundant."
-  default     = true
+  default     = false
 }
 
 variable "enclave_type" {
@@ -114,21 +124,4 @@ variable "ledger_enabled" {
   type        = bool
   description = "Whether or not ledger is enabled for the SQL database."
   default     = true
-}
-
-variable "user_assigned_identity_principal_id" {
-  type        = string
-  description = "The principal ID of the user assigned identity."
-}
-
-variable "key_vault_key_id" {
-  type        = string
-  description = "The ID of the key vault key."
-}
-
-# Private endpoint variables
-
-variable "subnet_id" {
-  type        = string
-  description = "The ID of the subnet."
 }

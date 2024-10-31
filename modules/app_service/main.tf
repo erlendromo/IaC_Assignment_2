@@ -32,24 +32,4 @@ resource "azurerm_linux_web_app" "main" {
     account_name = var.storage_account_name
     access_key   = var.storage_account_access_key
   }
-
-  logs {
-    failed_request_tracing  = true
-    detailed_error_messages = true
-
-    http_logs {
-      file_system {
-        retention_in_days = 25
-        retention_in_mb   = 50
-      }
-    }
-  }
-
-  identity {
-    type = "SystemAssigned"
-  }
-
-  auth_settings {
-    enabled = true
-  }
 }
