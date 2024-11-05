@@ -77,7 +77,7 @@ resource "azurerm_application_gateway" "main" {
   backend_address_pool {
     name = "backendAddressPool"
     fqdns = [
-      azurerm_linux_web_app.main.default_hostname
+      module.app_service.default_hostname
     ]
   }
 
@@ -123,7 +123,7 @@ resource "azurerm_application_gateway" "main" {
   }
 
   depends_on = [
-    azurerm_linux_web_app.main,
+    module.app_service,
     azurerm_public_ip.main
   ]
 }
