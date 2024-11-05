@@ -49,7 +49,7 @@ module "nsg" {
       protocol                   = "Tcp"
       source_port_range          = "*"
       destination_port_range     = "65200-65535"
-      source_address_prefix      = "*"
+      source_address_prefix      = "10.0.0.0/24"
       destination_address_prefix = "*"
     }
   }
