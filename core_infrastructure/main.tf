@@ -32,6 +32,26 @@ module "nsg" {
       source_address_prefix      = "10.0.0.0/24"
       destination_address_prefix = "*"
     },
+    "AllowHttpInbound" = {
+      priority                   = 110
+      direction                  = "Inbound"
+      access                     = "Allow"
+      protocol                   = "Tcp"
+      source_port_range          = "*"
+      destination_port_range     = "80"
+      source_address_prefix      = "10.0.0.0/24"
+      destination_address_prefix = "*"
+    },
+    "AllowAppGatewayInbound" = {
+      priority                   = 120
+      direction                  = "Inbound"
+      access                     = "Allow"
+      protocol                   = "Tcp"
+      source_port_range          = "*"
+      destination_port_range     = "65200-65535"
+      source_address_prefix      = "Internet"
+      destination_address_prefix = "*"
+    }
   }
 }
 
