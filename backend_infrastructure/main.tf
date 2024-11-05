@@ -24,19 +24,19 @@ module "sql_database" {
   ]
 }
 
-# module "app_service" {
-#   source                     = "../modules/app_service"
-#   resource_group_name        = var.resource_group_name
-#   resource_group_location    = var.resource_group_location
-#   service_plan_name          = "${var.base_prefix}-sp-${var.workspace_suffix}"
-#   linux_web_app_name         = "${var.base_prefix}-webapp-${var.workspace_suffix}"
-#   storage_account_name       = module.storage.storage_account_name
-#   storage_account_access_key = module.storage.storage_account_access_key
+module "app_service" {
+  source                     = "../modules/app_service"
+  resource_group_name        = var.resource_group_name
+  resource_group_location    = var.resource_group_location
+  service_plan_name          = "${var.base_prefix}-sp-${var.workspace_suffix}"
+  linux_web_app_name         = "${var.base_prefix}-webapp-${var.workspace_suffix}"
+  storage_account_name       = module.storage.storage_account_name
+  storage_account_access_key = module.storage.storage_account_access_key
 
-#   depends_on = [
-#     module.storage
-#   ]
-# }
+  depends_on = [
+    module.storage
+  ]
+}
 
 # resource "azurerm_public_ip" "main" {
 #   name               = "${var.base_prefix}-pip-${var.workspace_suffix}"

@@ -13,16 +13,39 @@ resource "azurerm_linux_web_app" "main" {
   resource_group_name           = azurerm_service_plan.main.resource_group_name
   location                      = azurerm_service_plan.main.location
   service_plan_id               = azurerm_service_plan.main.id
+
   https_only                    = var.https_only
   client_certificate_enabled    = var.client_certificate_enabled
   public_network_access_enabled = var.public_network_access_enabled
 
+  identity {
+    type = "SystemAssigned"
+  }
+
+  logs {
+    detailed_error_messages = true
+    failed_request_tracing  = true
+
+    http_logs {
+      file_system {
+        retention_in_days = 25
+        retention_in_mb   = 50
+      }
+    }
+  }
+
   site_config {
-    http2_enabled                     = true
-    health_check_path                 = "/health"
-    health_check_eviction_time_in_min = 5
-    minimum_tls_version               = "1.2"
-    ftps_state                        = "FtpsOnly"
+    http2_enabled = true
+    ftps_state    = "FtpsOnly"
+    always_on     = true
+
+    ip_restriction {
+      ip_address  = "10.0.0.0/24"
+      action      = "Allow"
+      priority    = 100
+      name        = "AllowSubet"
+      description = "Allow access from subnet"
+    }
   }
 
   storage_account {
@@ -32,4 +55,8 @@ resource "azurerm_linux_web_app" "main" {
     account_name = var.storage_account_name
     access_key   = var.storage_account_access_key
   }
+
+  depends_on = [
+    azurerm_service_plan.main
+  ]
 }
