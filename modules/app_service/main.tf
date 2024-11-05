@@ -9,10 +9,10 @@ resource "azurerm_service_plan" "main" {
 }
 
 resource "azurerm_linux_web_app" "main" {
-  name                          = var.linux_web_app_name
-  resource_group_name           = azurerm_service_plan.main.resource_group_name
-  location                      = azurerm_service_plan.main.location
-  service_plan_id               = azurerm_service_plan.main.id
+  name                = var.linux_web_app_name
+  resource_group_name = azurerm_service_plan.main.resource_group_name
+  location            = azurerm_service_plan.main.location
+  service_plan_id     = azurerm_service_plan.main.id
 
   https_only                    = var.https_only
   client_certificate_enabled    = var.client_certificate_enabled
