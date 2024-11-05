@@ -68,3 +68,17 @@ variable "min_tls_version" {
   description = "The minimum supported TLS version for the storage account. Valid values are TLS1_0, TLS1_1, and TLS1_2."
   default     = "TLS1_2"
 }
+
+# Storage Container Variables
+
+variable "container_name" {
+  type        = string
+  description = "The name of the storage container."
+  default     = "vhds"
+}
+
+variable "container_access_type" {
+  type        = string
+  description = "The access level to use for the storage container. Valid options are private, blob, container."
+  default     = "private"
+}
