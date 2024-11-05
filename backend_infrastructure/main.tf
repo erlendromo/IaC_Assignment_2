@@ -40,91 +40,90 @@ module "app_service" {
   ]
 }
 
-resource "azurerm_public_ip" "loadbalancer" {
-  name                = "${var.base_prefix}-lb-pip-${var.workspace_suffix}"
+resource "azurerm_public_ip" "main" {
+  name                = "${var.base_prefix}-pip-${var.workspace_suffix}"
   resource_group_name = var.resource_group_name
   location            = var.resource_group_location
   allocation_method   = "Static"
   sku                 = "Standard"
 }
 
-resource "azurerm_lb" "main" {
-  name                = "${var.base_prefix}-lb-${var.workspace_suffix}"
+resource "azurerm_application_gateway" "main" {
+  name                = "${var.base_prefix}-appgw-${var.workspace_suffix}"
   resource_group_name = var.resource_group_name
   location            = var.resource_group_location
-  sku                 = "Standard"
+
+  sku {
+    name     = "Standard_v2"
+    tier     = "Standard_v2"
+    capacity = 2
+  }
+
+  gateway_ip_configuration {
+    name      = "appGatewayIpConfig"
+    subnet_id = var.subnet_ids[0]
+  }
+
+  frontend_port {
+    name = "port_80"
+    port = 80
+  }
 
   frontend_ip_configuration {
-    name                 = "PublicIPAddress"
-    public_ip_address_id = azurerm_public_ip.loadbalancer.id
+    name                 = "appGatewayFrontendIP"
+    public_ip_address_id = azurerm_public_ip.main.id
+  }
+
+  backend_address_pool {
+    name = "backendAddressPool"
+    fqdns = [
+      azurerm_linux_web_app.main.default_hostname
+    ]
+  }
+
+  probe {
+    name                                      = "httpProbe"
+    protocol                                  = "Http"
+    path                                      = "/"
+    interval                                  = 30
+    timeout                                   = 30
+    unhealthy_threshold                       = 3
+    pick_host_name_from_backend_http_settings = true
+
+    match {
+      body        = ""
+      status_code = [200]
+    }
+  }
+
+  backend_http_settings {
+    name                                = "appGatewayBackendHttpSettings"
+    cookie_based_affinity               = "Disabled"
+    pick_host_name_from_backend_address = true
+    path                                = "/"
+    port                                = 80
+    protocol                            = "Http"
+    request_timeout                     = 20
+  }
+
+  http_listener {
+    name                           = "appGatewayHttpListener"
+    frontend_ip_configuration_name = "appGatewayFrontendIP"
+    frontend_port_name             = "port_80"
+    protocol                       = "Http"
+  }
+
+  request_routing_rule {
+    name                       = "rule1"
+    rule_type                  = "Basic"
+    http_listener_name         = "appGatewayHttpListener"
+    backend_address_pool_name  = "backendAddressPool"
+    backend_http_settings_name = "appGatewayBackendHttpSettings"
+    priority                   = 100
   }
 
   depends_on = [
-    azurerm_public_ip.loadbalancer
-  ]
-}
-
-resource "azurerm_lb_backend_address_pool" "main" {
-  name            = "${var.base_prefix}-bepool-${var.workspace_suffix}"
-  loadbalancer_id = azurerm_lb.main.id
-
-  depends_on = [
-    azurerm_lb.main
-  ]
-}
-
-resource "azurerm_lb_probe" "main" {
-  name            = "${var.base_prefix}-probe-${var.workspace_suffix}"
-  loadbalancer_id = azurerm_lb.main.id
-  protocol        = "Http"
-  port            = 80
-  request_path    = "/"
-
-  depends_on = [
-    azurerm_lb.main
-  ]
-}
-
-resource "azurerm_lb_rule" "main" {
-  name                           = "${var.base_prefix}-lbrule-${var.workspace_suffix}"
-  loadbalancer_id                = azurerm_lb.main.id
-  frontend_ip_configuration_name = azurerm_lb.main.frontend_ip_configuration[0].name
-  probe_id                       = azurerm_lb_probe.main.id
-  protocol                       = "Tcp"
-  frontend_port                  = 80
-  backend_port                   = 80
-
-  depends_on = [
-    azurerm_lb.main,
-    azurerm_lb_probe.main
-  ]
-}
-
-
-
-resource "azurerm_public_ip" "nic" {
-  name                = "${var.base_prefix}-nic-pip-${var.workspace_suffix}"
-  resource_group_name = var.resource_group_name
-  location            = var.resource_group_location
-  allocation_method   = "Static"
-  sku                 = "Standard"
-}
-
-resource "azurerm_network_interface" "main" {
-  name                = "${var.base_prefix}-nic-${var.workspace_suffix}"
-  resource_group_name = var.resource_group_name
-  location            = var.resource_group_location
-
-  ip_configuration {
-    name                                               = "ipconfig1"
-    subnet_id                                          = var.subnet_ids[0]
-    private_ip_address_allocation                      = "Dynamic"
-    public_ip_address_id                               = azurerm_public_ip.nic.id
-    gateway_load_balancer_frontend_ip_configuration_id = azurerm_lb.main.frontend_ip_configuration[0].id
-  }
-
-  depends_on = [
-    azurerm_public_ip.nic,
-    azurerm_lb.main
+    azurerm_linux_web_app.main,
+    azurerm_public_ip.main
   ]
 }
