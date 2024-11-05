@@ -109,7 +109,7 @@ resource "azurerm_network_interface" "main" {
     name                                               = "ipconfig1"
     subnet_id                                          = var.subnet_ids[0]
     private_ip_address_allocation                      = "Dynamic"
-    gateway_load_balancer_frontend_ip_configuration_id = azurerm_lb.main.frontend_ip_configuration[0].id
+    gateway_load_balancer_frontend_ip_configuration_id = azurerm_public_ip.main.id
   }
 
   depends_on = [
