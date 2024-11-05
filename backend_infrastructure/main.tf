@@ -56,11 +56,11 @@ resource "azurerm_lb" "main" {
 
   frontend_ip_configuration {
     name                 = "PublicIPAddress"
-    public_ip_address_id = azurerm_public_ip.main.id
+    public_ip_address_id = azurerm_public_ip.loadbalancer.id
   }
 
   depends_on = [
-    azurerm_public_ip.main
+    azurerm_public_ip.loadbalancer
   ]
 }
 
@@ -100,6 +100,8 @@ resource "azurerm_lb_rule" "main" {
   ]
 }
 
+
+
 resource "azurerm_public_ip" "nic" {
   name                = "${var.base_prefix}-nic-pip-${var.workspace_suffix}"
   resource_group_name = var.resource_group_name
@@ -122,6 +124,7 @@ resource "azurerm_network_interface" "main" {
   }
 
   depends_on = [
+    azurerm_public_ip.nic,
     azurerm_lb.main
   ]
 }
