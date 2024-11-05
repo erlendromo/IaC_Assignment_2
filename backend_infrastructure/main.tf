@@ -40,8 +40,8 @@ module "app_service" {
   ]
 }
 
-resource "azurerm_public_ip" "main" {
-  name                = "${var.base_prefix}-pip-${var.workspace_suffix}"
+resource "azurerm_public_ip" "loadbalancer" {
+  name                = "${var.base_prefix}-lb-pip-${var.workspace_suffix}"
   resource_group_name = var.resource_group_name
   location            = var.resource_group_location
   allocation_method   = "Static"
@@ -100,6 +100,14 @@ resource "azurerm_lb_rule" "main" {
   ]
 }
 
+resource "azurerm_public_ip" "nic" {
+  name = "${var.base_prefix}-nic-pip-${var.workspace_suffix}"
+  resource_group_name = var.resource_group_name
+  location            = var.resource_group_location
+  allocation_method   = "Static"
+  sku                 = "Standard"
+}
+
 resource "azurerm_network_interface" "main" {
   name                = "${var.base_prefix}-nic-${var.workspace_suffix}"
   resource_group_name = var.resource_group_name
@@ -109,7 +117,8 @@ resource "azurerm_network_interface" "main" {
     name                                               = "ipconfig1"
     subnet_id                                          = var.subnet_ids[0]
     private_ip_address_allocation                      = "Dynamic"
-    gateway_load_balancer_frontend_ip_configuration_id = azurerm_public_ip.main.id
+    public_ip_address_id = azurerm_public_ip.nic.id
+    gateway_load_balancer_frontend_ip_configuration_id = azurerm_lb.main.frontend_ip_configuration[0].id
   }
 
   depends_on = [
