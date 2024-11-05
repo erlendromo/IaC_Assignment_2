@@ -24,72 +24,106 @@ module "sql_database" {
   ]
 }
 
-# module "app_service" {
-#   source                     = "../modules/app_service"
-#   resource_group_name        = var.resource_group_name
-#   resource_group_location    = var.resource_group_location
-#   service_plan_name          = "${var.base_prefix}-sp-${var.workspace_suffix}"
-#   linux_web_app_name         = "${var.base_prefix}-webapp-${var.workspace_suffix}"
-#   storage_account_name       = module.storage.storage_account_name
-#   storage_account_access_key = module.storage.storage_account_access_key
+module "app_service" {
+  source                  = "../modules/app_service"
+  resource_group_name     = var.resource_group_name
+  resource_group_location = var.resource_group_location
 
-#   depends_on = [
-#     module.storage
-#   ]
-# }
+  service_plan_name  = "${var.base_prefix}-sp-${var.workspace_suffix}"
+  linux_web_app_name = "${var.base_prefix}-webapp-${var.workspace_suffix}"
 
-# resource "azurerm_public_ip" "main" {
-#   name               = "${var.base_prefix}-pip-${var.workspace_suffix}"
-#   resource_group_name = var.resource_group_name
-#   location            = var.resource_group_location
-#   allocation_method   = "Static"
-#   sku = "Standard"
-# }
+  storage_account_name       = module.storage.storage_account_name
+  storage_account_access_key = module.storage.storage_account_access_key
 
-# resource "azurerm_lb" "main" {
-#   name = "${var.base_prefix}-lb-${var.workspace_suffix}"
-#   resource_group_name = var.resource_group_name
-#   location            = var.resource_group_location
-#   sku = "Standard"
+  depends_on = [
+    module.storage
+  ]
+}
 
-#   frontend_ip_configuration {
-#     name                 = "PublicIPAddress"
-#     public_ip_address_id = azurerm_public_ip.main.id
-#   }
-# }
+resource "azurerm_public_ip" "main" {
+  name                = "${var.base_prefix}-pip-${var.workspace_suffix}"
+  resource_group_name = var.resource_group_name
+  location            = var.resource_group_location
+  allocation_method   = "Static"
+  sku                 = "Standard"
+}
 
-# resource "azurerm_lb_backend_address_pool" "main" {
-#   name                = "${var.base_prefix}-bepool-${var.workspace_suffix}"
-#   loadbalancer_id     = azurerm_lb.main.id
-# }
+resource "azurerm_application_gateway" "main" {
+  name                = "${var.base_prefix}-appgw-${var.workspace_suffix}"
+  resource_group_name = var.resource_group_name
+  location            = var.resource_group_location
 
-# resource "azurerm_lb_probe" "main" {
-#   name                = "${var.base_prefix}-probe-${var.workspace_suffix}"
-#   loadbalancer_id     = azurerm_lb.main.id
-#   protocol            = "https"
-#   port                = 443
-#   request_path        = "/"
-# }
+  sku {
+    name     = "Standard_v2"
+    tier     = "Standard_v2"
+    capacity = 2
+  }
 
-# resource "azurerm_lb_rule" "main" {
-#   name                  = "${var.base_prefix}-lbrule-${var.workspace_suffix}"
-#   loadbalancer_id       = azurerm_lb.main.id
-#   frontend_ip_configuration_name = azurerm_lb.main.frontend_ip_configuration[0].name
-#   probe_id                     = azurerm_lb_probe.main.id
-#   protocol                     = "Tcp"
-#   frontend_port                = 80
-#   backend_port                 = 80
-# }
+  gateway_ip_configuration {
+    name      = "appGatewayIpConfig"
+    subnet_id = var.subnet_ids[0]
+  }
 
-# resource "azurerm_network_interface" "main" {
-#   name = "${var.base_prefix}-nic-${var.workspace_suffix}"
-#   resource_group_name = var.resource_group_name
-#   location            = var.resource_group_location
+  frontend_port {
+    name = "port_80"
+    port = 80
+  }
 
-#   ip_configuration {
-#     name                          = "ipconfig1"
-#     subnet_id                     = var.subnet_ids[0]
-#     private_ip_address_allocation = "Dynamic"
-#     gateway_load_balancer_frontend_ip_configuration_id = azurerm_lb.main.frontend_ip_configuration[0].id
-#   }
-# }
+  frontend_ip_configuration {
+    name                 = "appGatewayFrontendIP"
+    public_ip_address_id = azurerm_public_ip.main.id
+  }
+
+  backend_address_pool {
+    name = "backendAddressPool"
+    fqdns = [
+      module.app_service.default_hostname
+    ]
+  }
+
+  probe {
+    name                                      = "httpProbe"
+    protocol                                  = "Http"
+    path                                      = "/"
+    interval                                  = 30
+    timeout                                   = 30
+    unhealthy_threshold                       = 3
+    pick_host_name_from_backend_http_settings = true
+
+    match {
+      body        = ""
+      status_code = [200]
+    }
+  }
+
+  backend_http_settings {
+    name                                = "appGatewayBackendHttpSettings"
+    cookie_based_affinity               = "Disabled"
+    pick_host_name_from_backend_address = true
+    path                                = "/"
+    port                                = 80
+    protocol                            = "Http"
+    request_timeout                     = 20
+  }
+
+  http_listener {
+    name                           = "appGatewayHttpListener"
+    frontend_ip_configuration_name = "appGatewayFrontendIP"
+    frontend_port_name             = "port_80"
+    protocol                       = "Http"
+  }
+
+  request_routing_rule {
+    name                       = "rule1"
+    rule_type                  = "Basic"
+    http_listener_name         = "appGatewayHttpListener"
+    backend_address_pool_name  = "backendAddressPool"
+    backend_http_settings_name = "appGatewayBackendHttpSettings"
+    priority                   = 100
+  }
+
+  depends_on = [
+    module.app_service,
+    azurerm_public_ip.main
+  ]
+}

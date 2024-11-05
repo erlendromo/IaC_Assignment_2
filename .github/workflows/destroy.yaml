@@ -1,0 +1,44 @@
+name: Terraform Destroy
+
+on:
+  workflow_dispatch:
+    inputs:
+      workspace:
+        description: 'Workspace to destroy'
+        required: true
+        default: 'dev/stage/prod'
+
+env:
+  ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
+  ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
+  ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
+  ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
+  GITHUB_TOKEN: ${{ secrets.IAC_ASSIGNMENT_2_TOKEN }}
+  TF_WORKSPACE: ${{ inputs.workspace }}
+  WORKING_DIR: '.'
+
+jobs:
+  destroy:
+    name: Destroy Terraform Resources
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        id: checkout
+        uses: actions/checkout@master
+        with:
+          ref: ${{ github.ref }}
+
+      - name: Terraform Init
+        id: init
+        run: terraform init
+        working-directory: ${{ env.WORKING_DIR }}
+
+      - name: Terraform Workspace Dev
+        id: workspace
+        run: terraform workspace select ${{ env.TF_WORKSPACE }}
+        working-directory: ${{ env.WORKING_DIR }}
+
+      - name: Terraform Destroy
+        id: destroy
+        run: terraform destroy -auto-approve
+        working-directory: ${{ env.WORKING_DIR }}

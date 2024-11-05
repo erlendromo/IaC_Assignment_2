@@ -12,3 +12,13 @@ resource "azurerm_storage_account" "main" {
   local_user_enabled              = var.local_user_enabled
   min_tls_version                 = var.min_tls_version
 }
+
+resource "azurerm_storage_container" "main" {
+  name                  = var.container_name
+  storage_account_name  = azurerm_storage_account.main.name
+  container_access_type = var.container_access_type
+
+  depends_on = [
+    azurerm_storage_account.main
+  ]
+}
