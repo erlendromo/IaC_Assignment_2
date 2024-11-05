@@ -25,12 +25,12 @@ module "sql_database" {
 }
 
 module "app_service" {
-  source                     = "../modules/app_service"
-  resource_group_name        = var.resource_group_name
-  resource_group_location    = var.resource_group_location
+  source                  = "../modules/app_service"
+  resource_group_name     = var.resource_group_name
+  resource_group_location = var.resource_group_location
 
-  service_plan_name          = "${var.base_prefix}-sp-${var.workspace_suffix}"
-  linux_web_app_name         = "${var.base_prefix}-webapp-${var.workspace_suffix}"
+  service_plan_name  = "${var.base_prefix}-sp-${var.workspace_suffix}"
+  linux_web_app_name = "${var.base_prefix}-webapp-${var.workspace_suffix}"
 
   storage_account_name       = module.storage.storage_account_name
   storage_account_access_key = module.storage.storage_account_access_key
@@ -41,18 +41,18 @@ module "app_service" {
 }
 
 resource "azurerm_public_ip" "main" {
-  name               = "${var.base_prefix}-pip-${var.workspace_suffix}"
+  name                = "${var.base_prefix}-pip-${var.workspace_suffix}"
   resource_group_name = var.resource_group_name
   location            = var.resource_group_location
   allocation_method   = "Static"
-  sku = "Standard"
+  sku                 = "Standard"
 }
 
 resource "azurerm_lb" "main" {
-  name = "${var.base_prefix}-lb-${var.workspace_suffix}"
+  name                = "${var.base_prefix}-lb-${var.workspace_suffix}"
   resource_group_name = var.resource_group_name
   location            = var.resource_group_location
-  sku = "Standard"
+  sku                 = "Standard"
 
   frontend_ip_configuration {
     name                 = "PublicIPAddress"
@@ -65,8 +65,8 @@ resource "azurerm_lb" "main" {
 }
 
 resource "azurerm_lb_backend_address_pool" "main" {
-  name                = "${var.base_prefix}-bepool-${var.workspace_suffix}"
-  loadbalancer_id     = azurerm_lb.main.id
+  name            = "${var.base_prefix}-bepool-${var.workspace_suffix}"
+  loadbalancer_id = azurerm_lb.main.id
 
   depends_on = [
     azurerm_lb.main
@@ -74,11 +74,11 @@ resource "azurerm_lb_backend_address_pool" "main" {
 }
 
 resource "azurerm_lb_probe" "main" {
-  name                = "${var.base_prefix}-probe-${var.workspace_suffix}"
-  loadbalancer_id     = azurerm_lb.main.id
-  protocol            = "http"
-  port                = 80
-  request_path        = "/"
+  name            = "${var.base_prefix}-probe-${var.workspace_suffix}"
+  loadbalancer_id = azurerm_lb.main.id
+  protocol        = "http"
+  port            = 80
+  request_path    = "/"
 
   depends_on = [
     azurerm_lb.main
@@ -86,13 +86,13 @@ resource "azurerm_lb_probe" "main" {
 }
 
 resource "azurerm_lb_rule" "main" {
-  name                  = "${var.base_prefix}-lbrule-${var.workspace_suffix}"
-  loadbalancer_id       = azurerm_lb.main.id
+  name                           = "${var.base_prefix}-lbrule-${var.workspace_suffix}"
+  loadbalancer_id                = azurerm_lb.main.id
   frontend_ip_configuration_name = azurerm_lb.main.frontend_ip_configuration[0].name
-  probe_id                     = azurerm_lb_probe.main.id
-  protocol                     = "Tcp"
-  frontend_port                = 80
-  backend_port                 = 80
+  probe_id                       = azurerm_lb_probe.main.id
+  protocol                       = "Tcp"
+  frontend_port                  = 80
+  backend_port                   = 80
 
   depends_on = [
     azurerm_lb.main,
@@ -101,14 +101,14 @@ resource "azurerm_lb_rule" "main" {
 }
 
 resource "azurerm_network_interface" "main" {
-  name = "${var.base_prefix}-nic-${var.workspace_suffix}"
+  name                = "${var.base_prefix}-nic-${var.workspace_suffix}"
   resource_group_name = var.resource_group_name
   location            = var.resource_group_location
 
   ip_configuration {
-    name                          = "ipconfig1"
-    subnet_id                     = var.subnet_ids[0]
-    private_ip_address_allocation = "Dynamic"
+    name                                               = "ipconfig1"
+    subnet_id                                          = var.subnet_ids[0]
+    private_ip_address_allocation                      = "Dynamic"
     gateway_load_balancer_frontend_ip_configuration_id = azurerm_lb.main.frontend_ip_configuration[0].id
   }
 
