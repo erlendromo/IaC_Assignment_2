@@ -132,5 +132,3 @@ module "appservice" {
     module.storage
   ]
 }
-
-# Test new workflows
