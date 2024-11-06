@@ -1,4 +1,4 @@
-name: Prod - Validate, Plan & Apply Terraform Files
+name: Prod - Validate & Plan Terraform Files
 
 on:
   pull_request:

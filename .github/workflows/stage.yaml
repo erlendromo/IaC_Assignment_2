@@ -1,4 +1,4 @@
-name: Stage - Validate, Plan & Apply Terraform Files
+name: Stage - Validate & Plan Terraform Files
 
 on:
   pull_request:
