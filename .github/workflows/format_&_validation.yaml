@@ -6,6 +6,8 @@ on:
       - dev
       - stage
       - main
+    paths-ignore:
+      - '.github/**'
 
 permissions:
   contents: write
