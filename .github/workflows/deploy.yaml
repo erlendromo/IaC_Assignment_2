@@ -30,34 +30,11 @@ env:
   GH_TOKEN: ${{ github.token }}
 
 jobs:
-  deploy:
+  deploy-production:
+    if: github.event_name == 'push' && github.ref_name == 'main' || github.event_name == 'workflow_dispatch' && github.event.inputs.terraform_workspace == 'prod'
     runs-on: ubuntu-latest
+    environment: Production
     steps:
-      - name: Set Terraform Workspace
-        id: set-workspace
-        run: |
-          if [ "${{ github.event_name }}" == "push" ]; then
-            if [ "${{ github.ref_name }}" == "main" ]; then
-              echo "TF_WORKSPACE=prod" >> $GITHUB_ENV
-              echo "ENVIRONMENT=Production" >> $GITHUB_ENV
-            elif [ "${{ github.ref_name }}" == "stage" ]; then
-              echo "TF_WORKSPACE=stage" >> $GITHUB_ENV
-              echo "ENVIRONMENT=Staging" >> $GITHUB_ENV
-            else
-              echo "TF_WORKSPACE=dev" >> $GITHUB_ENV
-              echo "ENVIRONMENT=Development" >> $GITHUB_ENV
-            fi
-          else
-            echo "TF_WORKSPACE=${{ inputs.terraform_workspace }}" >> $GITHUB_ENV
-            if [ "${{ inputs.terraform_workspace }}" == "prod" ]; then
-              echo "ENVIRONMENT=Production" >> $GITHUB_ENV
-            elif [ "${{ inputs.terraform_workspace }}" == "stage" ]; then
-              echo "ENVIRONMENT=Staging" >> $GITHUB_ENV
-            else
-              echo "ENVIRONMENT=Development" >> $GITHUB_ENV
-            fi
-          fi
-
       - name: Checkout
         uses: actions/checkout@master
 
@@ -70,4 +47,42 @@ jobs:
         uses: ./.github/actions/apply
         with:
           working_dir: ${{ env.WORKING_DIR }}
-          terraform_workspace: ${{ inputs.terraform_workspace }}
+          terraform_workspace: 'prod'
+
+  deploy-stage:
+    if: github.event_name == 'push' && github.ref_name == 'stage' || github.event_name == 'workflow_dispatch' && github.event.inputs.terraform_workspace == 'stage'
+    runs-on: ubuntu-latest
+    environment: Stage
+    steps:
+      - name: Checkout
+        uses: actions/checkout@master
+
+      - name: Terraform Init
+        run: terraform init
+        working-directory: ${{ env.WORKING_DIR }}
+
+      - name: Terraform Apply
+        id: apply
+        uses: ./.github/actions/apply
+        with:
+          working_dir: ${{ env.WORKING_DIR }}
+          terraform_workspace: 'stage'
+
+  deploy-development:
+    if: github.event_name == 'push' && github.ref_name == 'dev' || github.event_name == 'workflow_dispatch' && github.event.inputs.terraform_workspace == 'dev'
+    runs-on: ubuntu-latest
+    environment: Development
+    steps:
+      - name: Checkout
+        uses: actions/checkout@master
+
+      - name: Terraform Init
+        run: terraform init
+        working-directory: ${{ env.WORKING_DIR }}
+
+      - name: Terraform Apply
+        id: apply
+        uses: ./.github/actions/apply
+        with:
+          working_dir: ${{ env.WORKING_DIR }}
+          terraform_workspace: 'dev'
