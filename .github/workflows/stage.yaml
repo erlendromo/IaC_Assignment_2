@@ -4,8 +4,9 @@ on:
   pull_request:
     branches:
       - stage
-    paths:
+    paths-ignore:
       - '.github/**'
+  workflow_dispatch:
 
 permissions:
   contents: read
