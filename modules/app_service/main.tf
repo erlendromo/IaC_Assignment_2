@@ -146,7 +146,7 @@ resource "azurerm_application_gateway" "main" {
     backend_http_settings_name = "appGatewayBackendHttpSettings"
     priority                   = 100
   }
-  
+
   depends_on = [
     azurerm_service_plan.main,
     azurerm_linux_web_app.main,

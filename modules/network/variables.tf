@@ -27,7 +27,7 @@ variable "virtual_network_address_space" {
 variable "dns_servers" {
   type        = list(string)
   description = "The DNS servers that are used by the virtual network."
-  default = []
+  default     = []
 }
 
 
