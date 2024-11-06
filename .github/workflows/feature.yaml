@@ -20,7 +20,7 @@ env:
   ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
   ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
   GH_TOKEN: ${{ github.token }}
-  WORKING_DIR: '.'
+  WORKING_DIR: 'deployments'
   TF_WORKSPACE: ''
 
 jobs:
@@ -36,8 +36,7 @@ jobs:
         id: fmt
         uses: ./.github/actions/format
         with:
-          github_token: ${{ env.GH_TOKEN }}
-          working_dir: ${{ env.WORKING_DIR }}
+          working_dir: '.'
   
   validate:
     name: Validate Terraform Files
@@ -52,6 +51,4 @@ jobs:
         id: validate
         uses: ./.github/actions/validate
         with:
-          terraform_workspace: ${{ env.TF_WORKSPACE }}
           working_dir: ${{ env.WORKING_DIR }}
-          github_token: ${{ env.GH_TOKEN }}

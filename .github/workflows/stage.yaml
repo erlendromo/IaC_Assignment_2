@@ -33,9 +33,7 @@ jobs:
         id: validate
         uses: ./.github/actions/validate
         with:
-          terraform_workspace: ${{ env.TF_WORKSPACE }}
           working_dir: ${{ env.WORKING_DIR }}
-          github_token: ${{ env.GH_TOKEN }}
 
   plan:
     name: Plan Terraform Files
@@ -52,7 +50,6 @@ jobs:
         with:
           working_dir: ${{ env.WORKING_DIR }}
           terraform_workspace: ${{ env.TF_WORKSPACE }}
-          github_token: ${{ env.GH_TOKEN }}
 
   apply:
     name: Apply Terraform Files
@@ -70,4 +67,3 @@ jobs:
         with:
           working_dir: ${{ env.WORKING_DIR }}
           terraform_workspace: ${{ env.TF_WORKSPACE }}
-          github_token: ${{ env.GH_TOKEN }}

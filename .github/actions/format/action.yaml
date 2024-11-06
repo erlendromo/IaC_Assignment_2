@@ -1,29 +1,16 @@
 name: Format Terraform Files
 
-
 inputs:
-  github_token:
-    description: 'The GitHub token to use'
-    type: string
-    required: true
   working_dir:
     description: 'The directory to run terraform fmt in'
     type: string
     required: false
     default: '.'
-    
-permissions:
-  contents: write
-  pull-requests: write
-
-env:
-  GH_TOKEN: ${{ inputs.github_token }}
-  WORKING_DIR: ${{ inputs.working_dir }}
 
 runs:
   using: 'composite'
   steps:
-    - name: 'Checkout'
+    - name: Checkout
         id: checkout
         uses: actions/checkout@master
 
@@ -31,7 +18,7 @@ runs:
         id: fmt
         uses: dflook/terraform-fmt@v1.44.0
         with:
-          path: ${{ env.WORKING_DIR }}
+          path: ${{ inputs.working_dir }}
 
       - name: Commit changes
         run: |
