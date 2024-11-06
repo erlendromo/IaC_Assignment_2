@@ -5,4 +5,11 @@ locals {
   workspace_suffix = terraform.workspace == "default" ? "" : "${terraform.workspace}"
 
   resource_group_name = "${local.base_prefix}-${var.resource_group_name}-${local.workspace_suffix}"
+
+  tags = {
+    owner       = "erlenrom"
+    project     = "Assignment2"
+    client      = "OperaTerra"
+    environment = terraform.workspace
+  }
 }

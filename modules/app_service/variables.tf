@@ -64,6 +64,11 @@ variable "public_network_access_enabled" {
   default     = false
 }
 
+variable "subnet_cidr_range" {
+  type        = string
+  description = "The CIDR range of the subnet."
+}
+
 variable "storage_account_name" {
   type        = string
   description = "The name of the storage account."
@@ -72,4 +77,27 @@ variable "storage_account_name" {
 variable "storage_account_access_key" {
   type        = string
   description = "The access key of the storage account."
+}
+
+
+
+# Public IP variables
+
+variable "pip_name" {
+  type        = string
+  description = "The name of the public IP."
+}
+
+
+
+# Application Gateway variables
+
+variable "application_gateway_name" {
+  type        = string
+  description = "The name of the application gateway."
+}
+
+variable "application_gateway_subnet_id" {
+  type = string
+  description = "The ID of the subnet for the application gateway."
 }

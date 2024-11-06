@@ -1,0 +1,34 @@
+name: Apply
+
+inputs:
+  working_dir:
+    description: 'The working directory for the Terraform code'
+    type: string
+    default: 'deployments'
+  terraform_workspace:
+    description: 'The Terraform workspace to use'
+    type: string
+    required: true
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Checkout
+      id: checkout
+      uses: actions/checkout@master
+      
+    - name: Terraform Init
+      id: init
+      run: terraform init
+      working-directory: ${{ inputs.working_dir }}
+
+    - name: Restore cached source
+      uses: actions/cache@v4.1.2
+      with:
+        path: ${{ inputs.working_dir }}/${{ inputs.terraform_workspace }}.tfplan
+        key: tfplan-${{ inputs.terraform_workspace }}-${{ github.run_number }}
+      
+    - name: Terraform Apply
+      id: apply
+      run: terraform apply -auto-approve ${{ inputs.working_dir }}/${{ inputs.terraform_workspace }}.tfplan
+      working-directory: ${{ inputs.working_dir }}
