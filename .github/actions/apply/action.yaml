@@ -22,6 +22,7 @@ runs:
       id: init
       run: terraform init
       working-directory: ${{ inputs.working_dir }}
+      shell: bash
 
     - name: Restore cached source
       uses: actions/cache@v4.1.2
