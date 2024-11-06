@@ -21,11 +21,13 @@ runs:
       id: init
       run: terraform init
       working-directory: ${{ inputs.working_dir }}
+      shell: bash
 
     - name: Terraform Plan
       id: plan
       run: terraform plan -out=${{ inputs.terraform_workspace }}.tfplan
       working-directory: ${{ inputs.working_dir }}
+      shell: bash
     
     - name: 'Save tfplan'
       uses: actions/cache/save@v4.1.2
