@@ -11,23 +11,23 @@ runs:
   using: 'composite'
   steps:
     - name: Checkout
-        id: checkout
-        uses: actions/checkout@master
+      id: checkout
+      uses: actions/checkout@master
 
-      - name: terraform fmt
-        id: fmt
-        uses: dflook/terraform-fmt@v1.44.0
-        with:
-          path: ${{ inputs.working_dir }}
+    - name: terraform fmt
+      id: fmt
+      uses: dflook/terraform-fmt@v1.44.0
+      with:
+        path: ${{ inputs.working_dir }}
 
-      - name: Commit changes
-        run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git add .
-          git diff-index --quiet HEAD || git commit -m "terraform fmt applied"
+    - name: Commit changes
+      run: |
+        git config --global user.name "github-actions[bot]"
+        git config --global user.email "github-actions[bot]@users.noreply.github.com"
+        git add .
+        git diff-index --quiet HEAD || git commit -m "terraform fmt applied"
 
-      - name: Push Changes
-        id: push
-        run: |
-          git push origin ${{ github.ref }}
+    - name: Push Changes
+      id: push
+      run: |
+        git push origin ${{ github.ref }}
