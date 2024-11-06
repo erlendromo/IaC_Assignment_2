@@ -35,6 +35,9 @@ jobs:
       - name: Terraform fmt
         id: fmt
         uses: ./.github/actions/format
+        with:
+          github_token: ${{ env.GH_TOKEN }}
+          working_dir: ${{ env.WORKING_DIR }}
   
   validate:
     name: Validate Terraform Files

@@ -1,12 +1,16 @@
 name: Format Terraform Files
 
-on:
-  workflow_call:
-    inputs:
-      github_token:
-        description: 'The GitHub token to use'
-        type: string
-        required: true
+
+inputs:
+  github_token:
+    description: 'The GitHub token to use'
+    type: string
+    required: true
+  working_dir:
+    description: 'The directory to run terraform fmt in'
+    type: string
+    required: false
+    default: '.'
     
 permissions:
   contents: write
@@ -14,12 +18,12 @@ permissions:
 
 env:
   GH_TOKEN: ${{ inputs.github_token }}
-  WORKING_DIR: '.'
+  WORKING_DIR: ${{ inputs.working_dir }}
 
 runs:
   using: 'composite'
   steps:
-    - name: Checkout
+    - name: 'Checkout'
         id: checkout
         uses: actions/checkout@master
 
