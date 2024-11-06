@@ -1,12 +1,11 @@
 name: Validate
 
-on:
-  workflow_call:
-    inputs:
-      WORKING_DIR:
-        description: 'The working directory for the Terraform code'
-        type: string
-        default: '.'
+inputs:
+  working_dir:
+    description: 'The working directory for the Terraform code'
+    type: string
+    required: false
+    default: 'deployments'
 
 runs:
   using: 'composite'
@@ -18,24 +17,24 @@ runs:
     - name: Terraform Init
       id: init
       run: terraform init
-      working-directory: ${{ inputs.WORKING_DIR }}
+      working-directory: ${{ inputs.working_dir }}
       shell: bash
 
     - name: Terraform Validate
       id: validate
       run: terraform validate
-      working-directory: ${{ inputs.WORKING_DIR }}
+      working-directory: ${{ inputs.working_dir }}
       shell: bash
 
     - name: Tfsec
       id: tfsec
       uses: aquasecurity/tfsec-action@v1.0.3
       with:
-        working_directory: ${{ inputs.WORKING_DIR }}
+        working_directory: ${{ inputs.working_dir }}
 
     - name: Checkov
       id: checkov
       uses: bridgecrewio/checkov-action@master
       with:
-        directory: ${{ inputs.WORKING_DIR }}
+        directory: ${{ inputs.working_dir }}
       continue-on-error: true

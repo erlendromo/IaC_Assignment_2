@@ -40,10 +40,10 @@ resource "azurerm_linux_web_app" "main" {
     always_on     = true
 
     ip_restriction {
-      ip_address  = "10.0.0.0/24"
+      ip_address  = var.subnet_cidr_range
       action      = "Allow"
       priority    = 100
-      name        = "AllowSubet"
+      name        = "AllowSubnet"
       description = "Allow access from subnet"
     }
   }
@@ -58,5 +58,98 @@ resource "azurerm_linux_web_app" "main" {
 
   depends_on = [
     azurerm_service_plan.main
+  ]
+}
+
+resource "azurerm_public_ip" "main" {
+  name                = var.pip_name
+  resource_group_name = azurerm_service_plan.main.resource_group_name
+  location            = azurerm_service_plan.main.location
+  allocation_method   = "Static"
+  sku                 = "Standard"
+
+  depends_on = [
+    azurerm_service_plan.main
+  ]
+}
+
+resource "azurerm_application_gateway" "main" {
+  name                = var.application_gateway_name
+  resource_group_name = azurerm_service_plan.main.resource_group_name
+  location            = azurerm_service_plan.main.location
+
+  sku {
+    name     = "Standard_v2"
+    tier     = "Standard_v2"
+    capacity = 2
+  }
+
+  gateway_ip_configuration {
+    name      = "appGatewayIpConfig"
+    subnet_id = var.application_gateway_subnet_id
+  }
+
+  frontend_port {
+    name = "port_80"
+    port = 80
+  }
+
+  frontend_ip_configuration {
+    name                 = "appGatewayFrontendIP"
+    public_ip_address_id = azurerm_public_ip.main.id
+  }
+
+  backend_address_pool {
+    name = "backendAddressPool"
+    fqdns = [
+      azurerm_linux_web_app.main.default_hostname
+    ]
+  }
+
+  probe {
+    name                                      = "httpProbe"
+    protocol                                  = "Http"
+    path                                      = "/"
+    interval                                  = 30
+    timeout                                   = 30
+    unhealthy_threshold                       = 3
+    pick_host_name_from_backend_http_settings = true
+
+    match {
+      body        = ""
+      status_code = [200]
+    }
+  }
+
+  backend_http_settings {
+    name                                = "appGatewayBackendHttpSettings"
+    cookie_based_affinity               = "Disabled"
+    pick_host_name_from_backend_address = true
+    path                                = "/"
+    port                                = 80
+    protocol                            = "Http"
+    request_timeout                     = 20
+  }
+
+  http_listener {
+    name                           = "appGatewayHttpListener"
+    frontend_ip_configuration_name = "appGatewayFrontendIP"
+    frontend_port_name             = "port_80"
+    protocol                       = "Http"
+  }
+
+  request_routing_rule {
+    name                       = "rule1"
+    rule_type                  = "Basic"
+    http_listener_name         = "appGatewayHttpListener"
+    backend_address_pool_name  = "backendAddressPool"
+    backend_http_settings_name = "appGatewayBackendHttpSettings"
+    priority                   = 100
+  }
+  
+  depends_on = [
+    azurerm_service_plan.main,
+    azurerm_linux_web_app.main,
+    azurerm_public_ip.main
   ]
 }

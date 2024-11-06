@@ -69,6 +69,8 @@ variable "min_tls_version" {
   default     = "TLS1_2"
 }
 
+
+
 # Storage Container Variables
 
 variable "container_name" {
