@@ -1,0 +1,73 @@
+name: Deploy Terraform Configuration
+
+on:
+  push:
+    branches:
+      - main
+      - stage
+      - dev
+  workflow_dispatch:
+    inputs:
+      terraform_workspace:
+        description: 'The Terraform workspace to use'
+        type: choice
+        required: true
+        options:
+          - prod
+          - stage
+          - dev
+
+permissions:
+  contents: read
+  pull-requests: write
+
+env:
+  ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
+  ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
+  ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
+  ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
+  WORKING_DIR: 'deployments'
+  GH_TOKEN: ${{ github.token }}
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set Terraform Workspace
+        id: set-workspace
+        run: |
+          if [ "${{ github.event_name }}" == "push" ]; then
+            if [ "${{ github.ref_name }}" == "main" ]; then
+              echo "TF_WORKSPACE=prod" >> $GITHUB_ENV
+              echo "ENVIRONMENT=Production" >> $GITHUB_ENV
+            elif [ "${{ github.ref_name }}" == "stage" ]; then
+              echo "TF_WORKSPACE=stage" >> $GITHUB_ENV
+              echo "ENVIRONMENT=Staging" >> $GITHUB_ENV
+            else
+              echo "TF_WORKSPACE=dev" >> $GITHUB_ENV
+              echo "ENVIRONMENT=Development" >> $GITHUB_ENV
+            fi
+          else
+            echo "TF_WORKSPACE=${{ inputs.terraform_workspace }}" >> $GITHUB_ENV
+            if [ "${{ inputs.terraform_workspace }}" == "prod" ]; then
+              echo "ENVIRONMENT=Production" >> $GITHUB_ENV
+            elif [ "${{ inputs.terraform_workspace }}" == "stage" ]; then
+              echo "ENVIRONMENT=Staging" >> $GITHUB_ENV
+            else
+              echo "ENVIRONMENT=Development" >> $GITHUB_ENV
+            fi
+          fi
+
+      - name: Checkout
+        uses: actions/checkout@master
+
+      - name: Terraform Init
+        run: terraform init
+        working-directory: ${{ env.WORKING_DIR }}
+
+      - name: Terraform Apply
+        id: apply
+        uses: ./.github/actions/apply
+        with:
+          working_dir: ${{ env.WORKING_DIR }}
+          terraform_workspace: ${{ inputs.terraform_workspace }}

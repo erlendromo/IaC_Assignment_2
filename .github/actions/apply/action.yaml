@@ -4,6 +4,7 @@ inputs:
   working_dir:
     description: 'The working directory for the Terraform code'
     type: string
+    required: false
     default: 'deployments'
   terraform_workspace:
     description: 'The Terraform workspace to use'
@@ -32,3 +33,4 @@ runs:
       id: apply
       run: terraform apply -auto-approve ${{ inputs.working_dir }}/${{ inputs.terraform_workspace }}.tfplan
       working-directory: ${{ inputs.working_dir }}
+      shell: bash

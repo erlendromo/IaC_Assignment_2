@@ -1,11 +1,12 @@
-name: Prod - Validate, Plan & Apply Terraform Files
+name: Prod - Validate & Plan Terraform Files
 
 on:
   pull_request:
     branches:
       - main
-    paths:
+    paths-ignore:
       - '.github/**'
+  workflow_dispatch:
 
 permissions:
   contents: read
