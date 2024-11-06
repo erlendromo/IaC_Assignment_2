@@ -32,6 +32,9 @@ jobs:
       - name: Terraform validate
         id: validate
         uses: ./.github/actions/validate
+        with:
+          terraform_workspace: ${{ env.TF_WORKSPACE }}
+          working_dir: ${{ env.WORKING_DIR }}
 
   plan:
     name: Plan Terraform Files

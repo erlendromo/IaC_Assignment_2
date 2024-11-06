@@ -3,6 +3,10 @@ name: Validate
 on:
   workflow_call:
     inputs:
+      terraform_workspace:
+        description: 'The Terraform workspace to use'
+        type: string
+        required: true
       working_dir:
         description: 'The working directory for the Terraform code'
         type: string
@@ -15,6 +19,7 @@ permissions:
 env:
   GH_TOKEN: ${{ github.token }}
   WORKING_DIR: ${{ inputs.working_dir }}
+  TF_WORKSPACE: ${{ inputs.terraform_workspace }}
 
 runs:
   using: 'composite'

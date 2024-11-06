@@ -21,6 +21,7 @@ env:
   ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
   GH_TOKEN: ${{ github.token }}
   WORKING_DIR: '.'
+  TF_WORKSPACE: ''
 
 jobs:
   format:
@@ -51,3 +52,6 @@ jobs:
       - name: Terraform validate
         id: validate
         uses: ./.github/actions/validate
+        with:
+          terraform_workspace: ${{ env.TF_WORKSPACE }}
+          working_dir: ${{ env.WORKING_DIR }}
