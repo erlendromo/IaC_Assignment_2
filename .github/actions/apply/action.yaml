@@ -11,13 +11,17 @@ on:
         description: 'The Terraform workspace to use'
         type: string
         required: true
+      github_token:
+        description: 'The GitHub token to use'
+        type: string
+        required: true
 
 permissions:
   contents: read
   pull-requests: write
 
 env:
-  GH_TOKEN: ${{ github.token }}
+  GH_TOKEN: ${{ inputs.github_token }}
   WORKING_DIR: ${{ inputs.working_dir }}
   TF_WORKSPACE: ${{ inputs.terraform_workspace }}
 
