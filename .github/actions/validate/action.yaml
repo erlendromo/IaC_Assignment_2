@@ -3,10 +3,18 @@ name: Validate
 on:
   workflow_call:
     inputs:
-      WORKING_DIR:
+      working_dir:
         description: 'The working directory for the Terraform code'
         type: string
-        default: '.'
+        default: 'deployments'
+
+permissions:
+  contents: read
+  pull-requests: write
+
+env:
+  GH_TOKEN: ${{ github.token }}
+  WORKING_DIR: ${{ inputs.working_dir }}
 
 runs:
   using: 'composite'
@@ -18,24 +26,24 @@ runs:
     - name: Terraform Init
       id: init
       run: terraform init
-      working-directory: ${{ inputs.WORKING_DIR }}
+      working-directory: ${{ env.WORKING_DIR }}
       shell: bash
 
     - name: Terraform Validate
       id: validate
       run: terraform validate
-      working-directory: ${{ inputs.WORKING_DIR }}
+      working-directory: ${{ env.WORKING_DIR }}
       shell: bash
 
     - name: Tfsec
       id: tfsec
       uses: aquasecurity/tfsec-action@v1.0.3
       with:
-        working_directory: ${{ inputs.WORKING_DIR }}
+        working_directory: ${{ env.WORKING_DIR }}
 
     - name: Checkov
       id: checkov
       uses: bridgecrewio/checkov-action@master
       with:
-        directory: ${{ inputs.WORKING_DIR }}
+        directory: ${{ env.WORKING_DIR }}
       continue-on-error: true

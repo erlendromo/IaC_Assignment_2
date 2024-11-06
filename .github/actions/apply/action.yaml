@@ -1,0 +1,49 @@
+name: Apply
+
+on:
+  workflow_call:
+    inputs:
+      working_dir:
+        description: 'The working directory for the Terraform code'
+        type: string
+        default: 'deployments'
+      terraform_workspace:
+        description: 'The Terraform workspace to use'
+        type: string
+        required: true
+
+permissions:
+  contents: read
+  pull-requests: write
+
+env:
+  ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
+  ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
+  ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
+  ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
+  GH_TOKEN: ${{ github.token }}
+  WORKING_DIR: ${{ inputs.working_dir }}
+  TF_WORKSPACE: ${{ inputs.terraform_workspace }}
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Checkout
+      id: checkout
+      uses: actions/checkout@master
+      
+    - name: Terraform Init
+      id: init
+      run: terraform init
+      working-directory: ${{ env.WORKING_DIR }}
+
+    - name: Restore cached source
+      uses: actions/cache@v4.1.2
+      with:
+        path: ${{ env.WORKING_DIR }}/${{ env.TF_WORKSPACE }}.tfplan
+        key: tfplan-${{ env.TF_WORKSPACE }}-${{ github.run_number }}
+      
+    - name: Terraform Apply
+      id: apply
+      run: terraform apply -auto-approve ${{ env.WORKING_DIR }}/${{ env.TF_WORKSPACE }}.tfplan
+      working-directory: ${{ env.WORKING_DIR }}
