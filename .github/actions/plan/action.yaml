@@ -25,7 +25,7 @@ runs:
 
     - name: Terraform Plan
       id: plan
-      run: terraform plan -out=${{ inputs.terraform_workspace }}.tfplan
+      run: terraform plan -out=${{ inputs.working_dir }}/${{ inputs.terraform_workspace }}.tfplan
       working-directory: ${{ inputs.working_dir }}
       shell: bash
     
