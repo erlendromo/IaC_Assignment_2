@@ -24,11 +24,11 @@ runs:
       working-directory: ${{ inputs.working_dir }}
       shell: bash
 
-    - name: Restore cached source
-      uses: actions/cache@v4.1.2
+    - name: Download Plan Artifact
+      uses: actions/download-artifact@v3
       with:
-        path: ${{ inputs.working_dir }}/${{ inputs.terraform_workspace }}.tfplan
-        key: tfplan-${{ inputs.terraform_workspace }}-${{ github.run_number }}
+        name: tfplan
+        path: ${{ inputs.working_dir }}
       
     - name: Terraform Apply
       id: apply
