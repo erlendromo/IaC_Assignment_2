@@ -29,7 +29,7 @@ runs:
       working-directory: ${{ inputs.working_dir }}
       shell: bash
     
-    - name: Upload Plan Artifactp
+    - name: Upload Plan Artifact
       uses: actions/upload-artifact@v3
       with:
         name: ${{ inputs.terraform_workspace }}-tfplan
