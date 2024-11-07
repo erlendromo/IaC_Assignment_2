@@ -29,9 +29,8 @@ runs:
       working-directory: ${{ inputs.working_dir }}
       shell: bash
     
-    - name: Upload Plan Artifact
-      uses: actions/upload-artifact@v3
+    - name: Cache Terraform Plan File
+      uses: actions/cache@v3
       with:
-        name: ${{ inputs.terraform_workspace }}-tfplan
         path: ${{ inputs.working_dir }}/${{ inputs.terraform_workspace }}.tfplan
-
+        key: terraform-plan-${{ inputs.terraform_workspace }}
