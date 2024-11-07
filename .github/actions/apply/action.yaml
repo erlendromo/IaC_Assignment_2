@@ -32,6 +32,6 @@ runs:
       
     - name: Terraform Apply
       id: apply
-      run: terraform apply -auto-approve ${{ inputs.working_dir }}/${{ inputs.terraform_workspace }}.tfplan
+      run: terraform apply -auto-approve ${{ inputs.terraform_workspace }}.tfplan
       working-directory: ${{ inputs.working_dir }}
       shell: bash
