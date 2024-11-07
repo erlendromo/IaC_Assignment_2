@@ -32,6 +32,6 @@ runs:
     - name: Upload Plan Artifact
       uses: actions/upload-artifact@v3
       with:
-        name: tfplan
+        name: ${{ inputs.terraform_workspace }}-tfplan
         path: ${{ inputs.working_dir }}/${{ inputs.terraform_workspace }}.tfplan
 
