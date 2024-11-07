@@ -27,7 +27,7 @@ runs:
     - name: Download Plan Artifact
       uses: actions/download-artifact@v3
       with:
-        name: tfplan
+        name: ${{ inputs.terraform_workspace }}-tfplan
         path: ${{ inputs.working_dir }}
       
     - name: Terraform Apply
