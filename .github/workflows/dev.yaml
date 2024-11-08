@@ -1,7 +1,7 @@
 name: Dev - Validate & Plan Terraform Files
 
 on:
-  pull_request:
+  push:
     branches:
       - dev
     paths-ignore:
