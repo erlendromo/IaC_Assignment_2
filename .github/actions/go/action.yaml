@@ -10,6 +10,22 @@ inputs:
     description: 'The name of the Azure Web App to deploy to'
     type: string
     required: true
+  client_id:
+    description: 'Azure Service Principal Client ID'
+    type: string
+    required: true
+  client_secret:
+    description: 'Azure Service Principal Client Secret'
+    type: string
+    required: true
+  subscription_id:
+    description: 'Azure Subscription ID'
+    type: string
+    required: true
+  tenant_id:
+    description: 'Azure Tenant ID'
+    type: string
+    required: true
 
 runs:
   using: 'composite'
@@ -29,6 +45,12 @@ runs:
       id: build
       run: go build src/main.go
       shell: bash
+
+    - name: Az Login
+      id: az-login
+      uses: azure/login@v2
+      with:
+        creds: '{"clientId":"${{ inputs.client_id }}","clientSecret":"${{ inputs.client_secret }}","subscriptionId":"${{ inputs.subscription_id }}","tenantId":"${{ inputs.tenant_id }}"}'
     
     - name: Deploy to Azure Web App
       id: deploy-to-webapp
