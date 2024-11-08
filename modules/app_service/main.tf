@@ -46,6 +46,10 @@ resource "azurerm_linux_web_app" "main" {
       name        = "AllowSubnet"
       description = "Allow access from subnet"
     }
+
+    application_stack {
+      go_version = "1.19"
+    }
   }
 
   storage_account {
@@ -59,6 +63,22 @@ resource "azurerm_linux_web_app" "main" {
   depends_on = [
     azurerm_service_plan.main
   ]
+}
+
+resource "azurerm_linux_web_app_slot" "main" {
+  app_service_id = azurerm_linux_web_app.main.id
+  name           = "my_go_app"
+  public_network_access_enabled = true
+
+  site_config {
+    application_stack {
+      go_version = "1.19"
+    }
+  }
+
+  auth_settings {
+    enabled = false
+  }
 }
 
 resource "azurerm_public_ip" "main" {
