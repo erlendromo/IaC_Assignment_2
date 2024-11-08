@@ -38,12 +38,12 @@ runs:
       id: setup-go
       uses: actions/setup-go@v5
       with:
-        working-directory: ${{ inputs.working_dir }}
         go-version-file: src/go.mod
 
     - name: Build
       id: build
-      run: go build src/main.go
+      run: go build src/main.go -o src/app
+      working-directory: ${{ inputs.working_dir }}
       shell: bash
 
     - name: Az Login
@@ -58,4 +58,4 @@ runs:
       with:
         app-name: ${{ inputs.azure_webapp_name }}
         slot-name: 'myGoApp'
-        package: .
+        package: src/app
