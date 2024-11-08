@@ -42,7 +42,7 @@ runs:
 
     - name: Build
       id: build
-      run: go build src/main.go -o src/app
+      run: go build -o src/app src/main.go
       working-directory: ${{ inputs.working_dir }}
       shell: bash
 
@@ -58,4 +58,4 @@ runs:
       with:
         app-name: ${{ inputs.azure_webapp_name }}
         slot-name: 'myGoApp'
-        package: src/app
+        package: src
