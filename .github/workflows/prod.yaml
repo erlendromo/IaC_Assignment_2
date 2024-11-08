@@ -82,6 +82,5 @@ jobs:
         id: go
         uses: ./.github/actions/go
         with:
-          working_dir: 'src'
-          go_version: '1.19'
+          working_dir: '.'
           azure_webapp_name: 'erlenrom-web-prod'
