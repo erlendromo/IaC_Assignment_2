@@ -67,7 +67,7 @@ resource "azurerm_linux_web_app" "main" {
 
 resource "azurerm_linux_web_app_slot" "main" {
   app_service_id                = azurerm_linux_web_app.main.id
-  name                          = "my_go_app"
+  name                          = "myGoApp"
   public_network_access_enabled = true
 
   site_config {
@@ -79,6 +79,10 @@ resource "azurerm_linux_web_app_slot" "main" {
   auth_settings {
     enabled = false
   }
+
+  depends_on = [
+    azurerm_linux_web_app.main
+  ]
 }
 
 resource "azurerm_public_ip" "main" {
