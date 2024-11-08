@@ -115,6 +115,7 @@ module "appservice" {
   service_plan_name = "${local.base_prefix}-asp-${local.workspace_suffix}"
 
   linux_web_app_name = "${local.base_prefix}-web-${local.workspace_suffix}"
+  public_network_access_enabled = true
 
   subnet_cidr_range = "10.0.0.0/16"
 

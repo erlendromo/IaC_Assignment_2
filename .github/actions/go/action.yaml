@@ -24,7 +24,6 @@ runs:
       with:
         working-directory: ${{ inputs.working_dir }}
         go-version-file: src/go.mod
-      - run: go version
 
     - name: Build
       id: build
