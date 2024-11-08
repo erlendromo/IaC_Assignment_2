@@ -132,5 +132,3 @@ module "appservice" {
     module.storage
   ]
 }
-
-# Test deployment v6
