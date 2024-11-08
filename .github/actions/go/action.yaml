@@ -6,11 +6,6 @@ inputs:
     type: string
     required: false
     default: '.'
-  go_version:
-    description: 'The version of Go to use'
-    type: string
-    required: false
-    default: '1.19'
   azure_webapp_name:
     description: 'The name of the Azure Web App to deploy to'
     type: string
