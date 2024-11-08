@@ -25,13 +25,15 @@ runs:
 
     - name: Setup Go
       id: setup-go
-      uses: actions/setup-go@v3
+      uses: actions/setup-go@v5
       with:
-        go-version: ${{ inputs.go_version }}
+        working-directory: ${{ inputs.working_dir }}
+        go-version-file: src/go.mod
+      - run: go version
 
     - name: Build
       id: build
-      run: go build
+      run: go build src/main.go
       shell: bash
     
     - name: Deploy to Azure Web App
