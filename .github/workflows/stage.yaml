@@ -1,11 +1,12 @@
-name: Stage - Validate, Plan & Apply Terraform Files
+name: Stage - Validate & Plan Terraform Files
 
 on:
   pull_request:
     branches:
       - stage
-    paths:
+    paths-ignore:
       - '.github/**'
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -61,9 +62,3 @@ jobs:
         id: checkout
         uses: actions/checkout@master
 
-      - name: Terraform apply
-        id: apply
-        uses: ./.github/actions/apply
-        with:
-          working_dir: ${{ env.WORKING_DIR }}
-          terraform_workspace: ${{ env.TF_WORKSPACE }}

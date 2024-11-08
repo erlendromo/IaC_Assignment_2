@@ -98,6 +98,6 @@ variable "application_gateway_name" {
 }
 
 variable "application_gateway_subnet_id" {
-  type = string
+  type        = string
   description = "The ID of the subnet for the application gateway."
 }
