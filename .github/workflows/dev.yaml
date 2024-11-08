@@ -1,11 +1,12 @@
-name: Dev - Validate, Plan & Apply Terraform Files
+name: Dev - Validate & Plan Terraform Files
 
 on:
-  pull_request:
+  push:
     branches:
       - dev
-    paths:
+    paths-ignore:
       - '.github/**'
+  workflow_dispatch:
 
 permissions:
   contents: read

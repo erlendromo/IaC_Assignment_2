@@ -1,11 +1,12 @@
-name: Stage - Validate, Plan & Apply Terraform Files
+name: Stage - Validate & Plan Terraform Files
 
 on:
-  pull_request:
+  push:
     branches:
       - stage
-    paths:
+    paths-ignore:
       - '.github/**'
+  workflow_dispatch:
 
 permissions:
   contents: read
