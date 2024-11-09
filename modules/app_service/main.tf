@@ -151,7 +151,6 @@ resource "azurerm_application_gateway" "main" {
     name                                = "appGatewayBackendHttpSettings"
     cookie_based_affinity               = "Disabled"
     pick_host_name_from_backend_address = true
-    path                                = "/hello"
     port                                = 80
     protocol                            = "Http"
     request_timeout                     = 20
