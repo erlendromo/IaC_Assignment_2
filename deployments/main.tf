@@ -41,7 +41,7 @@ module "network" {
       protocol                   = "Tcp"
       source_port_range          = "*"
       destination_port_range     = "443"
-      source_address_prefix      = "10.0.0.0/16"
+      source_address_prefix      = "10.0.1.0/24"
       destination_address_prefix = "*"
     },
     "AllowHttpInbound" = {
@@ -51,7 +51,7 @@ module "network" {
       protocol                   = "Tcp"
       source_port_range          = "*"
       destination_port_range     = "80"
-      source_address_prefix      = "10.0.0.0/16"
+      source_address_prefix      = "10.0.1.0/24"
       destination_address_prefix = "*"
     },
     "AllowAppGatewayInbound" = {
@@ -62,6 +62,16 @@ module "network" {
       source_port_range          = "*"
       destination_port_range     = "65200-65535"
       source_address_prefix      = "Internet"
+      destination_address_prefix = "*"
+    },
+    "AllowGoAppInbound" = {
+      priority                   = 130
+      direction                  = "Inbound"
+      access                     = "Allow"
+      protocol                   = "Tcp"
+      source_port_range          = "*"
+      destination_port_range     = "8080"
+      source_address_prefix      = "10.0.1.0/24",
       destination_address_prefix = "*"
     }
   }
