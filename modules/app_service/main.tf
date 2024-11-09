@@ -54,8 +54,8 @@ resource "azurerm_linux_web_app" "main" {
 
   storage_account {
     name         = "webappstorage"
-    type         = "AzureFiles"
-    share_name   = "webappstorage"
+    type         = "AzureBlob"
+    share_name   = var.storage_container_name
     account_name = var.storage_account_name
     access_key   = var.storage_account_access_key
   }
@@ -114,8 +114,8 @@ resource "azurerm_application_gateway" "main" {
   }
 
   frontend_port {
-    name = "https"
-    port = 443
+    name = "http"
+    port = 80
   }
 
   frontend_ip_configuration {
@@ -134,6 +134,7 @@ resource "azurerm_application_gateway" "main" {
     name                                      = "http-probe"
     protocol                                  = "Http"
     path                                      = "/"
+    port                                      = 8080
     interval                                  = 30
     timeout                                   = 30
     unhealthy_threshold                       = 3
@@ -145,28 +146,28 @@ resource "azurerm_application_gateway" "main" {
   }
 
   backend_http_settings {
-    name                                = "appGatewayBackendHttpsSettings"
+    name                                = "appGatewayBackendHttpSettings"
     cookie_based_affinity               = "Disabled"
     pick_host_name_from_backend_address = true
     path                                = "/"
-    port                                = 443
-    protocol                            = "Https"
+    port                                = 8080
+    protocol                            = "Http"
     request_timeout                     = 20
   }
 
   http_listener {
-    name                           = "appGatewayHttpsListener"
+    name                           = "appGatewayHttpListener"
     frontend_ip_configuration_name = "appGatewayFrontendIP"
-    frontend_port_name             = "https"
+    frontend_port_name             = "http"
     protocol                       = "Http"
   }
 
   request_routing_rule {
-    name                       = "https-rule"
+    name                       = "http-rule"
     rule_type                  = "Basic"
-    http_listener_name         = "appGatewayHttpsListener"
+    http_listener_name         = "appGatewayHttpListener"
     backend_address_pool_name  = "backendAddressPool"
-    backend_http_settings_name = "appGatewayBackendHttpsSettings"
+    backend_http_settings_name = "appGatewayBackendHttpSettings"
     priority                   = 100
   }
 

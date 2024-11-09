@@ -63,16 +63,6 @@ module "network" {
       destination_port_range     = "65200-65535"
       source_address_prefix      = "Internet"
       destination_address_prefix = "*"
-    },
-    "AllowGoAppInbound" = {
-      priority                   = 130
-      direction                  = "Inbound"
-      access                     = "Allow"
-      protocol                   = "Tcp"
-      source_port_range          = "*"
-      destination_port_range     = "8080"
-      source_address_prefix      = "10.0.1.0/24",
-      destination_address_prefix = "*"
     }
   }
 
@@ -131,6 +121,7 @@ module "appservice" {
 
   subnet_cidr_range = "10.0.1.0/24"
 
+  storage_container_name     = module.storage.storage_container_name
   storage_account_name       = module.storage.storage_account_name
   storage_account_access_key = module.storage.storage_account_access_key
 
