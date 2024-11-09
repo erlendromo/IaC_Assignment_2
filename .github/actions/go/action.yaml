@@ -57,5 +57,5 @@ runs:
       uses: azure/webapps-deploy@v2
       with:
         app-name: ${{ inputs.azure_webapp_name }}
-        slot-name: 'myGoApp'
+        slot-name: 'goapp'
         package: src
