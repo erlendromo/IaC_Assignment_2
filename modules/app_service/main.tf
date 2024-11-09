@@ -36,16 +36,16 @@ resource "azurerm_linux_web_app" "main" {
 
   site_config {
     http2_enabled = true
-    ftps_state    = "FtpsOnly"
-    always_on     = true
+    #ftps_state    = "FtpsOnly"
+    #always_on     = true
 
-    ip_restriction {
-      ip_address  = var.subnet_cidr_range
-      action      = "Allow"
-      priority    = 100
-      name        = "AllowSubnet"
-      description = "Allow access from subnet"
-    }
+    # ip_restriction {
+    #   ip_address  = var.subnet_cidr_range
+    #   action      = "Allow"
+    #   priority    = 100
+    #   name        = "AllowSubnet"
+    #   description = "Allow access from subnet"
+    # }
 
     application_stack {
       go_version = "1.19"
@@ -114,8 +114,8 @@ resource "azurerm_application_gateway" "main" {
   }
 
   frontend_port {
-    name = "http"
-    port = 80
+    name = "https"
+    port = 443
   }
 
   frontend_ip_configuration {
@@ -130,9 +130,8 @@ resource "azurerm_application_gateway" "main" {
     ]
   }
 
-  # Set to the go-web-app endpoint (http://<app-slot-name>.azurewebsites.net/hello)
   probe {
-    name                                      = "probe"
+    name                                      = "http-probe"
     protocol                                  = "Http"
     path                                      = "/"
     interval                                  = 30
@@ -145,30 +144,29 @@ resource "azurerm_application_gateway" "main" {
     }
   }
 
-  # Set to the go-web-app endpoint (http://<app-slot-name>.azurewebsites.net/hello)
   backend_http_settings {
-    name                                = "appGatewayBackendHttpSettings"
+    name                                = "appGatewayBackendHttpsSettings"
     cookie_based_affinity               = "Disabled"
     pick_host_name_from_backend_address = true
-    port                                = 80
-    protocol                            = "Http"
+    path                                = "/"
+    port                                = 443
+    protocol                            = "Https"
     request_timeout                     = 20
-    probe_name                          = "probe"
   }
 
   http_listener {
-    name                           = "appGatewayHttpListener"
+    name                           = "appGatewayHttpsListener"
     frontend_ip_configuration_name = "appGatewayFrontendIP"
-    frontend_port_name             = "http"
+    frontend_port_name             = "https"
     protocol                       = "Http"
   }
 
   request_routing_rule {
-    name                       = "http-rule"
+    name                       = "https-rule"
     rule_type                  = "Basic"
-    http_listener_name         = "appGatewayHttpListener"
+    http_listener_name         = "appGatewayHttpsListener"
     backend_address_pool_name  = "backendAddressPool"
-    backend_http_settings_name = "appGatewayBackendHttpSettings"
+    backend_http_settings_name = "appGatewayBackendHttpsSettings"
     priority                   = 100
   }
 

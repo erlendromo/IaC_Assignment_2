@@ -129,7 +129,7 @@ module "appservice" {
   public_network_access_enabled = true
   client_certificate_enabled    = false
 
-  subnet_cidr_range = "10.0.0.0/16"
+  subnet_cidr_range = "10.0.1.0/24"
 
   storage_account_name       = module.storage.storage_account_name
   storage_account_access_key = module.storage.storage_account_access_key
