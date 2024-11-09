@@ -69,6 +69,11 @@ variable "subnet_cidr_range" {
   description = "The CIDR range of the subnet."
 }
 
+variable "storage_container_name" {
+  type        = string
+  description = "The name of the storage container."
+}
+
 variable "storage_account_name" {
   type        = string
   description = "The name of the storage account."
