@@ -134,7 +134,7 @@ resource "azurerm_application_gateway" "main" {
     name                                      = "http-probe"
     protocol                                  = "Http"
     path                                      = "/"
-    port                                      = 8080
+    port                                      = 80
     interval                                  = 30
     timeout                                   = 30
     unhealthy_threshold                       = 3
@@ -150,7 +150,7 @@ resource "azurerm_application_gateway" "main" {
     cookie_based_affinity               = "Disabled"
     pick_host_name_from_backend_address = true
     path                                = "/"
-    port                                = 8080
+    port                                = 80
     protocol                            = "Http"
     request_timeout                     = 20
   }
