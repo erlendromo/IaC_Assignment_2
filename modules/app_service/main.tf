@@ -76,9 +76,9 @@ resource "azurerm_linux_web_app_slot" "main" {
     }
   }
 
-  # auth_settings {
-  #   enabled = false
-  # }
+  auth_settings {
+    enabled = false
+  }
 
   depends_on = [
     azurerm_linux_web_app.main
@@ -118,11 +118,6 @@ resource "azurerm_application_gateway" "main" {
     port = 80
   }
 
-  frontend_port {
-    name = "https"
-    port = 443
-  }
-
   frontend_ip_configuration {
     name                 = "appGatewayFrontendIP"
     public_ip_address_id = azurerm_public_ip.main.id
@@ -135,10 +130,11 @@ resource "azurerm_application_gateway" "main" {
     ]
   }
 
+  # Set to the go-web-app endpoint (http://<app-slot-name>.azurewebsites.net/hello)
   probe {
-    name                                      = "httpProbe"
+    name                                      = "helloProbe"
     protocol                                  = "Http"
-    path                                      = "/"
+    path                                      = "/hello"
     interval                                  = 30
     timeout                                   = 30
     unhealthy_threshold                       = 3
@@ -150,39 +146,16 @@ resource "azurerm_application_gateway" "main" {
     }
   }
 
-  probe {
-    name                                      = "httpsProbe"
-    protocol                                  = "Https"
-    path                                      = "/"
-    interval                                  = 30
-    timeout                                   = 30
-    unhealthy_threshold                       = 3
-    pick_host_name_from_backend_http_settings = true
-
-    match {
-      body        = ""
-      status_code = [200]
-    }
-  }
-
+  # Set to the go-web-app endpoint (http://<app-slot-name>.azurewebsites.net/hello)
   backend_http_settings {
     name                                = "appGatewayBackendHttpSettings"
     cookie_based_affinity               = "Disabled"
     pick_host_name_from_backend_address = true
-    path                                = "/"
+    path                                = "/hello"
     port                                = 80
     protocol                            = "Http"
     request_timeout                     = 20
-  }
-
-  backend_http_settings {
-    name                                = "appGatewayBackendHttpsSettings"
-    cookie_based_affinity               = "Disabled"
-    pick_host_name_from_backend_address = true
-    path                                = "/"
-    port                                = 443
-    protocol                            = "Https"
-    request_timeout                     = 20
+    probe_name                          = "helloProbe"
   }
 
   http_listener {
@@ -192,28 +165,12 @@ resource "azurerm_application_gateway" "main" {
     protocol                       = "Http"
   }
 
-  http_listener {
-    name                           = "appGatewayHttpsListener"
-    frontend_ip_configuration_name = "appGatewayFrontendIP"
-    frontend_port_name             = "https"
-    protocol                       = "Https"
-  }
-
   request_routing_rule {
     name                       = "http-rule"
     rule_type                  = "Basic"
     http_listener_name         = "appGatewayHttpListener"
     backend_address_pool_name  = "backendAddressPool"
     backend_http_settings_name = "appGatewayBackendHttpSettings"
-    priority                   = 100
-  }
-
-  request_routing_rule {
-    name                       = "https-rule"
-    rule_type                  = "Basic"
-    http_listener_name         = "appGatewayHttpsListener"
-    backend_address_pool_name  = "backendAddressPool"
-    backend_http_settings_name = "appGatewayBackendHttpsSettings"
     priority                   = 100
   }
 
