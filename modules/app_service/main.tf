@@ -67,7 +67,7 @@ resource "azurerm_linux_web_app" "main" {
 
 resource "azurerm_linux_web_app_slot" "main" {
   app_service_id                = azurerm_linux_web_app.main.id
-  name                          = "myGoApp"
+  name                          = "goapp"
   public_network_access_enabled = true
 
   site_config {
@@ -126,15 +126,15 @@ resource "azurerm_application_gateway" "main" {
   backend_address_pool {
     name = "backendAddressPool"
     fqdns = [
-      "${azurerm_linux_web_app.main.name}-${azurerm_linux_web_app_slot.main.name}.azurewebsites.net"
+      azurerm_linux_web_app_slot.main.default_hostname
     ]
   }
 
   # Set to the go-web-app endpoint (http://<app-slot-name>.azurewebsites.net/hello)
   probe {
-    name                                      = "helloProbe"
+    name                                      = "probe"
     protocol                                  = "Http"
-    path                                      = "/hello"
+    path                                      = "/"
     interval                                  = 30
     timeout                                   = 30
     unhealthy_threshold                       = 3
@@ -153,7 +153,7 @@ resource "azurerm_application_gateway" "main" {
     port                                = 80
     protocol                            = "Http"
     request_timeout                     = 20
-    probe_name                          = "helloProbe"
+    probe_name                          = "probe"
   }
 
   http_listener {
