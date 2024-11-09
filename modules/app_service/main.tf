@@ -155,7 +155,7 @@ resource "azurerm_application_gateway" "main" {
     port                                = 80
     protocol                            = "Http"
     request_timeout                     = 20
-    probe_name = "helloProbe"
+    probe_name                          = "helloProbe"
   }
 
   http_listener {
