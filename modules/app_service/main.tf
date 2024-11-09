@@ -68,7 +68,7 @@ resource "azurerm_linux_web_app" "main" {
 resource "azurerm_linux_web_app_slot" "main" {
   app_service_id                = azurerm_linux_web_app.main.id
   name                          = "goapp"
-  public_network_access_enabled = true
+  public_network_access_enabled = var.public_network_access_enabled
 
   site_config {
     application_stack {
