@@ -127,6 +127,7 @@ module "appservice" {
   linux_web_app_name            = "${local.base_prefix}-web-${local.workspace_suffix}"
   https_only                    = false
   public_network_access_enabled = true
+  client_certificate_enabled    = false
 
   subnet_cidr_range = "10.0.0.0/16"
 
