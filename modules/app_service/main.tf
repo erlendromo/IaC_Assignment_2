@@ -126,7 +126,7 @@ resource "azurerm_application_gateway" "main" {
   backend_address_pool {
     name = "backendAddressPool"
     fqdns = [
-      azurerm_linux_web_app_slot.main.default_hostname
+      "${azurerm_linux_web_app.main.name}-${azurerm_linux_web_app_slot.main.name}.azurewebsites.net"
     ]
   }
 
@@ -141,7 +141,6 @@ resource "azurerm_application_gateway" "main" {
     pick_host_name_from_backend_http_settings = true
 
     match {
-      body        = ""
       status_code = [200]
     }
   }
