@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/erlendromo/gowebapp/utils"
+	"gowebapp/utils"
 )
 
 const (

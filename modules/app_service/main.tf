@@ -80,6 +80,12 @@ resource "azurerm_linux_web_app_slot" "main" {
     enabled = false
   }
 
+  lifecycle {
+    ignore_changes = [
+      auth_settings
+    ]
+  }
+
   depends_on = [
     azurerm_linux_web_app.main
   ]
