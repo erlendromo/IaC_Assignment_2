@@ -1,14 +1,18 @@
-# Service plan variables
+# Resource Group variables
 
 variable "resource_group_name" {
   type        = string
   description = "The name of the resource group."
 }
 
-variable "resource_group_location" {
+variable "location" {
   type        = string
   description = "The location of the resource group."
 }
+
+
+
+# Service plan variables
 
 variable "service_plan_name" {
   type        = string
@@ -38,6 +42,14 @@ variable "worker_count" {
   description = "The number of workers."
   default     = 3
 }
+
+
+variable "go_version" {
+  type = string
+  description = "The version of Go to use."
+  default = "1.19"
+}
+
 
 # Linux web app variables
 
@@ -84,25 +96,8 @@ variable "storage_account_access_key" {
   description = "The access key of the storage account."
 }
 
-
-
-# Public IP variables
-
-variable "pip_name" {
+variable "linux_web_app_slot_name" {
   type        = string
-  description = "The name of the public IP."
-}
-
-
-
-# Application Gateway variables
-
-variable "application_gateway_name" {
-  type        = string
-  description = "The name of the application gateway."
-}
-
-variable "application_gateway_subnet_id" {
-  type        = string
-  description = "The ID of the subnet for the application gateway."
+  description = "The name of the Linux web app slot. NB: MUST BE THE SAME AS IN GITHUB ACTION (goapp)"
+  default     = "goapp"
 }

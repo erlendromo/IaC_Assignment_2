@@ -1,7 +1,7 @@
 resource "azurerm_service_plan" "main" {
   name                   = var.service_plan_name
   resource_group_name    = var.resource_group_name
-  location               = var.resource_group_location
+  location               = var.location
   os_type                = var.os_type
   sku_name               = var.sku_name
   zone_balancing_enabled = var.zone_balancing_enabled
@@ -48,7 +48,7 @@ resource "azurerm_linux_web_app" "main" {
     # }
 
     application_stack {
-      go_version = "1.19"
+      go_version = var.go_version
     }
   }
 
@@ -67,12 +67,12 @@ resource "azurerm_linux_web_app" "main" {
 
 resource "azurerm_linux_web_app_slot" "main" {
   app_service_id                = azurerm_linux_web_app.main.id
-  name                          = "goapp"
+  name                          = var.linux_web_app_slot_name
   public_network_access_enabled = var.public_network_access_enabled
 
   site_config {
     application_stack {
-      go_version = "1.19"
+      go_version = var.go_version
     }
   }
 
@@ -82,98 +82,5 @@ resource "azurerm_linux_web_app_slot" "main" {
 
   depends_on = [
     azurerm_linux_web_app.main
-  ]
-}
-
-resource "azurerm_public_ip" "main" {
-  name                = var.pip_name
-  resource_group_name = azurerm_service_plan.main.resource_group_name
-  location            = azurerm_service_plan.main.location
-  allocation_method   = "Static"
-  sku                 = "Standard"
-
-  depends_on = [
-    azurerm_service_plan.main
-  ]
-}
-
-resource "azurerm_application_gateway" "main" {
-  name                = var.application_gateway_name
-  resource_group_name = azurerm_service_plan.main.resource_group_name
-  location            = azurerm_service_plan.main.location
-
-  sku {
-    name     = "Standard_v2"
-    tier     = "Standard_v2"
-    capacity = 2
-  }
-
-  gateway_ip_configuration {
-    name      = "appGatewayIpConfig"
-    subnet_id = var.application_gateway_subnet_id
-  }
-
-  frontend_port {
-    name = "http"
-    port = 80
-  }
-
-  frontend_ip_configuration {
-    name                 = "appGatewayFrontendIP"
-    public_ip_address_id = azurerm_public_ip.main.id
-  }
-
-  backend_address_pool {
-    name = "backendAddressPool"
-    fqdns = [
-      azurerm_linux_web_app_slot.main.default_hostname
-    ]
-  }
-
-  probe {
-    name                                      = "http-probe"
-    protocol                                  = "Http"
-    path                                      = "/"
-    port                                      = 80
-    interval                                  = 30
-    timeout                                   = 30
-    unhealthy_threshold                       = 3
-    pick_host_name_from_backend_http_settings = true
-
-    match {
-      status_code = [200]
-    }
-  }
-
-  backend_http_settings {
-    name                                = "appGatewayBackendHttpSettings"
-    cookie_based_affinity               = "Disabled"
-    pick_host_name_from_backend_address = true
-    path                                = "/"
-    port                                = 80
-    protocol                            = "Http"
-    request_timeout                     = 20
-  }
-
-  http_listener {
-    name                           = "appGatewayHttpListener"
-    frontend_ip_configuration_name = "appGatewayFrontendIP"
-    frontend_port_name             = "http"
-    protocol                       = "Http"
-  }
-
-  request_routing_rule {
-    name                       = "http-rule"
-    rule_type                  = "Basic"
-    http_listener_name         = "appGatewayHttpListener"
-    backend_address_pool_name  = "backendAddressPool"
-    backend_http_settings_name = "appGatewayBackendHttpSettings"
-    priority                   = 100
-  }
-
-  depends_on = [
-    azurerm_service_plan.main,
-    azurerm_linux_web_app_slot.main,
-    azurerm_public_ip.main
   ]
 }
