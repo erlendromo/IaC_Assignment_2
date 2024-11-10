@@ -40,6 +40,12 @@ runs:
       with:
         go-version-file: src/go.mod
 
+    - name: Go Test
+      id: go-test
+      run: go test ./... --race
+      working-directory: 'src'
+      shell: bash
+
     - name: Build
       id: build
       run: go build -o src/app src/main.go
