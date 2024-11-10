@@ -28,7 +28,7 @@ resource "azurerm_application_gateway" "main" {
   }
 
   frontend_ip_configuration {
-    name                 = var.gateway_frontend_ip_configuration.name
+    name                 = var.gateway_frontend_ip_configuration_name
     public_ip_address_id = azurerm_public_ip.main.id
   }
 
