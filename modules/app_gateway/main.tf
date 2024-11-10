@@ -33,7 +33,7 @@ resource "azurerm_application_gateway" "main" {
   }
 
   backend_address_pool {
-    name = var.gateway_backend_address_pool.name
+    name  = var.gateway_backend_address_pool.name
     fqdns = var.gateway_backend_address_pool.fqdns
   }
 

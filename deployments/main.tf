@@ -30,7 +30,7 @@ module "network" {
       service_endpoints = []
     },
     "app-subnet" = {
-      address_prefixes = ["10.0.2.0/24"]
+      address_prefixes  = ["10.0.2.0/24"]
       service_endpoints = ["Microsoft.Storage", "Microsoft.Sql"]
     }
   }
@@ -77,9 +77,9 @@ module "database" {
 }
 
 module "appservice" {
-  source                  = "../modules/app_service"
-  resource_group_name     = azurerm_resource_group.main.name
-  location = azurerm_resource_group.main.location
+  source              = "../modules/app_service"
+  resource_group_name = azurerm_resource_group.main.name
+  location            = azurerm_resource_group.main.location
 
   service_plan_name = "${local.base_prefix}-asp-${local.workspace_suffix}"
 
@@ -102,15 +102,15 @@ module "appservice" {
 }
 
 module "appgateway" {
-  source = "../modules/app_gateway"
+  source              = "../modules/app_gateway"
   resource_group_name = azurerm_resource_group.main.name
-  location = azurerm_resource_group.main.location
+  location            = azurerm_resource_group.main.location
 
   pip_name = "${local.base_prefix}-appgw-pip-${local.workspace_suffix}"
 
   application_gateway_name = "${local.base_prefix}-appgw-${local.workspace_suffix}"
   gateway_ip_configuration = {
-    name = "appgwIPConfig"
+    name      = "appgwIPConfig"
     subnet_id = module.network.subnet_id_map.app-subnet
   }
   gateway_frontend_ip_configuration_name = "appgwFrontendIPConfig"

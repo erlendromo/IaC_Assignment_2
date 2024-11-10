@@ -45,9 +45,9 @@ variable "worker_count" {
 
 
 variable "go_version" {
-  type = string
+  type        = string
   description = "The version of Go to use."
-  default = "1.19"
+  default     = "1.19"
 }
 
 
