@@ -6,6 +6,7 @@ on:
       - stage
     paths-ignore:
       - '.github/**'
+      - 'backend/**'
   workflow_dispatch:
 
 permissions:

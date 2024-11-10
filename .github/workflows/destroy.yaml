@@ -11,6 +11,14 @@ on:
           - dev
           - stage
           - prod
+      working_dir:
+        description: 'Working directory'
+        required: false
+        type: choice
+        default: deployments
+        options:
+          - deployments
+          - backend
 
 env:
   ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
@@ -19,7 +27,7 @@ env:
   ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
   GH_TOKEN: ${{ github.token }}
   TF_WORKSPACE: ${{ inputs.workspace }}
-  WORKING_DIR: 'deployments'
+  WORKING_DIR: ${{ inputs.working_dir }}
 
 jobs:
   destroy:
