@@ -3,7 +3,7 @@ package main
 import (
 	"net/http"
 
-	"github.com/erlendromo/gowebapp/server"
+	"gowebapp/server"
 )
 
 func main() {
