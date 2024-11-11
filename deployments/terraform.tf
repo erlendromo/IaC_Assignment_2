@@ -13,8 +13,8 @@ terraform {
 
   backend "azurerm" {
     resource_group_name  = "erlenrom-rg-backend-tfstate"
-    storage_account_name = "sabackendtfstatez3y3mmir"
-    container_name       = "scbackendtfstate"
+    storage_account_name = "erlenromsabackendtfstate"
+    container_name       = "erlenrom-sc-backend-tfstate"
     key                  = "compulsory-assignment-2.terraform.tfstate"
   }
 }
