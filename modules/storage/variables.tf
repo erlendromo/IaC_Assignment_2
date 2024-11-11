@@ -1,14 +1,23 @@
-# Storage Account Variables
+# Resource Group Variables
 
 variable "resource_group_name" {
   type        = string
   description = "The name of the resource group."
 }
 
-variable "resource_group_location" {
+variable "location" {
   type        = string
   description = "The location of the resource group."
 }
+
+
+variable "tags" {
+  type        = map(string)
+  description = "A map of tags for the resources."
+}
+
+
+# Storage Account Variables
 
 variable "storage_account_name" {
   type        = string

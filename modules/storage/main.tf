@@ -1,7 +1,7 @@
 resource "azurerm_storage_account" "main" {
   name                            = var.storage_account_name
   resource_group_name             = var.resource_group_name
-  location                        = var.resource_group_location
+  location                        = var.location
   account_tier                    = var.account_tier
   account_kind                    = var.account_kind
   account_replication_type        = var.account_replication_type
@@ -11,6 +11,8 @@ resource "azurerm_storage_account" "main" {
   shared_access_key_enabled       = var.shared_access_key_enabled
   local_user_enabled              = var.local_user_enabled
   min_tls_version                 = var.min_tls_version
+
+  tags = var.tags
 }
 
 resource "azurerm_storage_container" "main" {
