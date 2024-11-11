@@ -33,4 +33,4 @@ runs:
       uses: actions/cache@v3
       with:
         path: ${{ inputs.working_dir }}/${{ inputs.terraform_workspace }}.tfplan
-        key: terraform-plan-${{ inputs.terraform_workspace }}
+        key: terraform-plan-${{ inputs.terraform_workspace }}-${{ github.run_number }}-${{ github.run_attempt }}

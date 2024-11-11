@@ -13,3 +13,8 @@ output "storage_blob_endpoint" {
   value       = azurerm_storage_account.main.primary_blob_endpoint
   description = "The blob endpoint for the storage account."
 }
+
+output "storage_container_name" {
+  value       = azurerm_storage_container.main.name
+  description = "The name of the storage container."
+}

@@ -25,44 +25,13 @@ module "network" {
   virtual_network_address_space = ["10.0.0.0/16"]
 
   subnets = {
-    "subnet1" = {
+    "main-subnet" = {
       address_prefixes  = ["10.0.1.0/24"]
-      service_endpoints = ["Microsoft.Sql", "Microsoft.Storage"]
-    }
-  }
-
-  network_security_group_name = "${local.base_prefix}-nsg-${local.workspace_suffix}"
-
-  network_security_rules = {
-    "AllowHttpsInbound" = {
-      priority                   = 100
-      direction                  = "Inbound"
-      access                     = "Allow"
-      protocol                   = "Tcp"
-      source_port_range          = "*"
-      destination_port_range     = "443"
-      source_address_prefix      = "10.0.0.0/16"
-      destination_address_prefix = "*"
+      service_endpoints = []
     },
-    "AllowHttpInbound" = {
-      priority                   = 110
-      direction                  = "Inbound"
-      access                     = "Allow"
-      protocol                   = "Tcp"
-      source_port_range          = "*"
-      destination_port_range     = "80"
-      source_address_prefix      = "10.0.0.0/16"
-      destination_address_prefix = "*"
-    },
-    "AllowAppGatewayInbound" = {
-      priority                   = 120
-      direction                  = "Inbound"
-      access                     = "Allow"
-      protocol                   = "Tcp"
-      source_port_range          = "*"
-      destination_port_range     = "65200-65535"
-      source_address_prefix      = "Internet"
-      destination_address_prefix = "*"
+    "app-subnet" = {
+      address_prefixes  = ["10.0.2.0/24"]
+      service_endpoints = ["Microsoft.Storage", "Microsoft.Sql"]
     }
   }
 
@@ -108,27 +77,53 @@ module "database" {
 }
 
 module "appservice" {
-  source                  = "../modules/app_service"
-  resource_group_name     = azurerm_resource_group.main.name
-  resource_group_location = azurerm_resource_group.main.location
+  source              = "../modules/app_service"
+  resource_group_name = azurerm_resource_group.main.name
+  location            = azurerm_resource_group.main.location
 
   service_plan_name = "${local.base_prefix}-asp-${local.workspace_suffix}"
 
-  linux_web_app_name = "${local.base_prefix}-web-${local.workspace_suffix}"
+  linux_web_app_name            = "${local.base_prefix}-web-${local.workspace_suffix}"
+  https_only                    = false
+  public_network_access_enabled = true
+  client_certificate_enabled    = false
 
-  subnet_cidr_range = "10.0.0.0/16"
+  subnet_cidr_range = "10.0.2.0/24"
 
+  storage_container_name     = module.storage.storage_container_name
   storage_account_name       = module.storage.storage_account_name
   storage_account_access_key = module.storage.storage_account_access_key
-
-  pip_name = "${local.base_prefix}-webapp-pip-${local.workspace_suffix}"
-
-  application_gateway_name      = "${local.base_prefix}-appgw-${local.workspace_suffix}"
-  application_gateway_subnet_id = module.network.subnet_id_map.subnet1
 
   depends_on = [
     azurerm_resource_group.main,
     module.network,
     module.storage
+  ]
+}
+
+module "appgateway" {
+  source              = "../modules/app_gateway"
+  resource_group_name = azurerm_resource_group.main.name
+  location            = azurerm_resource_group.main.location
+
+  pip_name = "${local.base_prefix}-appgw-pip-${local.workspace_suffix}"
+
+  application_gateway_name = "${local.base_prefix}-appgw-${local.workspace_suffix}"
+  gateway_ip_configuration = {
+    name      = "appgwIPConfig"
+    subnet_id = module.network.subnet_id_map.app-subnet
+  }
+  gateway_frontend_ip_configuration_name = "appgwFrontendIPConfig"
+  gateway_backend_address_pool = {
+    name = "appgwBackendAddressPool"
+    fqdns = [
+      module.appservice.web_app_slot_hostname
+    ]
+  }
+
+  depends_on = [
+    azurerm_resource_group.main,
+    module.network,
+    module.appservice
   ]
 }
