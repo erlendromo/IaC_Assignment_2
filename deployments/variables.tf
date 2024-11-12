@@ -19,17 +19,17 @@ variable "resource_group_location" {
 variable "virtual_network_name" {
   type        = string
   description = "Name of the virtual network"
-  default = "vnet"
+  default     = "vnet"
 }
 
 variable "virtual_network_address_space" {
   type        = list(string)
   description = "Address space of the virtual network"
-  default = ["10.0.0.0/16"]
+  default     = ["10.0.0.0/16"]
 }
 
 variable "subnets" {
-  type        = map(object({
+  type = map(object({
     address_prefixes  = list(string)
     service_endpoints = list(string)
   }))
@@ -53,7 +53,7 @@ variable "subnets" {
 variable "storage_account_name" {
   type        = string
   description = "Name of the storage account"
-  default = "sa"
+  default     = "sa"
 }
 
 
@@ -63,24 +63,24 @@ variable "storage_account_name" {
 variable "server_name" {
   type        = string
   description = "Name of the database server"
-  default = "sqlserver"
+  default     = "sqlserver"
 }
 
 variable "database_name" {
-  type = string
+  type        = string
   description = "Name of the database"
-  default = "sqldb"
+  default     = "sqldb"
 }
 
 variable "mssql_administrator_login" {
   type        = string
-  description = "Administrator login of the database server"  
+  description = "Administrator login of the database server"
 }
 
 variable "mssql_administrator_login_password" {
   type        = string
   description = "Administrator login password of the database server"
-  sensitive = true
+  sensitive   = true
 }
 
 
@@ -89,13 +89,13 @@ variable "mssql_administrator_login_password" {
 variable "service_plan_name" {
   type        = string
   description = "Name of the app service"
-  default = "asp"
+  default     = "asp"
 }
 
 variable "linux_web_app_name" {
-  type = string
+  type        = string
   description = "Name of the Linux web app"
-  default = "web"
+  default     = "web"
 }
 
 
@@ -103,31 +103,31 @@ variable "linux_web_app_name" {
 # App Gateway Variables
 
 variable "pip_name" {
-  type = string
+  type        = string
   description = "Name of the public IP"
-  default = "appgw-pip"
+  default     = "appgw-pip"
 }
 
 variable "application_gateway_name" {
-  type = string
+  type        = string
   description = "Name of the application gateway"
-  default = "appgw"
+  default     = "appgw"
 }
 
 variable "gateway_ip_configuration_name" {
-  type = string
+  type        = string
   description = "Name of the gateway IP configuration"
-  default = "appgwIPConfig"
+  default     = "appgwIPConfig"
 }
 
 variable "gateway_frontend_ip_configuration_name" {
-  type = string
+  type        = string
   description = "Name of the gateway frontend IP configuration"
-  default = "appgwFrontendIPConfig"
+  default     = "appgwFrontendIPConfig"
 }
 
 variable "gateway_backend_address_pool_name" {
-  type = string
+  type        = string
   description = "Name of the gateway backend address pool"
-  default = "appgwBackendAddressPool"
+  default     = "appgwBackendAddressPool"
 }

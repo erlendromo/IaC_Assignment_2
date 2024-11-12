@@ -3,7 +3,7 @@
 variable "resource_group_name" {
   type        = string
   description = "The name of the resource group."
-  default = "rg-backend-tfstate"
+  default     = "rg-backend-tfstate"
 }
 
 variable "location" {
@@ -35,7 +35,7 @@ variable "container_name" {
 variable "keyvault_name" {
   type        = string
   description = "The name of the key vault."
-  default = "kvbackendtfstate"
+  default     = "kvbackendtfstate"
 }
 
 variable "sa_backend_accesskey_name" {

@@ -20,7 +20,7 @@ module "network" {
 
   virtual_network_name          = local.virtual_network_name
   virtual_network_address_space = var.virtual_network_address_space
-  subnets = var.subnets
+  subnets                       = var.subnets
 
   tags = local.tags
 
@@ -36,7 +36,7 @@ module "storage" {
 
   storage_account_name = local.storage_account_name
 
-  tags                 = local.tags
+  tags = local.tags
 
   depends_on = [
     azurerm_resource_group.main,
@@ -50,7 +50,7 @@ module "database" {
   location            = azurerm_resource_group.main.location
 
   server_name                  = local.server_name
-  database_name = local.database_name
+  database_name                = local.database_name
   administrator_login          = var.mssql_administrator_login
   administrator_login_password = var.mssql_administrator_login_password
 
@@ -73,8 +73,8 @@ module "appservice" {
   resource_group_name = azurerm_resource_group.main.name
   location            = azurerm_resource_group.main.location
 
-  service_plan_name = local.service_plan_name
-  linux_web_app_name            = local.linux_web_app_name
+  service_plan_name  = local.service_plan_name
+  linux_web_app_name = local.linux_web_app_name
 
   storage_container_name     = module.storage.storage_container_name
   storage_account_name       = module.storage.storage_account_name
@@ -94,7 +94,7 @@ module "appgateway" {
   resource_group_name = azurerm_resource_group.main.name
   location            = azurerm_resource_group.main.location
 
-  pip_name = local.pip_name
+  pip_name                 = local.pip_name
   application_gateway_name = local.application_gateway_name
   gateway_ip_configuration = {
     name      = var.gateway_ip_configuration_name
