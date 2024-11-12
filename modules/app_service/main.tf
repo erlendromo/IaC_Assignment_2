@@ -6,6 +6,8 @@ resource "azurerm_service_plan" "main" {
   sku_name               = var.sku_name
   zone_balancing_enabled = var.zone_balancing_enabled
   worker_count           = var.worker_count
+
+  tags = var.tags
 }
 
 resource "azurerm_linux_web_app" "main" {
@@ -36,16 +38,6 @@ resource "azurerm_linux_web_app" "main" {
 
   site_config {
     http2_enabled = true
-    #ftps_state    = "FtpsOnly"
-    #always_on     = true
-
-    # ip_restriction {
-    #   ip_address  = var.subnet_cidr_range
-    #   action      = "Allow"
-    #   priority    = 100
-    #   name        = "AllowSubnet"
-    #   description = "Allow access from subnet"
-    # }
 
     application_stack {
       go_version = var.go_version
@@ -59,6 +51,8 @@ resource "azurerm_linux_web_app" "main" {
     account_name = var.storage_account_name
     access_key   = var.storage_account_access_key
   }
+
+  tags = var.tags
 
   depends_on = [
     azurerm_service_plan.main
@@ -85,6 +79,8 @@ resource "azurerm_linux_web_app_slot" "main" {
       auth_settings
     ]
   }
+
+  tags = var.tags
 
   depends_on = [
     azurerm_linux_web_app.main
