@@ -62,7 +62,6 @@ module "database" {
   depends_on = [
     azurerm_resource_group.main,
     random_string.main,
-    random_password.main,
     module.network,
     module.storage
   ]
