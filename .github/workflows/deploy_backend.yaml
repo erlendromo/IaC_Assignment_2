@@ -1,0 +1,32 @@
+name: Deploy Backend
+
+on:
+  workflow_dispatch:
+
+env:
+  ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
+  ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
+  ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
+  ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
+  WORKING_DIR: 'backend'
+  GITHUB_TOKEN: ${{ github.token }}
+
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        id: checkout
+        uses: actions/checkout@master
+
+      - name: terraform init
+        id: init
+        run: terraform init
+        working-directory: ${{ env.WORKING_DIR }}
+
+      - name: terraform apply
+        id: apply
+        run: terraform apply -auto-approve
+        working-directory: ${{ env.WORKING_DIR }}
