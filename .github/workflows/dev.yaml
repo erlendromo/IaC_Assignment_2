@@ -22,7 +22,6 @@ env:
   TF_VAR_mssql_administrator_login_password: ${{ secrets.MSSQL_ADMINISTRATOR_LOGIN_PASSWORD }}
   GH_TOKEN: ${{ github.token }}
   WORKING_DIR: 'deployments'
-  TF_WORKSPACE: 'dev'
 
 jobs:
   validate:
@@ -38,7 +37,7 @@ jobs:
         uses: ./.github/actions/validate
         with:
           working_dir: ${{ env.WORKING_DIR }}
-          workspace: ${{ env.TF_WORKSPACE }}
+          workspace: 'dev'
 
   plan:
     name: Plan Terraform Files
@@ -54,7 +53,7 @@ jobs:
         uses: ./.github/actions/plan
         with:
           working_dir: ${{ env.WORKING_DIR }}
-          terraform_workspace: ${{ env.TF_WORKSPACE }}
+          terraform_workspace: 'dev'
 
   apply:
     name: Apply Terraform Files
@@ -71,7 +70,7 @@ jobs:
         uses: ./.github/actions/apply
         with:
           working_dir: ${{ env.WORKING_DIR }}
-          terraform_workspace: ${{ env.TF_WORKSPACE }}
+          terraform_workspace: 'dev'
 
   go:
     name: Build & Run Go
