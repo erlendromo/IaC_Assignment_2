@@ -17,9 +17,9 @@ resource "azurerm_resource_group" "main" {
 
 
 module "network" {
-  source                  = "../modules/network"
-  resource_group_name     = azurerm_resource_group.main.name
-  resource_group_location = azurerm_resource_group.main.location
+  source              = "../modules/network"
+  resource_group_name = azurerm_resource_group.main.name
+  location            = azurerm_resource_group.main.location
 
   virtual_network_name          = "${local.base_prefix}-vnet-${local.workspace_suffix}"
   virtual_network_address_space = ["10.0.0.0/16"]
@@ -41,11 +41,12 @@ module "network" {
 }
 
 module "storage" {
-  source                  = "../modules/storage"
-  resource_group_name     = azurerm_resource_group.main.name
-  resource_group_location = azurerm_resource_group.main.location
+  source              = "../modules/storage"
+  resource_group_name = azurerm_resource_group.main.name
+  location            = azurerm_resource_group.main.location
 
   storage_account_name = "${local.base_prefix}sa${random_string.main.result}${local.workspace_suffix}"
+  tags                 = local.tags
 
   depends_on = [
     azurerm_resource_group.main,
@@ -54,9 +55,9 @@ module "storage" {
 }
 
 module "database" {
-  source                  = "../modules/database"
-  resource_group_name     = azurerm_resource_group.main.name
-  resource_group_location = azurerm_resource_group.main.location
+  source              = "../modules/database"
+  resource_group_name = azurerm_resource_group.main.name
+  location            = azurerm_resource_group.main.location
 
   server_name                  = "${local.base_prefix}-sqlserver-${local.workspace_suffix}"
   administrator_login          = random_string.main.result
