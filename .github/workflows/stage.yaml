@@ -18,6 +18,8 @@ env:
   ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
   ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
   ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
+  TF_VAR_mssql_administrator_login: ${{ secrets.MSSQL_ADMINISTRATOR_LOGIN }}
+  TF_VAR_mssql_administrator_login_password: ${{ secrets.MSSQL_ADMINISTRATOR_LOGIN_PASSWORD }}
   GH_TOKEN: ${{ github.token }}
   WORKING_DIR: 'deployments'
   TF_WORKSPACE: 'stage'
