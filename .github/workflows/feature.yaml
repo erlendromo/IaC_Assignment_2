@@ -23,7 +23,6 @@ env:
   ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
   GH_TOKEN: ${{ github.token }}
   WORKING_DIR: 'deployments'
-  TF_WORKSPACE: 'default'
 
 jobs:
   format:
@@ -54,4 +53,3 @@ jobs:
         uses: ./.github/actions/validate
         with:
           working_dir: ${{ env.WORKING_DIR }}
-          workspace: ${{ env.TF_WORKSPACE }}

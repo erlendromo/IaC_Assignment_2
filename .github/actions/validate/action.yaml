@@ -10,7 +10,7 @@ inputs:
     description: 'The Terraform workspace to use'
     type: string
     required: true
-    default: ''
+    default: 'default'
 
 runs:
   using: 'composite'
