@@ -10,6 +10,11 @@ variable "location" {
   description = "The location of the resource group."
 }
 
+variable "tags" {
+  type = map(string)
+  description = "Tags to apply to all resources."
+}
+
 
 
 # Service plan variables
@@ -61,24 +66,19 @@ variable "linux_web_app_name" {
 variable "https_only" {
   type        = bool
   description = "Whether to only allow HTTPS traffic."
-  default     = true
+  default     = false
 }
 
 variable "client_certificate_enabled" {
   type        = bool
   description = "Whether to enable client certificate authentication."
-  default     = true
+  default     = false
 }
 
 variable "public_network_access_enabled" {
   type        = bool
   description = "Whether to enable public network access."
-  default     = false
-}
-
-variable "subnet_cidr_range" {
-  type        = string
-  description = "The CIDR range of the subnet."
+  default     = true
 }
 
 variable "storage_container_name" {

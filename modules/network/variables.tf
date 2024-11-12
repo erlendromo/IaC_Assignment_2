@@ -10,6 +10,11 @@ variable "location" {
   description = "The location of the resource group."
 }
 
+variable "tags" {
+  type = map(string)
+  description = "Tags to apply to all resources."
+}
+
 
 
 # Virtual Network variables

@@ -7,6 +7,8 @@ resource "azurerm_mssql_server" "main" {
   administrator_login_password  = var.administrator_login_password
   public_network_access_enabled = var.public_network_access_enabled
   minimum_tls_version           = var.minimum_tls_version
+
+  tags = var.tags
 }
 
 resource "azurerm_mssql_database" "main" {
@@ -24,6 +26,8 @@ resource "azurerm_mssql_database" "main" {
   lifecycle {
     prevent_destroy = false
   }
+
+  tags = var.tags
 
   depends_on = [
     azurerm_mssql_server.main
