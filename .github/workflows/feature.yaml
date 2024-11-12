@@ -23,7 +23,6 @@ env:
   ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
   GH_TOKEN: ${{ github.token }}
   WORKING_DIR: 'deployments'
-  TF_WORKSPACE: ''
 
 jobs:
   format:
