@@ -4,7 +4,7 @@ This is the entrypoint for deploying the OperaTerra infrastructure. Using module
 
 ## Project Structure Selection
 
-TODO write this part
+The project structure options all have their pros and cons, but for OperaTerra, simplicity and control is more important than strict governance over environments and access control. As OperaTerra is a new (and small) E-commerce platform, project structure alternative two is suitable. As an initial thought, i went for alternative three, as i wanted a balance between simplicity and maintainability. After a couple weeks went by coding the infrastructure, i saw fit to migrate to alternative two as the project wasn't big enough (in my opinion) for sacrificing maintainability. Environment separation was already implemented using terraform workspace and locals for customization, so the final decision of migrating was a welcoming one as i am the only engineer working on the project.
 
 ## Actions & Workflows
 
