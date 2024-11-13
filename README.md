@@ -2,26 +2,63 @@
 
 Your company, OperaTerra, is launching a new e-commerce platform. As a DevOps engineer, you're tasked with setting up the infrastructure on Microsoft Azure using Terraform. The platform requires a web application, a database for product information and user data, and a storage solution for product images.
 
-## Requirements
+## How To Use
 
-The infrastructure components you need to set up include a Virtual Network with proper subnets, an Azure Service Plan for hosting the web application, an SQL Database for storing product and user data, Azure Blob Storage for storing product images, and an Load Balancer in front of the web application.
-You are required to implement this infrastructure for three environments: Development (dev), Staging, and Production (prod).
-Your Terraform implementation should define and deploy all infrastructure components. You should create modules for reusable components such as networking, app service, database, and storage. Use locals for environment-specific customization and implement random name generation for globally unique resource names. Ensure that you pass information between root module and child modules effectively. Additionally, use remote state storage with Azure Storage Account.
-The main focus for this assignment is to implement a CI/CD pipeline using GitHub Actions or simular available tools (Digger etc.).
-For infrastructure configuration it should be created branches (remember good naming convention and life cycle) that should undergo code reviews (terraform fmt, terraform validate and tflint/tfsec) before they are merged into the environment branches (e.g., dev, staging, prod), which providing a layer of quality assurance.
-Create Pull Request to perform merging with environment branches.
-Merging with environment branches should trigger a workflow that will plan and apply infrastructure to workspaces except prod
-For deoployment of infrastructure in prod it must be aproved by a minimum of one person.
- 
-An important part of this assignment is to analyze and discuss the three provided folder structure alternatives. You should choose one and justify your decision based on scalability, maintainability, separation of concerns, and ease of implementing CI/CD.
+### GitHub Environments
 
-## Deliverables
+Although only `Production` environment is needed per the assignment requirements, this project uses environments for all the protected brances to add another layer of quality assurance for the terraform infrastructure:
 
-IMPORTANT! A .zip-file with the following name, files and folders: Name the zip file with the ntnu username and oppg2, such as: melling-oppg2.zip In the zip file there must be a folder with the same name as the zip file: ntnuusername-oppg2, such as: melling-oppg2. The folder naturally contains the terraform files and folders and the CI/CD pipeline configuration files. A README.md file explaining your solution and how to use it. The reason for the naming is to streamline censorship and display in VS Code.
-Additionally, prepare a brief report (maximum 2 pages) discussing your chosen folder structure and your justification for it. In this report, also describe the challenges you faced during the implementation and how you overcame them. Finally, suggest potential improvements or optimizations for your solution.
-NOTE! It should be written so flexible that learning assistant or teacher could deploy this resources based on small changes, like change subscription ID.
+- `Development` (branch: dev)
+- `Stage` (branch: stage)
+- `Production` (branch: main) 
 
-## Evaluation Criteria
+### GitHub Secrets
 
-Your submission will be evaluated based on the correct implementation of required infrastructure components and proper use of Terraform best practices, including effective use of modules, locals, variables, and outputs. We will also assess your effective use of Azure resources, the quality and clarity of your code and documentation, your thoughtful analysis of folder structure options, and the successful implementation of the CI/CD pipeline.
-This assignment is designed to test your ability to apply Terraform and Azure knowledge in a realistic scenario, make informed decisions about code organization, and implement robust DevOps practices. Good luck with your implementation!
+Some GitHub Secrets needs to be added to the repository for a successful deployment of the infrastructure:
+
+Azure Service Principal:
+- `ARM_CLIENT_ID`
+- `ARM_CLIENT_SECRET`
+- `ARM_SUBSCRIPTION_ID`
+- `ARM_TENANT_ID`
+
+Terraform Variables:
+- `MSSQL_ADMINISTRATOR_LOGIN` -> The username used for the sql database
+- `MSSQL_ADMINISTRATOR_LOGIN_PASSWORD` -> The password used for the sql database
+
+### Setup Terraform Workspaces
+
+Make sure to run the following commands locally when the backend is first deployed:
+
+```code
+cd deployments
+terraform init
+terraform workspace new dev
+terraform workspace new stage
+terraform workspace new prod
+```
+
+This ensures no errors occur when running the workflows for deploying later on.
+
+### Backend
+
+If the use of the backend is wanted, in the `terraform.tf` file in the directory `backend` needs to be managed manually at first.
+
+Deploy the backend locally (comment out the backend code in `terraform.tf`) with the following commands:
+```code
+cd backend
+terraform init
+terraform apply
+```
+
+Deploy the backend remotely (comment out the backend code in `terraform.tf`):
+Push the code to a repository, and run the workflow named `Deploy Backend` manually (`deploy_backend.yaml`)
+
+
+After the backend is deployed, doublecheck that the `backend` block in the `deployments/terraform.tf` file is correctly addressing the proper backend configuration.
+
+### Usage
+
+When pushing code to a remote branch that is NOT `dev`, `stage`, or `main`, a workflow (feature.yaml) is run to format and validate the terraform configuration. When merging a pull-request to any of the protected brances, workflows run for validating, planning, applying and deployment of the terraform infrastructure as well as a sample go-web-api. This is done using terraform workspaces to separate the different environments. 
+
+When all this is in order, simply push code to a `feature`-branch, create pull-requests to the protected branches, and merge changes all the way to the `main(production)`-branch, and wait for the terraform infrastructure to be deployed.
