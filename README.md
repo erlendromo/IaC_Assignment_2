@@ -2,6 +2,11 @@
 
 Your company, OperaTerra, is launching a new e-commerce platform. As a DevOps engineer, you're tasked with setting up the infrastructure on Microsoft Azure using Terraform. The platform requires a web application, a database for product information and user data, and a storage solution for product images.
 
+## Prerequisites
+
+Before you can use the code for yourself, you need to edit atleast one local variables:
+Navigate to `locals.tf` in both `backend` and `deployments` directories. Make sure to edit the field `subscription_id` to your azure service principal subscription_id. Feel free to edit the `base_prefix` and `tags` also if you want to.
+
 ## How To Use
 
 ### GitHub Environments
