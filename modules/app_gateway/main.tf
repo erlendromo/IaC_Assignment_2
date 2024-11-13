@@ -4,6 +4,8 @@ resource "azurerm_public_ip" "main" {
   location            = var.location
   allocation_method   = var.pip_allocation_method
   sku                 = var.pip_sku
+
+  tags = var.tags
 }
 
 resource "azurerm_application_gateway" "main" {
@@ -77,6 +79,8 @@ resource "azurerm_application_gateway" "main" {
     backend_address_pool_name  = var.gateway_backend_address_pool.name
     backend_http_settings_name = var.gateway_backend_http_settings.name
   }
+
+  tags = var.tags
 
   depends_on = [
     azurerm_public_ip.main

@@ -1,4 +1,4 @@
-# Network Security Group variables
+# Resource Group variables
 
 variable "resource_group_name" {
   type        = string
@@ -9,6 +9,15 @@ variable "location" {
   type        = string
   description = "The location of the resource group."
 }
+
+variable "tags" {
+  type        = map(string)
+  description = "Tags to apply to all resources."
+}
+
+
+
+# Network Security Group variables
 
 variable "network_security_group_name" {
   type        = string
