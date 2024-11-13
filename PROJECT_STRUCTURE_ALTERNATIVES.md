@@ -2,6 +2,7 @@
 
 ## Alternative One
 
+```text
 azure-terraform-project/
 │
 ├── modules/
@@ -51,9 +52,11 @@ azure-terraform-project/
 ├── variables.tf
 ├── outputs.tf
 └── README.md
+```
 
 ## Alternative Two
 
+```text
 azure-terraform-project/
 │
 ├── modules/
@@ -76,9 +79,11 @@ azure-terraform-project/
 │   └── main.tf
 │
 └── README.md
+```
 
 ## Alternative Three
 
+```text
 azure-terraform-project/
 │
 ├── modules/
@@ -116,3 +121,4 @@ azure-terraform-project/
 │   └── main.tf
 │
 └── README.md
+```
